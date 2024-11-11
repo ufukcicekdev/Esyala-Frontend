@@ -1,0 +1,104 @@
+/* Popup Container */
+.popupSocial {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
+  }
+  
+  .popupSocial header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+  
+  .popupSocial .close {
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #333;
+    transition: color 0.2s;
+  }
+  
+  .popupSocial .close:hover {
+    color: #ff0000;
+  }
+  
+  .popupSocial .content ul.icons {
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+  }
+  
+  .popupSocial .content ul.icons li {
+    list-style: none;
+  }
+  
+  .popupSocial .content ul.icons .share-btn {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+  }
+  
+  .popupSocial .field {
+    display: flex;
+    margin-top: 15px;
+  }
+  
+  .popupSocial .field input {
+    flex: 1;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .popupSocial .field button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .popupSocial .field button:hover {
+    background-color: #0056b3;
+  }
+
+
+
+
+
+
+
+
+
+
+  /* about css */
+
+   .img-holder a img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 233px; 
+      overflow: hidden; 
+      position: relative; 
+  }
+  a img {
+      max-width: 100%;
+      max-height: 100%;
+  }
