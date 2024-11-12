@@ -68,3 +68,20 @@ export async function fetchHomeMainBanner() {
         return [];
     }
 }
+
+
+
+export async function fetchCategory() {
+    try {
+        const response = await instance.get("/main/get_category/");
+        if (response.data["status"] == true) {
+            return response.data;
+        }
+        else {
+            return response.data["messages"]
+        }
+    } catch (error) {
+        console.error("Kategoriler alınırken bir hata oluştu:", error);
+        return [];
+    }
+}

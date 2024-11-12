@@ -1,0 +1,168 @@
+.user-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 50%; /* Yuvarlak şekil için */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: #fff;
+}
+
+.logo-img {
+    width: 150px; /* Logo genişliğini ayarlayın */
+    height: auto; /* Yükseklik otomatik ayarlanacak */
+}
+
+.container {
+    max-width: 100%; /* Container'ın tam genişlikte olmasını sağlar */
+    padding: 0 10px; /* Yanlarda hafif bir boşluk bırakmak için */
+}
+
+.mt-logo {
+    text-align: center; /* Logo ortalanmış */
+    margin: 20px 0; /* Üst ve alt boşluk eklemek için */
+}
+
+.logo-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #000;
+    flex-wrap: wrap; /* Yazıların bir satıra sığmadığında alt satıra geçmesini sağlar */
+}
+
+.logo-text span {
+    display: flex;
+    align-items: center;
+    margin: 0 4px; /* Yanlara boşluk ekler */
+}
+
+.logo-text span:not(:last-child)::after {
+    content: '•'; /* Nokta sembolü */
+    margin: 0 4px; /* Nokta ile kelime arasına boşluk */
+    font-size: 14px; /* Noktanın büyüklüğü */
+    color: #000; /* Siyah renk */
+}
+
+@media (max-width: 991px) {
+    .logo-text {
+        font-size: 9px; /* Mobilde daha küçük yazı boyutu */
+    }
+
+    .logo-text span:not(:last-child)::after {
+        margin: 0 2px; /* Nokta ile kelime arasındaki boşluk mobilde küçültüldü */
+        font-size: 9px; /* Noktanın boyutunu mobil için küçültüldü */
+    }
+}
+
+/* Yeni eklenen stil */
+.mt-nav-holder {
+    display: flex;
+    justify-content: center; /* Navigation'ı ortala */
+}
+
+nav {
+    display: flex;
+    justify-content: center; /* Menü öğelerini ortala */
+}
+
+.mt-icon-list {
+    justify-content: flex-end; /* İkon listesi sağa yaslı */
+}
+
+/* Alt menü için stil */
+.mobile-bottom-nav {
+display: none; /* Desktop görünümünde gizlenir */
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+background-color: #fff; /* Menü arka planı */
+box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+z-index: 1000; /* Üstte görünmesi için */
+border-top: 1px solid #ddd;
+padding: 10px 0;
+
+}
+
+.mobile-bottom-nav ul {
+display: flex;
+justify-content: space-around; /* İkonları eşit aralıklı yerleştirir */
+margin: 0;
+padding: 0;
+list-style: none;
+}
+
+.mobile-bottom-nav ul li {
+flex: 1; /* İkonlar eşit genişlikte */
+text-align: center;
+}
+
+.mobile-bottom-nav ul li a {
+color: #000;
+font-size: 16px; /* İkon boyutu */
+text-decoration: none;
+}
+
+.mobile-bottom-nav ul li a .icon {
+font-size: 24px; /* İkon büyüklüğü */
+display: block;
+margin-bottom: 5px;
+}
+
+/* Mobilde görünür yapmak için */
+@media (max-width: 767px) {
+.mobile-bottom-nav {
+    display: block;
+}
+#user-icon{
+    display: none;
+}
+.icon-magnifier{
+    display: none;
+}
+}
+
+@media (max-width: 991px) {
+.mobile-bottom-nav {
+    display: block;
+}
+#user-icon{
+    display: none;
+}
+.icon-magnifier{
+    display: none;
+}
+}
+
+.user-icon1 {
+display: flex;
+justify-content: center;
+align-items: center;
+width: 22px; /* Simgenin genişliği */
+height: 22px; /* Simgenin yüksekliği */
+background-color: #ccc; /* Arkaplan rengi */
+color: white; /* Harf rengi */
+border-radius: 50%; /* Yuvarlak simge */
+font-size: 18px; /* Harf boyutu */
+font-weight: bold; /* Harfi vurgulamak için */
+margin: 0 auto 5px; /* Ortalamak ve altına boşluk bırakmak için */
+}
+
+
+
+li a span {
+display: block;
+text-align: center;
+}
+
+#back-top.active{
+margin-bottom: 70px; 
+}
+
+
+
+

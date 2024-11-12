@@ -8,6 +8,8 @@ import "./static/css/responsive.css";
 import "./static/css/custom2.css";
 import "./static/css/bcf16bd37f5afe2e2.css";
 import "./static/css/share.css";
+import "./static/css/header.css";
+
 
 import Header from "./components/header";
 import Footer from "./components/footer";
