@@ -1,0 +1,44 @@
+.container {
+  margin-bottom: 20px;
+}
+
+.step {
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #f9f9f9; /* Adım kutucuğunun arka plan rengi */
+}
+
+.step-number {
+  display: block;
+  width: 30px;
+  height: 30px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+  float: left;
+}
+
+.step-content {
+  padding: 20px;
+  overflow: hidden;
+}
+
+.step h2 {
+  margin-top: 0; /* Başlığın üstündeki boşluğu kaldırır */
+}
+
+.step p {
+  margin-bottom: 10px; /* Paragraflar arasında boşluk bırakır */
+}
+
+.step ul,
+.step ol {
+  margin-top: 0; /* Listelerin üstündeki boşluğu kaldırır */
+  padding-left: 20px; /* Liste içeriklerini biraz sağa kaydırır */
+}
+
+.step li {
+  margin-bottom: 5px; /* Listenin elemanları arasında boşluk bırakır */
+}

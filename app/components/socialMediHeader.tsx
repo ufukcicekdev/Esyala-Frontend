@@ -1,6 +1,7 @@
-'use client';
+"use client";
 import { fetchSocialMediaLinks } from "@/lib/main_api";
 import { useEffect, useState } from "react";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 
 interface SocialMediaLink {
     name: string;
@@ -19,44 +20,42 @@ function SocialMediaHeader() {
         loadLinks();
     }, []);
 
+    const getIcon = (name: string) => {
+        switch (name.toLowerCase()) {
+            case "facebook":
+                return <FaFacebook className="text-blue-600 hover:text-blue-800" size={20} />;
+            case "twitter":
+                return <FaTwitter className="text-blue-400 hover:text-blue-600" size={20} />;
+            case "instagram":
+                return <FaInstagram className="text-pink-600 hover:text-pink-800" size={20} />;
+            case "linkedin":
+                return <FaLinkedin className="text-blue-700 hover:text-blue-900" size={20} />;
+            case "youtube":
+                return <FaYoutube className="text-red-600 hover:text-red-800" size={20} />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <>
-            {/* Sosyal medya bağlantılarını render et */}
+            {/* Sosyal Medya Bağlantıları - Mobilde Gizleme */}
             {socialMediaLinks.length > 0 && (
-                <ul className="mt-top-social">
-                    {socialMediaLinks.map((socialMedia, index) => {
-                        let iconClass = '';
-                        switch (socialMedia.name) {
-                            case 'facebook':
-                                iconClass = 'fa-facebook';
-                                break;
-                            case 'twitter':
-                                iconClass = 'fa-twitter';
-                                break;
-                            case 'instagram':
-                                iconClass = 'fa-instagram';
-                                break;
-                            case 'linkedin':
-                                iconClass = 'fa-linkedin';
-                                break;
-                            case 'youtube':
-                                iconClass = 'fa-youtube';
-                                break;
-                            default:
-                                return null;
-                        }
-
-                        return (
-                            <li key={index}>
-                                <a target="_blank" rel="nofollow" href={socialMedia.link}>
-                                    <i className={`fa ${iconClass}`} />
-                                </a>
-                            </li>
-                        );
-                    })}
+                <ul className="flex space-x-4 mt-4 hidden sm:flex"> {/* sm:flex ile küçük ekranlarda gizler */}
+                    {socialMediaLinks.map((socialMedia, index) => (
+                        <li key={index}>
+                            <a
+                                target="_blank"
+                                rel="nofollow noreferrer"
+                                href={socialMedia.link}
+                                className="flex items-center"
+                            >
+                                {getIcon(socialMedia.name)}
+                            </a>
+                        </li>
+                    ))}
                 </ul>
             )}
-             
         </>
     );
 }

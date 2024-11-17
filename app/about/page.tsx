@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import SocialMedia from "../components/socialMedia";
 import { fetchAbout } from "@/lib/main_api";
+import { Link } from "lucide-react";
+import Image from 'next/image';
 
 const About = () => {
     const [teamData, setTeamData] = useState([]);
@@ -32,6 +34,7 @@ const About = () => {
     }, []);
 
     return (
+        <>
         <main id="mt-main">
             <section className="mt-contact-banner style4 wow fadeInUp" data-wow-delay="0.4s" style={{ backgroundImage: "url(https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img43.jpg)", backgroundSize: "cover", backgroundPosition: "center", height: "250px", width: "100%" }}>
                 <div className="container">
@@ -85,23 +88,28 @@ const About = () => {
                                                 {sortedMembers[level].map((member, index) => (
                                                     <div key={index} className="col-md-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-delay="0.8s">
                                                         <div className="img-holder">
-                                                            <a href="javascript:void(0)">
-                                                                <img src={'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul' + member.image.replace('/media', '')} alt={member.full_name} />
+                                                            <Link href="javascript:void(0)">
+                                                                <Image 
+                                                                src={'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul' + member.image.replace('/media', '')} 
+                                                                alt={member.full_name} 
+                                                                width={100}
+                                                                height={100}
+                                                                />
                                                                 {member.social_media_links && (
                                                                     <ul className="list-unstyled social-icon">
                                                                         {Object.entries(member.social_media_links).map(([platform, link]) => (
                                                                             <li key={platform} data-link={link}>
-                                                                                <a href={link} target="_blank" rel="noopener noreferrer">
+                                                                                <Link href={link} target="_blank" rel="noopener noreferrer">
                                                                                     <i className={`fa fa-${platform}`}></i>
-                                                                                </a>
+                                                                                </Link>
                                                                             </li>
                                                                         ))}
                                                                     </ul>
                                                                 )}
-                                                            </a>
+                                                            </Link>
                                                         </div>
                                                         <div className="mt-txt">
-                                                            <h4><a href="#">{member.full_name}</a></h4>
+                                                            <h4><Link href="#">{member.full_name}</Link></h4>
                                                             <span className="sub-title">{member.position}</span>
                                                         </div>
                                                     </div>
@@ -116,6 +124,7 @@ const About = () => {
                 </div>
             </section>
         </main>
+        </>
     );
 };
 

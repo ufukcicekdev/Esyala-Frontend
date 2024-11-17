@@ -25,24 +25,24 @@ function BlogCategory() {
     }, []);
 
 
-  return (
-    <>
-    {blogcategoryList.length > 0 ? (
-                                <section className="widget category-widget">
-                                <h3>Kategoriler</h3>
-                                <ul className="list-unstyled widget-nav">
-                                    {blogcategoryList.map((blogcategory, index) => (
-                                    <li key={index}>
-                                        <a href={`/blog/category/${blogcategory.slug}/`}>{blogcategory.name}</a>
-                                    </li>
-                                    ))}
-                                </ul>
-                                </section>
-                            ) : (
-                                <p>Kategori bulunamadı.</p>
-                            )}
-    </>
-  )
+    return (
+        <>
+            {blogcategoryList.length > 0 ? (
+                <section className="widget category-widget">
+                    <h3>Kategoriler</h3>
+                    <ul className="list-unstyled widget-nav">
+                        {blogcategoryList.map((blogcategory, index) => (
+                            <li key={index}>
+                                <Link href={`/blog/category/${blogcategory.slug}/`}>{blogcategory.name}</Link>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            ) : (
+                <p>Kategori bulunamadı.</p>
+            )}
+        </>
+    )
 }
 
 export default BlogCategory

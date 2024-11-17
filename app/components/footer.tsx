@@ -1,14 +1,65 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import SocialMedia from './socialMedia';
 import Subscribe from './subscribe';
+import Image from 'next/image';
+
+import Uyelik from "./sozlesmeler/uyelik";
+import Aydınlatma from "./sozlesmeler/aydınlatma";
+import Cayma from "./sozlesmeler/cayma";
+import Cerez from "./sozlesmeler/cerez";
+import Kimlik from "./sozlesmeler/kimlik";
+import Odeme from "./sozlesmeler/odeme";
+import Mesafe from "./sozlesmeler/mesafe";
+import { fetchFooterCategory } from "@/lib/main_api";
+
 
 const Footer = () => {
+
+    const [dialogContent, setDialogContent] = useState("");
+
+
+    const [footerCategoryList, setFooterCategoryList] = useState([]);
+
+    useEffect(() => {
+        const loadFooterCategory = async () => {
+            try {
+                const footerCategoryResult = await fetchFooterCategory();
+                if (footerCategoryResult && footerCategoryResult.status) {
+                    setFooterCategoryList(footerCategoryResult.data);
+                } else {
+                    console.error("Blog verisi alınamadı.");
+                }
+            } catch (error) {
+                console.error("Blogları yüklerken bir hata oluştu:", error);
+            }
+        };
+        loadFooterCategory();
+
+    }, []);
+
+
+
+
+
+    const dialogData = {
+        "Üyelik Sözleşmesi": <Uyelik />,
+        "Aydınlatma Metni": <Aydınlatma/>,
+        "Cayma, Fesih ve İade Koşulları": <Cayma/>,
+        "Çerez (Cookie) Politikası": <Cerez/>,
+        "Kimlik ve Findeks Raporu": <Kimlik/>,
+        "Ödeme ve Teslimat Bilgileri": <Odeme/>,
+        "Mesafeli Satış Sözleşmesi": <Mesafe/>
+    };
+
+
+
     return (
         <footer id="mt-footer" className="style7 wow fadeInUp">
 
             <aside className="f-promo-box dark">
-                <div className="container divider">
+                <div className="container">
                     <div className="row">
                         <div className="col-xs-12 col-sm-6 col-md-3 mt-paddingbottomsm">
                             <div className="f-widget-item">
@@ -45,7 +96,10 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
+                <div className="divider"></div>
             </aside>
+
+
 
             <div className="footer-holder bg-grey">
                 <div className="container">
@@ -53,7 +107,11 @@ const Footer = () => {
                         <div className="col-xs-12 col-sm-4 mt-paddingbottomsm">
                             <div className="f-widget-about">
                                 <div className="logo">
-                                    <Link href="/" title="Eşyala"><img src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/esyala_syh_noktal%C4%B1.png" alt="Esyala" /></Link>
+                                    <Link href="/" title="Eşyala"><Image
+                                        src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/esyala_syh_noktal%C4%B1.png"
+                                        alt="Esyala"
+                                        width={300}
+                                        height={100} /></Link>
                                 </div>
                                 <ul className="list-unstyled address-list">
                                     <li>
@@ -62,8 +120,8 @@ const Footer = () => {
                                         </i>
                                         <address>Veysel Karani, Çolakoğlu Sokağı No: 10</address>
                                         <address>34885 Rings Rezidans Kat :5 Daire :87  Sancaktepe/İstanbul</address></li>
-                                    <li><i className="fa fa-phone"></i><a href="tel:908503048400" title="0 850 304 84 00">0 850 304 84 00</a></li>
-                                    <li><i className="fa fa-envelope-o"></i><a href="mailto:info@esyala.com" title="info@esyala.com">info@esyala.com</a></li>
+                                    <li><i className="fa fa-phone"></i><Link href="tel:908503048400" title="0 850 304 84 00">0 850 304 84 00</Link></li>
+                                    <li><i className="fa fa-envelope-o"></i><Link href="mailto:info@esyala.com" title="info@esyala.com">info@esyala.com</Link></li>
                                 </ul>
                             </div>
                         </div>
@@ -73,11 +131,15 @@ const Footer = () => {
 
 
                                 <ul className="list-unstyled f-widget-nav">
-                                    {/* {% for category in footer_category %}
-                                <li><a href="{% url 'main:dynamic-category-product-list' category_slugs=category.slug %}" title="{{ category.name }}">{{ category.name }}</a></li>
-                                    
-                                {% endfor %} */}
-
+                                    {footerCategoryList.length > 0 && 
+                                        footerCategoryList.map((category, index) => (
+                                            <li key={index}>
+                                                <a href={`/category/${category.slug}/`} title={category.name}>
+                                                    {category.name}
+                                                </a>
+                                            </li>
+                                        ))
+                                    }
                                 </ul>
                             </div>
 
@@ -88,16 +150,38 @@ const Footer = () => {
                                     <li><Link href="/" title="Blog">Anasayfa</Link></li>
                                     <li><Link href="/about" title="Blog">Hakkımızda</Link></li>
                                     <li><Link href="/contact" title="Blog">İletişim</Link></li>
+                                    <li><Link href="/how-does-it-work" title="Nasıl Çalışır">Nasıl Çalışır</Link></li>
+                                    <li><Link href="/faqs" title="Sık Sorulan Sorular">SSS</Link></li>
+                                    {Object.keys(dialogData).map((title, index) => (
+                                        <li key={title} className="cursor-pointer">
+                                            <span
+                                                className="hover:text-red-600 hover:underline"
+                                                onClick={() => document.getElementById(`my_modal_${index}`).showModal()}
+                                            >
+                                                {title}
+                                            </span>
+
+                                            {/* Modal */}
+                                            <dialog id={`my_modal_${index}`} className="modal">
+                                                <div className="modal-box w-11/12 max-w-5xl bg-white text-black rounded-lg shadow-lg rounded">
+                                                    <form method="dialog">
+                                                        {/* Close button */}
+                                                        <button className="btn btn-lg btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                    </form>
+                                                    <h3 className="font-bold text-lg">{title}</h3>
+                                                    <div className="py-4">
+                                                        {/* Render dynamic content based on dialogData */}
+                                                        {dialogData[title]}
+                                                    </div>
+                                                </div>
+                                            </dialog>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
-
-
-
-
                             <div className="nav-widget-1">
                                 <h3 className="f-widget-heading">Hesap</h3>
                                 <ul className="list-unstyled f-widget-nav">
-
 
                                 </ul>
                             </div>
@@ -123,7 +207,12 @@ const Footer = () => {
                         </div>
                         <div className="col-xs-12">
                             <div className="bank-card align-center">
-                                <img src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/iyzicologolar.webp" alt="Bank Card" loading="lazy" />
+                                <Image
+                                    src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/iyzicologolar.webp"
+                                    alt="Bank Card"
+                                    loading="lazy"
+                                    width={300}
+                                    height={200} />
                             </div>
                         </div>
                     </div>
@@ -135,3 +224,7 @@ const Footer = () => {
 }
 
 export default Footer;
+
+
+
+

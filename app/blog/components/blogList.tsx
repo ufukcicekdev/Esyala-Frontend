@@ -1,0 +1,67 @@
+"use client";
+import { fetchBlogs } from '@/lib/blog_api';
+import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+
+
+function BlogList() {
+
+    const [blogList, setBlogList] = useState([]);
+
+    useEffect(() => {
+        const loadBlogs = async () => {
+            try {
+                const blogResult = await fetchBlogs();
+                if (blogResult && blogResult.status) {
+                    setBlogList(blogResult.data);
+                } else {
+                    console.error("Blog verisi alınamadı.");
+                }
+            } catch (error) {
+                console.error("Blogları yüklerken bir hata oluştu:", error);
+            }
+        };
+        loadBlogs();
+
+    }, []);
+
+
+    return (
+        <div className="col-xs-12 col-sm-8 wow fadeInUp">
+            {blogList.length > 0 ? (
+                blogList.map((blog, index) => (
+                    <article className="blog-post style2" key={index}>
+                        <div className="img-holder">
+                            <Link href={`/blog/${blog.slug}/`} title={blog.title}>
+                                <Image
+                                    src={'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul' + blog.banner.replace('/media', '')}
+                                    alt={blog.title}
+                                    className="img-responsive"
+                                    width={200}
+                                    height={100}
+                                    loading="lazy"
+                                />
+                            </Link>
+
+                        </div>
+                        <div className="blog-txt">
+                            <h2><Link href={`/blog/${blog.slug}/`}>{blog.title}</Link></h2>
+                            <ul className="list-unstyled blog-nav">
+                                <li><i className="fa fa-clock-o"></i>{blog.created_at}</li>
+                                <li> <Link href=""><i className="fa fa-list"></i> {blog.category.name} </Link></li>
+                                <li><Link href="#"><i className="fa fa-eye"></i>{blog.views}</Link></li>
+                            </ul>
+                            <p>{blog.short_description}</p>
+                            <Link href={`/blog/${blog.slug}/`} className="btn-more">Daha Fazla Oku</Link>
+                        </div>
+                    </article>
+                ))
+            ) : (
+                <p className="text-center">Yükleniyor...</p>
+            )}
+        </div>
+    )
+}
+
+export default BlogList

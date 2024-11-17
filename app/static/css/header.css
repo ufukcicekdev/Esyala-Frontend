@@ -115,9 +115,7 @@ margin-bottom: 5px;
 
 /* Mobilde görünür yapmak için */
 @media (max-width: 767px) {
-.mobile-bottom-nav {
-    display: block;
-}
+
 #user-icon{
     display: none;
 }
@@ -163,6 +161,8 @@ text-align: center;
 margin-bottom: 70px; 
 }
 
-
+#mt-footer{
+    padding-bottom: 90px;
+  }
 
 

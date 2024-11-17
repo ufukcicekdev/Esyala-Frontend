@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import PopulerBlogs from '../../components/populerblogs';
 import BlogCategory from '../../components/blogcategory';
+import Image from 'next/image';
 
 function Page({ params }: { params: Promise<{ slug: string }> }) {
     const [blogList, setBlogList] = useState([]);
@@ -44,7 +45,7 @@ function Page({ params }: { params: Promise<{ slug: string }> }) {
                             <h1>Blog</h1>
                             <nav className="breadcrumbs">
                                 <ul className="list-unstyled">
-                                    <li><a href="/">Ana Sayfa <i className="fa fa-angle-right"></i></a></li>
+                                    <li><Link href="/">Ana Sayfa <i className="fa fa-angle-right"></i></Link></li>
                                     <li><Link href="/blog">Blog<i className="fa fa-angle-right"></i></Link></li>
                                     <li>
                                         <span>{firstCategoryName}</span>
@@ -65,19 +66,22 @@ function Page({ params }: { params: Promise<{ slug: string }> }) {
                                 blogList.map((blog, index) => (
                                     <article className="blog-post style2" key={index}>
                                         <div className="img-holder">
-                                            <img
+                                            <Image
                                                 src={'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul'+ blog.banner.replace('/media','')}
                                                 alt={blog.title}
                                                 className="img-responsive"
+                                                width={500}
+                                                height={300}
+                                                layout="responsive"
                                             />
                                             <ul className="list-unstyled comment-nav">
-                                                <li><a href="#"><i className="fa fa-eye"></i>{blog.views}</a></li>
+                                                <li><i className="fa fa-eye"></i>{blog.views}</li>
                                             </ul>
                                         </div>
                                         <div className="blog-txt">
                                             <h2><Link href={`/blog/${blog.slug}/`}>{ blog.title }</Link></h2>
                                             <ul className="list-unstyled blog-nav">
-                                                <li> <a href="#"><i className="fa fa-clock-o"></i>{ blog.created_at }</a></li>
+                                                <li> <i className="fa fa-clock-o"></i>{ blog.created_at }</li>
                                                 <li> <Link href=""><i className="fa fa-list"></i> { blog.category.name } </Link></li>
                                             </ul>
                                             <p>{ blog.short_description }</p>

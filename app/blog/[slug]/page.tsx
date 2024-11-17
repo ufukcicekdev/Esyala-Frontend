@@ -7,6 +7,8 @@ import BlogCategory from '../components/blogcategory';
 import PopulerBlogs from '../components/populerblogs';
 import SocialMedia from '@/app/components/socialMedia';
 import Share from '@/app/components/share';
+import Image from 'next/image';
+
 
 export default function Page({ params }: { params: Promise<{ slug: string }> }) {
     const [blog, setBlog] = useState<any>(null);
@@ -83,10 +85,13 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
                         <div className="col-xs-12 col-sm-8" data-wow-delay="0.4s" >
                             <article className="blog-post detail wow fadeInUp" data-wow-delay="0.4s">
                                 <div className="img-holder">
-                                    <img
+                                    <Image
                                         src={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${blog.banner.replace('/media', '')}`}
                                         alt={blog.title}
                                         className="img-responsive"
+                                        width={500}
+                                        height={300}
+                                        layout="responsive" 
                                     />
                                 </div>
 
@@ -94,7 +99,7 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
                                     <h1>{blog.title}</h1>
                                     <ul className="list-unstyled blog-nav">
                                         <li>
-                                            <i className="fa fa-clock-o"></i> {new Date(blog.created_at).toLocaleDateString('tr-TR')}
+                                            <i className="fa fa-clock-o"></i> {blog.created_at}
                                         </li>
                                         <li>
                                             <Link href="{`/blog/category/${blogcategory.slug}`}"><i className="fa fa-list"></i>{ blog.category?.name }</Link>
@@ -110,9 +115,12 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
 
                             <article className="mt-author-box">
                                 <div className="author-img">
-                                    <img
-                                        src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/esyala_syh_noktal%C4%B1.png"
-                                        alt="Eşyala"
+                                <Image
+                                    src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/esyala_syh_noktal%C4%B1.png"
+                                    alt="Eşyala"
+                                    width={500}  // Görselin genişliğini belirtin
+                                    height={300} // Görselin yüksekliğini belirtin
+                                    layout="responsive" // Görselin responsive olmasını sağlamak için
                                     />
                                 </div>
                                 <div className="author-txt">

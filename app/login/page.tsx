@@ -1,35 +1,9 @@
-"use client";
-import handleLogin from "@/lib/customerauth_api";
-import React, { useState } from "react";
-import { useUser } from "../context/UserContext";
-import Link from "next/link";
+import { Link } from "lucide-react";
+import LoginForm from "../components/forms/LoginForm";
+
 
 function Signin() {
-    const [formData, setFormData] = useState({ email: "", password: "" });
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-    const { login, logout } = useUser() || {};
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault(); // Formun varsayılan davranışını engeller
-        try {
-            const data = await handleLogin(formData.email, formData.password);
-            setSuccessMessage("Giriş başarılı!"); // Başarılı mesajı
-            setErrorMessage(""); // Hataları temizle
-            console.log("Giriş başarılı:", data);
-            window.location.href = "/";
-        } catch (error) {
-            setErrorMessage("Giriş başarısız! Lütfen bilgilerinizi kontrol edin."); // Hata mesajı
-            console.error("Hata:", error);
-        }
-    };
+    
 
     return (
         <main id="mt-main">
@@ -108,40 +82,7 @@ function Signin() {
                                             </Link>
                                         </p>
                                     </header>
-                                    <form onSubmit={handleSubmit}>
-                                        <fieldset>
-                                            <input
-                                                type="email"
-                                                className="input"
-                                                required
-                                                name="email"
-                                                placeholder="Mail Adresiniz"
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                style={{ width: "100%" }}
-                                            />
-                                            <input
-                                                className="input"
-                                                required
-                                                type="password"
-                                                name="password"
-                                                placeholder="Şifreniz *"
-                                                value={formData.password}
-                                                onChange={handleChange}
-                                                style={{ width: "100%" }}
-                                            />
-                                            <div className="box">
-                                                <Link href="/password-change" className="help">
-                                                    Şifremi Unuttum!
-                                                </Link>
-                                            </div>
-                                            <button type="submit" className="btn-type1">
-                                                Giriş Yap
-                                            </button>
-                                        </fieldset>
-                                    </form>
-                                    {errorMessage && <p className="error-message">{errorMessage}</p>}
-                                    {successMessage && <p className="success-message">{successMessage}</p>}
+                                    <LoginForm/>
                                 </div>
                             </div>
                         </div>

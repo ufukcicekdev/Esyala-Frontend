@@ -4,12 +4,18 @@ import Link from "next/link";
 import Image from 'next/image';
 import { useEffect, useState } from "react";
 import SocialMediaHeader from "./socialMediHeader";
-import { useUser } from "../context/UserContext";
 import { fetchCategory } from "@/lib/main_api";
+import MobileBottomNav from "./MobileBottomNav";
+import { Alert } from "./messages/Alert";
+
+
 
 const Header = () => {
-  const { user } = useUser() || {};
+
+
   const [categories, setCategories] = useState([]);
+
+  const rantalCategory = "rental";
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -19,12 +25,17 @@ const Header = () => {
           setCategories(response.data.header_categories);
         }
       } catch (error) {
-        console.error("Kategoriler alınamadı:", error);
+        <Alert 
+        tag="error" 
+        message={["Kategoriler alınamadı"]} 
+        />
+  
       }
     };
 
     fetchCategories();
   }, []);
+
 
   const renderSubCategories = (category) => {
     if (category.children && category.children.length > 0) {
@@ -34,7 +45,7 @@ const Header = () => {
             <li key={child.slug} className="sub-category-item">
               <strong>
                 <Link
-                  href={`/category/${child.get_full_path_slug}`}
+                  href={`/category/${category.slug}/${child.slug}/`}
                   title={child.name}
                 >
                   {child.name}
@@ -47,7 +58,7 @@ const Header = () => {
                     <li key={subChild.slug}>
                       <strong>
                         <Link
-                          href={`/category/${subChild.get_full_path_slug}`}
+                          href={`/category/${subChild.slug}/`}
                           title={subChild.name}
                         >
                           {subChild.name}
@@ -97,7 +108,7 @@ const Header = () => {
                 </li>
                 <li><a href="#" className="icon-magnifier"></a></li>
                 <li id="user-icon">
-                  {user ? (
+                  {/* {user ? (
                     <>
                       <a href="/address-list" title={user.username}>
                         <div className="user-icon">
@@ -111,7 +122,7 @@ const Header = () => {
                     <a href="/login">
                       <div className="icon-user"></div>
                     </a>
-                  )}
+                  )} */}
                 </li>
               </ul>
               <div className="mt-logo">
@@ -135,6 +146,9 @@ const Header = () => {
         </div>
       </div>
 
+
+
+
       <div className="mt-nav-holder">
         <div className="container">
           <div className="row">
@@ -154,13 +168,24 @@ const Header = () => {
                     <div className="mt-dropmenu text-left">
                       <div className="mt-frame">
                         <div className="mt-f-box">
+                          <div className="mt-col-3">
+                            <div className="sub-dropcont">
+                              <strong className="title">
+                                <Link href={`/category/${rantalCategory}`} title="Çalışma Odası" className="mt-subopener">Kiralık Ürünler</Link>
+                              </strong>
+
+                              <Link href="/category/rental/" title="Tümünü Gör" >
+                                <i className="fa fa-angle-right" aria-hidden="true">Tümünü Gör</i>
+                              </Link>
+                            </div>
+                          </div>
                           {categories.length > 0 ? (
                             categories.map((category) => (
                               <div key={category.slug} className="mt-col-3">
                                 <div className="sub-dropcont mt-03">
                                   <strong className="title">
                                     <Link
-                                      href={`/category/${category.slug}`}
+                                      href={`/category/${category.slug}/`}
                                       title={category.name}
                                       className="mt-subopener"
                                     >
@@ -208,6 +233,10 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      <MobileBottomNav/>
+
+
     </header>
   );
 };

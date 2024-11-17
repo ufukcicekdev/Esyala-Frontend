@@ -1,0 +1,369 @@
+
+
+.star {
+    cursor: pointer;
+    font-size: 25px;
+    color: rgb(168, 168, 168);
+}
+
+.selected {
+    color: gold;
+}
+
+
+button{
+  outline: none;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  transition: background 0.1s linear, border-color 0.1s linear, color 0.1s linear;
+}
+
+
+::selection{
+  color: #fff;
+  background: #7d2ae8;
+}
+.view-modal, .popupSocial{
+  position: absolute;
+  left: 50%;
+  z-index: 5;
+}
+
+.view-modal{
+  top: 10%;
+  left: 90%;
+  color: #e8e4ee;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px 25px;
+  background: rgb(113, 5, 156);
+  transform: translate(-50%, -50%);
+}
+.popupSocial{
+  background: rgb(255, 254, 254);
+  padding: 25px;
+  border-radius: 15px;
+  top: 10%;
+  max-width: 380px;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+  transform: translate(-50%, -50%) scale(1.2);
+  transition: top 0s 0.2s ease-in-out,
+              opacity 0.2s 0s ease-in-out,
+              transform 0.2s 0s ease-in-out;
+}
+.popupSocial.show{
+  top: 300%;
+  left: 100%;
+  opacity: 1;
+  pointer-events: auto;
+  transform:translate(-50%, -50%) scale(1);
+  transition: top 0s 0s ease-in-out,
+              opacity 0.2s 0s ease-in-out,
+              transform 0.2s 0s ease-in-out;
+
+}
+.popupSocial :is(header, .icons, .field){
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.popupSocial header{
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ebedf9;
+}
+
+header .close, .icons a{
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+} 
+header .close{
+  color: #878787;
+  font-size: 17px;
+  background: #f3f3f3;
+  height: 33px;
+  width: 33px;
+  cursor: pointer;
+}
+header .close:hover{
+  background: #ebedf9;
+}
+.popup .sociaContent{
+  margin: 20px 0;
+}
+.popup .icons{
+  margin: 15px 0 20px 0;
+}
+.sociaContent p{
+  font-size: 16px;
+}
+.sociaContent .icons a{
+  height: 50px;
+  width: 50px;
+  font-size: 20px;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.icons a i{
+  transition: transform 0.3s ease-in-out;
+}
+.icons a:nth-child(1){
+  color: #1877F2;
+  border-color: #b7d4fb;
+}
+.icons a:nth-child(1):hover{
+  background: #1877F2;
+}
+.icons a:nth-child(2){
+  color: #46C1F6;
+  border-color: #b6e7fc;
+}
+.icons a:nth-child(2):hover{
+  background: #46C1F6;
+}
+.icons a:nth-child(3){
+  color: #e1306c;
+  border-color: #f5bccf;
+}
+.icons a:nth-child(3):hover{
+  background: #e1306c;
+}
+.icons a:nth-child(4){
+  color: #25D366;
+  border-color: #bef4d2;
+}
+.icons a:nth-child(4):hover{
+  background: #25D366;
+}
+.icons a:nth-child(5){
+  color: #0088cc;
+  border-color: #b3e6ff;
+}
+.icons a:nth-child(5):hover{
+  background: #0088cc;
+}
+.icons a:hover{
+  color: #fff;
+  border-color: transparent;
+}
+.icons a:hover i{
+  transform: scale(1.2);
+}
+.sociaContent .field{
+  margin: 12px 0 -5px 0;
+  height: 45px;
+  border-radius: 4px;
+  padding: 0 5px;
+  border: 1px solid #757171;
+}
+.field.active{
+  border-color: #7d2ae8;
+}
+.field i{
+  width: 50px;
+  font-size: 18px;
+  text-align: center;
+}
+.field.active i{
+  color: #7d2ae8;
+}
+
+
+.field input{
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+}
+.field button{
+  color: #fff;
+  padding: 5px 18px;
+  background: #7d2ae8;
+}
+.field button:hover{
+  background: #8d39fa;
+}
+
+
+@media only screen and (max-width: 798px) {
+    .popupSocial.show {
+    top: 300%;
+    left: 100%;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-93%, -50%) scale(0.80);
+    transition: top 0s 0s ease-in-out, opacity 0.2s 0s ease-in-out, transform 0.2s 0s ease-in-out;
+}
+
+
+}
+
+
+.subcategory-list .name {
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 700;
+}
+
+.subcategory-list .num {
+  float: right;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15px;
+  margin: 2px 0 0;
+}
+
+.sub-subcategory-list {
+    display: none; /* Alt kategorileri varsayılan olarak gizle */
+}
+
+.subcategory-list li {
+    list-style: none; /* Madde işaretlerini kaldır */
+    margin: 10px 0; /* Liste öğeleri arasındaki boşluğu ayarla */
+}
+
+.subcategory-list li:hover .sub-subcategory-list {
+    display: block; /* Üzerine gelindiğinde alt kategorileri göster */
+}
+
+
+  #card-view {
+    display: inline-table;
+    flex-wrap: wrap;
+    gap: 10px; /* Kartlar arasındaki boşluk */
+}
+
+.product-3 {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      height: 500px; /* Sabit yükseklik */
+      overflow: hidden; /* İçeriğin dışarı taşmasını önler */
+      position: relative;
+      text-align: center;
+      background-color: #fff; /* Arka plan rengi */
+  }
+
+  .img a img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 233px; 
+      overflow: hidden; 
+      position: relative; 
+  }
+  
+  .img img {
+      max-width: 100%;
+      max-height: 100%;
+  }
+
+.caption {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      color: #fff;
+      padding: 5px;
+  }
+  
+  .caption .off {
+      font-size: 17px;
+      color: #fff;
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      background-color: #b2cc29;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+  }
+  
+  .caption .best-price {
+      font-size: 17px;
+      color: #fff;
+      padding: 5px 10px;
+      background-color: #fed062;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+      display: inline-block;
+  }
+
+.mt-stars-container {
+    margin-top: 10px;
+}
+
+.mt-stars {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.mt-stars li {
+    margin: 0 2px;
+}
+
+.mt-stars i {
+    color: #FFD700;
+}
+
+.title a {
+    color: #000;
+    text-decoration: none;
+}
+
+.price, .off {
+    display: block;
+}
+
+.links {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.links li {
+    margin: 0 5px;
+}
+.caption.top-right {
+    top: 10px; /* Üstten mesafe */
+    right: 10px; /* Sağdan mesafe */
+}
+
+.related_product {
+    font-size: 17px;
+      color: #fff;
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 5px;
+      background-color: #fed062;
+      font-weight: 700;
+      font-family: "Montserrat", sans-serif;
+      line-height: 1.2;
+      border-radius: 3px;
+}
+.product-3 .img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 233px;
+    overflow: hidden;
+    position: relative;
+}
+
+
