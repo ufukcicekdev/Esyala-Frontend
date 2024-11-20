@@ -5,20 +5,7 @@ const instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 });
 
-export async function fetchSocialMediaLinks() {
-    try {
-        const response = await instance.get("/main/get_social_media_links/");
-        if (response.data["status"] == true) {
-            return response.data;
-        }
-        else {
-            return response.data["messages"]
-        }
-    } catch (error) {
-        console.error("Sosyal medya linkleri alınırken bir hata oluştu:", error);
-        return [];
-    }
-}
+
 
 
 export async function fetchBrands() {
@@ -57,6 +44,21 @@ export async function fetchAbout() {
 export async function fetchHomeMainBanner() {
     try {
         const response = await instance.get("/main/get_home_main_banner/");
+        if (response.data["status"] == true) {
+            return response.data;
+        }
+        else {
+            return response.data["messages"]
+        }
+    } catch (error) {
+        console.error("Bannerlar alınırken bir hata oluştu:", error);
+        return [];
+    }
+}
+
+export async function fetchBrand() {
+    try {
+        const response = await instance.get("/main/get_brand/");
         if (response.data["status"] == true) {
             return response.data;
         }

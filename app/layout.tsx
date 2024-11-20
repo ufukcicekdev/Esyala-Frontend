@@ -9,9 +9,10 @@ import "./static/css/custom2.css";
 import "./static/css/bcf16bd37f5afe2e2.css";
 import "./static/css/share.css";
 import "./static/css/header.css";
+import "./static/css/team.css";
 import "./globals.css";
 
-
+import { AlertProvider } from './context/AlertContext.js';
 
 import Header from "./components/header";
 import Footer from "./components/footer";
@@ -64,22 +65,20 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <head>
-      
+        {/* Head kısmındaki meta etiketler, title vb. buraya eklenebilir */}
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div id="wrapper">
-          <div className="w1">
-            <Header />
-            {children}
-            <Footer />
-            <span id="back-top" className="fa fa-arrow-up"></span>
+      <body className="antialiased">
+        <AlertProvider>
+          <div id="wrapper">
+            <div className="w1">
+              <Header />
+              {children}
+              <Footer />
+              <span id="back-top" className="fa fa-arrow-up"></span>
+            </div>
           </div>
-        </div>
-        
-        
+        </AlertProvider>
       </body>
-
     </html>
-
   );
 }

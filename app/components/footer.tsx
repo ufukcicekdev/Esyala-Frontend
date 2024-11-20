@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import SocialMedia from './socialMedia';
 import Subscribe from './subscribe';
 import Image from 'next/image';
 
@@ -13,7 +12,8 @@ import Kimlik from "./sozlesmeler/kimlik";
 import Odeme from "./sozlesmeler/odeme";
 import Mesafe from "./sozlesmeler/mesafe";
 import { fetchFooterCategory } from "@/lib/main_api";
-
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
+import CustomDialog from "./sozlesmeler/dialog";
 
 const Footer = () => {
 
@@ -39,21 +39,15 @@ const Footer = () => {
 
     }, []);
 
-
-
-
-
     const dialogData = {
         "Üyelik Sözleşmesi": <Uyelik />,
-        "Aydınlatma Metni": <Aydınlatma/>,
-        "Cayma, Fesih ve İade Koşulları": <Cayma/>,
-        "Çerez (Cookie) Politikası": <Cerez/>,
-        "Kimlik ve Findeks Raporu": <Kimlik/>,
-        "Ödeme ve Teslimat Bilgileri": <Odeme/>,
-        "Mesafeli Satış Sözleşmesi": <Mesafe/>
+        "Aydınlatma Metni": <Aydınlatma />,
+        "Cayma, Fesih ve İade Koşulları": <Cayma />,
+        "Çerez (Cookie) Politikası": <Cerez />,
+        "Kimlik ve Findeks Raporu": <Kimlik />,
+        "Ödeme ve Teslimat Bilgileri": <Odeme />,
+        "Mesafeli Satış Sözleşmesi": <Mesafe />
     };
-
-
 
     return (
         <footer id="mt-footer" className="style7 wow fadeInUp">
@@ -131,7 +125,7 @@ const Footer = () => {
 
 
                                 <ul className="list-unstyled f-widget-nav">
-                                    {footerCategoryList.length > 0 && 
+                                    {footerCategoryList.length > 0 &&
                                         footerCategoryList.map((category, index) => (
                                             <li key={index}>
                                                 <a href={`/category/${category.slug}/`} title={category.name}>
@@ -152,31 +146,7 @@ const Footer = () => {
                                     <li><Link href="/contact" title="Blog">İletişim</Link></li>
                                     <li><Link href="/how-does-it-work" title="Nasıl Çalışır">Nasıl Çalışır</Link></li>
                                     <li><Link href="/faqs" title="Sık Sorulan Sorular">SSS</Link></li>
-                                    {Object.keys(dialogData).map((title, index) => (
-                                        <li key={title} className="cursor-pointer">
-                                            <span
-                                                className="hover:text-red-600 hover:underline"
-                                                onClick={() => document.getElementById(`my_modal_${index}`).showModal()}
-                                            >
-                                                {title}
-                                            </span>
-
-                                            {/* Modal */}
-                                            <dialog id={`my_modal_${index}`} className="modal">
-                                                <div className="modal-box w-11/12 max-w-5xl bg-white text-black rounded-lg shadow-lg rounded">
-                                                    <form method="dialog">
-                                                        {/* Close button */}
-                                                        <button className="btn btn-lg btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                                    </form>
-                                                    <h3 className="font-bold text-lg">{title}</h3>
-                                                    <div className="py-4">
-                                                        {/* Render dynamic content based on dialogData */}
-                                                        {dialogData[title]}
-                                                    </div>
-                                                </div>
-                                            </dialog>
-                                        </li>
-                                    ))}
+                                    <CustomDialog dialogData={dialogData} />
                                 </ul>
                             </div>
                             <div className="nav-widget-1">
@@ -190,7 +160,53 @@ const Footer = () => {
                             <div className="f-widget-newsletter">
                                 <Subscribe />
                                 <h4 className="f-widget-heading follow">Bizi Takip Edin</h4>
-                                <SocialMedia />
+                                <ul className="list-unstyled social-network"> 
+
+                                    <li>
+                                        <a
+                                            target="_blank"
+                                            rel="nofollow noreferrer"
+                                            href="https://www.facebook.com/esyalacom"
+                                            className="flex items-center"
+                                        >
+                                            <FaFacebook className="text-blue-600 hover:text-blue-800" size={20} />
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a
+                                            target="_blank"
+                                            rel="nofollow noreferrer"
+                                            href="https://www.instagram.com/esyalacom/"
+                                            className="flex items-center"
+                                        >
+                                            <FaInstagram className="text-pink-600 hover:text-pink-800" size={20} />
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a
+                                            target="_blank"
+                                            rel="nofollow noreferrer"
+                                            href="https://www.linkedin.com/company/102235289/admin/feed/posts/?feedType=following"
+                                            className="flex items-center"
+                                        >
+                                            <FaLinkedin className="text-blue-700 hover:text-blue-900" size={20} />
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a
+                                            target="_blank"
+                                            rel="nofollow noreferrer"
+                                            href="https://www.youtube.com/@esyalacom"
+                                            className="flex items-center"
+                                        >
+                                            <FaYoutube className="text-red-600 hover:text-red-800" size={20} />
+                                        </a>
+                                    </li>
+
+                                </ul>
                             </div>
 
 

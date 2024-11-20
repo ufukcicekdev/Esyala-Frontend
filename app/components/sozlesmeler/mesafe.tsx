@@ -62,7 +62,7 @@ function Mesafe() {
 
       <h3 className="text-xl font-semibold mb-4">4. SATICI BİLGİLERİ</h3>
       <p className="mb-4">
-        Ünvanı :Yakup ULUSOY
+        Ünvanı : Eşyala Elektronik Hizmetler ve Ticaret Aş.
         <br />
         Adres : Veysel Karani, Osmangazi Cd No:158, Kat:5 Daire:87  34885 Sancaktepe/İstanbul
         <br />

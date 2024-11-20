@@ -1,10 +1,117 @@
-import React from 'react'
-import { IoIosArrowForward } from 'react-icons/io'
+"use client";
+import * as React from 'react';
+import { IoIosArrowForward } from 'react-icons/io';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from "@mui/material";
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 
-export default function page() {
+const theme = createTheme({ typography: { fontSize: 30 } });
+
+const steps = [
+    {
+        label: 'Nasıl Çalışır?',
+        description: `
+            <ul>
+                <li>Yüzlerce ürün arasından istediğin ürünü seç.</li>
+                <li>Kiralamak istediğin süreyi belirle.</li>
+                <li>Siparişini oluşturduğunda ilk ay kira ücreti alınır.</li>
+                <li>Otomatik kimlik teyidi ve Findeks raporu onayının ardından kiralama işlemi onaylanır ve ürünün ücretsiz kargo ile sana gönderilir.</li>
+                <li>Kiralama talebi onaylanmazsa alınan ilk ay kira ücreti iade edilir.</li>
+            </ul>
+        `,
+    },
+    {
+        label: 'Kullanım Detayları',
+        description: `
+            <p><strong>İlk ay kira ücreti:</strong> Kiralama yapıldığı gün alınır.</p>
+            <p><strong>Kira süresi:</strong> Ürünü teslim aldığın gün başlar. Sonraki ayların kira ücretleri, siparişini oluşturduğun günlerde kartından otomatik olarak alınır. Kargoda geçen süre kira süresine eklenir.</p>
+            <p><strong>Hasar Durumu:</strong> Ürünü kullanırken hasar oluşursa, hasar onarım süreçlerini biz üstleniriz ve hasar onarım masraflarının %70’ini karşılarız.</p>
+            <p><strong>Uzun Süreli Kullanım:</strong> Kiraladığın ürünü daha uzun süre kullanmak istersen, istediğin zaman kira süresini uzatabilir ya da kiraladığın ürünü satın alabilirsin.</p>
+        `,
+    },
+    {
+        label: 'İade İşlemleri',
+        description: `
+            <p><strong>İade işlemi:</strong> Kira süresi bittiğinde ürünü orijinal kutusu ve aksesuarlarıyla ücretsiz kargo ile geri gönder.</p>
+            <p>Her iade edilen ürünün teknik kalite kontrol işlemleri yapılır. Kalite kontrol işlemleri onaylandığında, kartından çekilen bir sonraki ayın kira ücreti iade edilir.</p>
+        `,
+    },
+];
+
+function VerticalLinearStepper() {
+    const [activeStep, setActiveStep] = React.useState(0);
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
+
+    return (
+        <ThemeProvider theme={theme}>
+            <Box sx={{ maxWidth: 800, margin: 'auto' }}>
+                <Stepper activeStep={activeStep} orientation="vertical">
+                    {steps.map((step, index) => (
+                        <Step key={step.label}>
+                            <StepLabel>{step.label}</StepLabel>
+                            <StepContent>
+                                <Typography
+                                    component="div"
+                                    sx={{
+                                        fontSize: '2rem',
+                                        lineHeight: '1.6',
+                                    }}
+                                    dangerouslySetInnerHTML={{ __html: step.description }}
+                                />
+                                <Box sx={{ mb: 2 }}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleNext}
+                                        sx={{ mt: 2, mr: 2 }}
+                                    >
+                                        {index === steps.length - 1 ? 'Bitir' : 'Devam'}
+                                    </Button>
+                                    <Button
+                                        disabled={index === 0}
+                                        onClick={handleBack}
+                                        sx={{ mt: 2, mr: 2 }}
+                                    >
+                                        Geri
+                                    </Button>
+                                </Box>
+                            </StepContent>
+                        </Step>
+                    ))}
+                </Stepper>
+                {activeStep === steps.length && (
+                    <Paper square elevation={0} sx={{ p: 3 }}>
+                        <Button onClick={handleReset} sx={{ mt: 2, mr: 2 }}>
+                            Resetle
+                        </Button>
+                    </Paper>
+                )}
+            </Box>
+        </ThemeProvider>
+    );
+}
+
+export default function Page() {
     return (
         <main id="mt-main">
-
             <section className="mt-contact-banner style4 wow fadeInUp" data-wow-delay="0.4s" style={{
                 backgroundImage: 'url(https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img43.jpg)',
                 backgroundSize: 'cover',
@@ -12,96 +119,28 @@ export default function page() {
                 height: '250px',
                 width: '100%',
             }}>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-xs-12 text-center">
-                            <h1>Nasıl Çalışır</h1>
+                <Container maxWidth="xl">
+                    <Grid container spacing={4} sx={{ width: '100%', height: '100%' }}>
+                        <Grid item xs={12} textAlign="center">
+                            <Typography variant="h3">Nasıl Çalışır</Typography>
                             <nav className="breadcrumbs">
                                 <ul className="list-unstyled">
                                     <li><a href="/">Ana Sayfa <IoIosArrowForward className="inline-block ml-1" /></a></li>
                                     <li>Nasıl Çalışır</li>
                                 </ul>
                             </nav>
-                        </div>
-                    </div>
-                </div>
+                        </Grid>
+                    </Grid>
+                </Container>
             </section>
 
-            <div className="w-full">
-                {/* Nasıl Çalışır */}
-                <div className="container mx-auto mb-8">
-                    <div className="step bg-white shadow-md rounded-lg p-6">
-                        <span className="step-number bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold">
-                            1
-                        </span>
-                        <div className="step-content mt-4">
-                            <h2 className="text-xl font-semibold mb-2 text-gray-800">Nasıl Çalışır?</h2>
-                            <p className="text-gray-600 mb-4">Web sitemizdeki kiralama işlemi adımları:</p>
-                            <ol className="list-decimal list-inside text-gray-700 space-y-2">
-                                <li>Yüzlerce ürün arasından istediğin ürünü seç.</li>
-                                <li>Kiralamak istediğin süreyi belirle.</li>
-                                <li>Siparişini oluşturduğunda ilk ay kira ücreti alınır.</li>
-                                <li>
-                                    Otomatik kimlik teyidi ve findeks raporu onayının ardından kiralama işlemi
-                                    onaylanır ve ürünün ücretsiz kargo ile sana gönderilir.
-                                </li>
-                                <li>Kiralama talebi onaylanmazsa alınan ilk ay kira ücreti iade edilir.</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Kullanım Detayları */}
-                <div className="container mx-auto mb-8">
-                    <div className="step bg-white shadow-md rounded-lg p-6">
-                        <span className="step-number bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold">
-                            2
-                        </span>
-                        <div className="step-content mt-4">
-                            <h2 className="text-xl font-semibold mb-2 text-gray-800">Kullanım Detayları</h2>
-                            <ul className="list-disc list-inside text-gray-700 space-y-2">
-                                <li>İlk ay kira ücreti kiralama yapıldığı gün alınır.</li>
-                                <li>
-                                    Kira süresi ürünü teslim aldığın gün başlar. Sonraki ayların kira ücretleri
-                                    de siparişini oluşturduğun günlerde kartından otomatik olarak alınır.
-                                    Kargoda geçen süre kira süresine eklenir.
-                                </li>
-                                <li>
-                                    Ürünü kullanırken hasar oluşursa, hasar onarım süreçlerini biz üstleniriz ve
-                                    hasar onarım masraflarının %70’ini karşılarız.
-                                </li>
-                                <li>
-                                    Kiraladığın ürünü daha uzun süre kullanmak istersen, istediğin zaman kira
-                                    süresini uzatabilir ya da kiraladığın ürünü satın alabilirsin.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                {/* İade İşlemleri */}
-                <div className="container mx-auto mb-8">
-                    <div className="step bg-white shadow-md rounded-lg p-6">
-                        <span className="step-number bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold">
-                            3
-                        </span>
-                        <div className="step-content mt-4">
-                            <h2 className="text-xl font-semibold mb-2 text-gray-800">İade İşlemleri</h2>
-                            <ul className="list-disc list-inside text-gray-700 space-y-2">
-                                <li>
-                                    Kira süresi bittiğinde ürünü orijinal kutusu ve aksesuarlarıyla ücretsiz
-                                    kargo ile geri gönder.
-                                </li>
-                                <li>Her iade edilen ürünün teknik kalite kontrol işlemleri yapılır.</li>
-                                <li>
-                                    Kalite kontrol işlemleri onaylandığında kartından çekilen bir sonraki ayın
-                                    kira ücreti iade edilir.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Container maxWidth="xl">
+                <Grid container justifyContent="center" spacing={4}>
+                    <Grid item xs={12} md={8}>
+                        <VerticalLinearStepper />
+                    </Grid>
+                </Grid>
+            </Container>
         </main>
-    )
+    );
 }

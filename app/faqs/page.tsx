@@ -1,7 +1,8 @@
 
-
+"use client";
 import React from 'react'
-import TabsFaqs, { AccordionDemo } from '../components/faqs'
+import ScrollableTabsButtonAuto from '../components/faqs'
+
 
 export default function page() {
     return (
@@ -48,7 +49,7 @@ export default function page() {
             <div className="container faq-section mt-about-sec">
                 <div className="row txt">
                     <div className="col-xs-12" data-wow-delay="0.4s">
-                        <TabsFaqs />
+                        <ScrollableTabsButtonAuto/>
                     </div>
                     
                 </div>

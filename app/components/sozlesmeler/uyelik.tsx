@@ -11,7 +11,7 @@ function Uyelik() {
         </p>
         <p className="mb-4">
           Sitemizdeki web sayfaları ve ona bağlı tüm sayfalar (“site”) esyala.com
-          adresindeki Yakup ULUSOY malıdır ve onun tarafından işletilir. Sizler
+          adresindeki Eşyala Elektronik Hizmetler ve Ticaret Aş. malıdır ve onun tarafından işletilir. Sizler
           (“Kullanıcı”) sitede sunulan tüm hizmetleri kullanırken aşağıdaki şartlara
           tabi olduğunuzu, sitedeki hizmetten yararlanmakla ve kullanmaya devam
           etmekle; sözleşme imzalama hakkına, yetkisine ve hukuki ehliyetine sahip ve

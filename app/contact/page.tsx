@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useAlert } from '../context/AlertContext';
 
 const Contact = () => {
+  const showAlert = useAlert();
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -11,8 +13,6 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
 
   // Telefon numarasını formatlamak için bir fonksiyon
   const handlePhoneChange = (e) => {
@@ -33,7 +33,6 @@ const Contact = () => {
       formattedValue += ' ' + value.substring(6, 10); // Son 4 rakamı ekle
     }
 
-    // State güncellemesi
     setFormData((prevData) => ({
       ...prevData,
       phone: formattedValue
@@ -54,24 +53,28 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true); // Form gönderimi başladığında
 
-    // API'ye POST isteği gönder
+    const cleanedPhone = formData.phone.replace(/\D/g, ''); 
     const data = {
       full_name: formData.fullName, // full_name alanı
       email: formData.email, // email alanı
-      phone: formData.phone, // phone alanı
+      phone: cleanedPhone, // phone alanı
       subject: formData.subject, // subject alanı
       message: formData.message // message alanı
     };
 
     try {
-      const response = await axios.post('/main/create_contact_us/', data, {
+      const response = await fetch('http://localhost:8000/main/create_contact_us/', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify(data),
       });
 
-      if (response.status === 200) {
-        setSubmitSuccess(true); // Başarıyla gönderildiyse
+      const result = await response.json();
+
+      if (response.ok && result.status === true) {
+        showAlert('success', 'Mesajınız başarıyla gönderildi.');
         setFormData({
           fullName: '',
           email: '',
@@ -80,12 +83,12 @@ const Contact = () => {
           message: ''
         });
       } else {
-        setSubmitError('Bir hata oluştu. Lütfen tekrar deneyin.');
+        showAlert('error',result.messages || 'Bir hata oluştu. Lütfen tekrar deneyin.');
       }
     } catch (error) {
-      setSubmitError('Bir hata oluştu. Lütfen tekrar deneyin.');
+      showAlert('error', 'Bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
-      setIsSubmitting(false); // Form gönderimi tamamlandığında
+      setIsSubmitting(false); 
     }
   };
 
@@ -201,23 +204,12 @@ const Contact = () => {
                   </button>
                 </fieldset>
               </form>
-
-              {submitSuccess && (
-                <div className="alert alert-success">
-                  Mesajınız başarıyla gönderildi.
-                </div>
-              )}
-              {submitError && (
-                <div className="alert alert-danger">
-                  {submitError}
-                </div>
-              )}
             </div>
           </div>
         </div>
       </section>
     </main>
   );
-}
+};
 
 export default Contact;

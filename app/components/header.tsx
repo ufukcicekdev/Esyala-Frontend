@@ -3,10 +3,14 @@
 import Link from "next/link";
 import Image from 'next/image';
 import { useEffect, useState } from "react";
-import SocialMediaHeader from "./socialMediHeader";
 import { fetchCategory } from "@/lib/main_api";
 import MobileBottomNav from "./MobileBottomNav";
-import { Alert } from "./messages/Alert";
+import { AutoDismissAlert } from "./messages/Alert";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
+import React from "react";
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 
 
 
@@ -21,15 +25,15 @@ const Header = () => {
     const fetchCategories = async () => {
       try {
         const response = await fetchCategory();
-        if (response.status && response.data.header_categories) {
-          setCategories(response.data.header_categories);
+        if (response.status && response.data) {
+          setCategories(response.data);
         }
       } catch (error) {
-        <Alert 
-        tag="error" 
-        message={["Kategoriler alınamadı"]} 
+        <AutoDismissAlert
+          tag="error"
+          message={["Kategoriler alınamadı"]}
         />
-  
+
       }
     };
 
@@ -79,7 +83,8 @@ const Header = () => {
   return (
     <header id="mt-header" className="style19">
       <div className="mt-top-bar">
-        <div className="container">
+      <Container maxWidth="xl">
+      <Box sx={{ width: '80%', margin: 'auto', mt: 1 }}>
           <div className="row">
             <div className="col-xs-12 col-sm-6 hidden-xs">
               <a href="tel:+908503048400" className="tel">
@@ -90,14 +95,63 @@ const Header = () => {
               </a>
             </div>
           </div>
-        </div>
+      </Box>
+      </Container>
       </div>
 
-      <div className="container">
+
+      <Container maxWidth="xl">
+      <Box sx={{ width: '80%', margin: 'auto', mt: 1 }}>
         <div className="mt-bottom-bar">
           <div className="row">
             <div className="col-xs-12">
-              <SocialMediaHeader />
+              <ul className="flex space-x-4 mt-4 hidden sm:flex"> {/* sm:flex ile küçük ekranlarda gizler */}
+
+                <li>
+                  <Link
+                    target="_blank"
+                    rel="nofollow noreferrer"
+                    href="https://www.facebook.com/esyalacom"
+                    className="flex items-center"
+                  >
+                    <FaFacebook className="text-blue-600 hover:text-blue-800" size={20} />
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    target="_blank"
+                    rel="nofollow noreferrer"
+                    href="https://www.instagram.com/esyalacom/"
+                    className="flex items-center"
+                  >
+                    <FaInstagram className="text-pink-600 hover:text-pink-800" size={20} />
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    target="_blank"
+                    rel="nofollow noreferrer"
+                    href="https://www.linkedin.com/company/102235289/admin/feed/posts/?feedType=following"
+                    className="flex items-center"
+                  >
+                    <FaLinkedin className="text-blue-700 hover:text-blue-900" size={20} />
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    target="_blank"
+                    rel="nofollow noreferrer"
+                    href="https://www.youtube.com/@esyalacom"
+                    className="flex items-center"
+                  >
+                    <FaYoutube className="text-red-600 hover:text-red-800" size={20} />
+                  </Link>
+                </li>
+
+              </ul>
               <ul className="mt-icon-list">
                 <li className="hidden-lg hidden-md">
                   <a href="#" className="bar-opener mobile-toggle">
@@ -126,7 +180,7 @@ const Header = () => {
                 </li>
               </ul>
               <div className="mt-logo">
-                <a href="/">
+                <Link href="/">
                   <Image
                     className="logo-img"
                     src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/esyala_syh_noktal%C4%B1.png"
@@ -134,7 +188,7 @@ const Header = () => {
                     width={500}
                     height={300}
                   />
-                </a>
+                </Link>
                 <div className="logo-text">
                   <span>Keşfet</span>
                   <span>Kullan</span>
@@ -144,7 +198,8 @@ const Header = () => {
             </div>
           </div>
         </div>
-      </div>
+        </Box>
+        </Container>
 
 
 
@@ -203,10 +258,10 @@ const Header = () => {
                                   </div>
 
                                   {/* Tümünü Gör linki */}
-                                  <a href={`/category/${category.slug}`} title="Tümünü Gör">
+                                  <Link href={`/category/${category.slug}`} title="Tümünü Gör">
                                     <i className="fa fa-angle-right" aria-hidden="true"></i>
                                     Tümünü Gör
-                                  </a>
+                                  </Link>
                                 </div>
                               </div>
                             ))
@@ -234,7 +289,7 @@ const Header = () => {
         </div>
       </div>
 
-      <MobileBottomNav/>
+      <MobileBottomNav />
 
 
     </header>

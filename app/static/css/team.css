@@ -1,0 +1,104 @@
+.our-team{
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease 0s;
+}
+.our-team:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.our-team img{
+    width: 100%;
+    height: 300px;
+    transition: all 0.3s ease-in-out 0s;
+}
+.our-team:hover img{
+    opacity: 0.5;
+}
+.our-team .team-content{
+    color: #000;
+    opacity: 0;
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+    transform: translate(-10px, 0px);
+    transition: all 0.3s ease 0s;
+}
+.our-team:hover .team-content{
+    opacity: 1;
+    transform: translate(20px, 0px);
+    transition-delay: 0.2s;
+}
+.our-team .title{
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 7px 0;
+}
+.our-team .post{
+    display: block;
+    font-size: 15px;
+}
+.our-team .social{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 35px;
+    text-align: center;
+    opacity: 0;
+    position: absolute;
+    bottom: 35px;
+    transition: all 0.3s ease 0s;
+}
+.our-team:hover .social{
+    opacity: 1;
+}
+.our-team .social li{
+    display: block;
+}
+.our-team .social li a{
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    background: #006e90;
+    font-size: 17px;
+    color: #fff;
+    opacity: 0.9;
+    position: relative;
+    transform: translate(-35px, 35px);
+    transition: all 0.3s ease-in-out 0s
+}
+.our-team:hover .social li:nth-child(1) a{
+    transition-delay: 0.3s;
+}
+.our-team:hover .social li:nth-child(2) a{
+    transition-delay: 0.2s
+}
+.our-team:hover .social li:nth-child(3) a{
+    transition-delay: 0.1s;
+}
+.our-team:hover .social li:nth-child(4) a{
+    transition-delay: 0s;
+}
+.our-team:hover .social li a{
+    transform: translate(0, 0)
+}
+.our-team .social li a:hover{
+    width: 40px;
+    background: #f2545b;
+    transition-delay: 0s;
+}
+.our-team .icon{
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    background: #006e90;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+}
+@media only screen and (max-width: 990px){
+    .our-team{ margin-bottom: 30px; }
+}
