@@ -107,18 +107,16 @@ export async function fetchFooterCategory() {
 
 
 
-export async function fetchCategoryProduct(category_slugs) {
+export async function fetchCategoryProduct(category_slugs:string) {
     try {
         const response = await instance.get(`/main/category/${category_slugs}/`);
         if (response.data.results.status === true) {
             return response.data.results; 
         } else {
             
-            console.warn("API response is empty or status is false:", response.data?.messages || "No message provided");
             return { error: response.data?.messages || "Ürün bulunamadı." };
         }
     } catch (error) {
-        console.error("Ürünler alınırken hata oluştu:", error.message);
         return { error: "Ürün detayları alınırken bir hata oluştu." };
     }
 }
@@ -134,7 +132,6 @@ export async function fetchRentalProduct() {
             return { error: response.data?.messages || "Ürün bulunamadı." };
         }
     } catch (error) {
-        console.error("Ürünler alınırken hata oluştu:", error.message);
         return { error: "Ürün detayları alınırken bir hata oluştu." };
     }
 }
@@ -145,11 +142,9 @@ export async function fetchSalesProduct() {
         if (response.data.results.status === true) {
             return response.data.results; 
         } else {
-            console.warn("API response is empty or status is false:", response.data?.messages || "No message provided");
             return { error: response.data?.messages || "Ürün bulunamadı." };
         }
-    } catch (error) {
-        console.error("Ürünler alınırken hata oluştu:", error.message);
+    } catch (error:unknown) {
         return { error: "Ürün detayları alınırken bir hata oluştu." };
     }
 }

@@ -5,10 +5,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 
-export default function CustomDialog({ dialogData }) {
-  const [openDialogIndex, setOpenDialogIndex] = React.useState(null);
+// dialogData'nın türünü belirtin
+interface CustomDialogProps {
+  dialogData: Record<string, React.JSX.Element>; // Değerler React.JSX.Element türünde olmalı
+}
 
-  const handleOpen = (index) => {
+export default function CustomDialog({ dialogData }: CustomDialogProps) {
+  const [openDialogIndex, setOpenDialogIndex] = React.useState<number | null>(null);
+
+  const handleOpen = (index: number) => {
     setOpenDialogIndex(index);
   };
 
@@ -41,7 +46,7 @@ export default function CustomDialog({ dialogData }) {
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} variant="contained" sx={{ fontSize:"1.25rem"}}>
+              <Button onClick={handleClose} variant="contained" sx={{ fontSize: "1.25rem" }}>
                 Kapat
               </Button>
             </DialogActions>

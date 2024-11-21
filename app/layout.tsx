@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./static/css/main.css";
 import "./static/css/bootstrap2.css";
 import "./static/css/animate2.css";
@@ -20,17 +19,7 @@ import Footer from "./components/footer";
 
 
 
-// Local font imports
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+
 
 // Global metadata
 export const metadata: Metadata = {
@@ -52,10 +41,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    domain: "esyala.com",
     title: "Anasayfa | Eşyala",
     description: "Eşyala, online alışveriş platformu.",
-    image: "https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/banners/WhatsApp_Image_2024-05-04_at_15.webp",
   },
 };
 

@@ -4,9 +4,24 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+
+interface BlogList  {
+    title: string;
+    short_description: string;
+    created_at: string;
+    banner: string;
+    views: number;
+    slug:string;
+    category?: {
+        name: string;
+        slug: string;
+    };
+}
+
+
 function PopulerBlogs() {
 
-    const [populerblogList, setPopulerList] = useState([]);
+    const [populerblogList, setPopulerList] = useState<BlogList[] | null>(null);
 
     useEffect(() => {
 
@@ -27,7 +42,7 @@ function PopulerBlogs() {
     }, []);
     return (
         <>
-            {populerblogList.length > 0 ? (
+            {populerblogList && populerblogList.length > 0 ? (
                 <section className="widget popular-widget">
                     <h3>Popüler Gönderiler</h3>
                     <ul className="list-unstyled text-right popular-post">

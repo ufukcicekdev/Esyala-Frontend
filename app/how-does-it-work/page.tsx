@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from "@mui/material";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Link from 'next/link';
 
 const theme = createTheme({ typography: { fontSize: 30 } });
 
@@ -125,7 +126,7 @@ export default function Page() {
                             <Typography variant="h3">Nasıl Çalışır</Typography>
                             <nav className="breadcrumbs">
                                 <ul className="list-unstyled">
-                                    <li><a href="/">Ana Sayfa <IoIosArrowForward className="inline-block ml-1" /></a></li>
+                                    <li><Link href="/">Ana Sayfa <IoIosArrowForward className="inline-block ml-1" /></Link></li>
                                     <li>Nasıl Çalışır</li>
                                 </ul>
                             </nav>

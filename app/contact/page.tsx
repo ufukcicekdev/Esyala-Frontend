@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { useAlert } from '../context/AlertContext';
+import Link from 'next/link';
 
 const Contact = () => {
   const showAlert = useAlert();
@@ -15,7 +16,7 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Telefon numarasını formatlamak için bir fonksiyon
-  const handlePhoneChange = (e) => {
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {  // Türü belirledik
     let value = e.target.value.replace(/\D/g, ''); // Sadece rakamları al
 
     if (value.length > 10) {
@@ -40,7 +41,7 @@ const Contact = () => {
   };
 
   // Form elemanlarındaki değişiklikleri yönetme
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => { // Türü belirledik
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -49,7 +50,7 @@ const Contact = () => {
   };
 
   // Formu gönderme
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Türü belirledik
     e.preventDefault();
     setIsSubmitting(true); // Form gönderimi başladığında
 
@@ -83,9 +84,9 @@ const Contact = () => {
           message: ''
         });
       } else {
-        showAlert('error',result.messages || 'Bir hata oluştu. Lütfen tekrar deneyin.');
+        showAlert('error', result.messages || 'Bir hata oluştu. Lütfen tekrar deneyin.');
       }
-    } catch (error) {
+    } catch {
       showAlert('error', 'Bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setIsSubmitting(false); 
@@ -107,7 +108,7 @@ const Contact = () => {
               <h1>İletişim</h1>
               <nav className="breadcrumbs">
                 <ul className="list-unstyled">
-                  <li><a href="/">Ana Sayfa <i className="fa fa-angle-right"></i></a></li>
+                  <li><Link href="/">Ana Sayfa <i className="fa fa-angle-right"></i></Link></li>
                   <li>İletişim</li>
                 </ul>
               </nav>
@@ -127,12 +128,12 @@ const Contact = () => {
             <div className="col-xs-12 col-sm-4 mt-paddingbottomxs text-center">
               <span className="icon"><i className="fa fa-phone"></i></span>
               <strong className="title">Telefon</strong>
-              <a href="tel:+908503048400" className="tel">0 850 304 84 00</a>
+              <Link href="tel:+908503048400" className="tel">0 850 304 84 00</Link>
             </div>
             <div className="col-xs-12 col-sm-4 mt-paddingbottomxs text-center">
               <span className="icon"><i className="fa fa-envelope-o"></i></span>
               <strong className="title">E-Mail</strong>
-              <a href="mailto:info@esyala.com">info@esyala.com</a>
+              <Link href="mailto:info@esyala.com">info@esyala.com</Link>
             </div>
           </div>
         </div>

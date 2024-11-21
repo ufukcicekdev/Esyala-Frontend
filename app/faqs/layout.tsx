@@ -24,10 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    domain: "esyala.com",
     title: "Sık Sorulan Sorular | Eşyala",
     description: "Esyala.com Sık Sorulan Sorular (SSS) sayfası, hizmetlerimiz, hesap yönetimi ve diğer konular hakkında en çok merak edilen sorulara yanıt sunar. Hızlı çözümler için doğru yerdesiniz!",
-    image: "https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/banners/WhatsApp_Image_2024-05-04_at_15.webp",
   },
 };
 

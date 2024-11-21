@@ -4,7 +4,6 @@ import PopulerBlogs from './components/populerblogs';
 import BlogList from './components/blogList';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 
 function Blog() {
     

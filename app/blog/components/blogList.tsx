@@ -4,10 +4,23 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+interface BlogList  {
+    title: string;
+    short_description: string;
+    created_at: string;
+    banner: string;
+    views: number;
+    slug:string;
+    category?: {
+        name: string;
+        slug: string;
+    };
+}
+
 
 function BlogList() {
 
-    const [blogList, setBlogList] = useState([]);
+    const [blogList, setBlogList] = useState<BlogList[] | null>(null);
 
     useEffect(() => {
         const loadBlogs = async () => {
@@ -29,7 +42,7 @@ function BlogList() {
 
     return (
         <div className="col-xs-12 col-sm-8 wow fadeInUp">
-            {blogList.length > 0 ? (
+            {blogList && blogList.length > 0 ? (
                 blogList.map((blog, index) => (
                     <article className="blog-post style2" key={index}>
                         <div className="img-holder">
@@ -49,7 +62,7 @@ function BlogList() {
                             <h2><Link href={`/blog/${blog.slug}/`}>{blog.title}</Link></h2>
                             <ul className="list-unstyled blog-nav">
                                 <li><i className="fa fa-clock-o"></i>{blog.created_at}</li>
-                                <li> <Link href=""><i className="fa fa-list"></i> {blog.category.name} </Link></li>
+                                <li> <Link href=""><i className="fa fa-list"></i> {blog.category?.name} </Link></li>
                                 <li><Link href="#"><i className="fa fa-eye"></i>{blog.views}</Link></li>
                             </ul>
                             <p>{blog.short_description}</p>

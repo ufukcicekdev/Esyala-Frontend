@@ -3,9 +3,17 @@ import { fetchBlogCategory } from '@/lib/blog_api';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 
+
+
+interface BlogCategory {
+    name: string;
+    slug: string; 
+}
+
+
 function BlogCategory() {
 
-    const [blogcategoryList, setCategoryList] = useState([]);
+    const [blogcategoryList, setCategoryList] = useState<BlogCategory[] | null>(null);
 
     useEffect(() => {
 
@@ -27,7 +35,7 @@ function BlogCategory() {
 
     return (
         <>
-            {blogcategoryList.length > 0 ? (
+            {blogcategoryList && blogcategoryList.length > 0 ? (
                 <section className="widget category-widget">
                     <h3>Kategoriler</h3>
                     <ul className="list-unstyled widget-nav">

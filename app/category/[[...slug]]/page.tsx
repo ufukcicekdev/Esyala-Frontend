@@ -1,7 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchCategoryProduct } from "@/lib/main_api";
-import { Alert } from "@/app/components/messages/Alert";
+import { AutoDismissAlert } from "@/app/components/messages/Alert";
+import Link from 'next/link';
+import Image from "next/image";
+
 
 // Product interface tanımlandı (isteğe bağlı)
 interface Product {
@@ -26,7 +29,6 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
   const [products, setProducts] = useState<Product[]>([]); // Dizi türü garanti edildi
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [category, setCategory] = useState<string | null>("");
 
   useEffect(() => {
     const loadCategoryProducts = async () => {
@@ -46,17 +48,19 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
           if (Array.isArray(productData.data.product)) {
             setProducts(productData.data.product); // Ürün verisi dizisi set edilir
           } else {
-            <Alert 
-              tag="error" 
-              message={["Ürün verisi hatalı. Beklenmeyen yapı."]} 
+            
+
+              <AutoDismissAlert
+              severity="error"
+                message={"Ürün verisi hatalı. Beklenmeyen yapı."} 
               />
           }
-          setCategory(productData.data.category || ""); // Kategori verisi set edilir
         }
-      } catch (err) {
-        <Alert 
-              tag="error" 
-              message={["Bir hata oluştu. Lütfen tekrar deneyin."]} 
+      } catch {
+     
+              <AutoDismissAlert
+              severity="error"
+                message={"Bir hata oluştu. Lütfen tekrar deneyin."} 
               />
       } finally {
         setLoading(false); // Yükleme durumu false yapılır
@@ -116,16 +120,19 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
                 <li key={product.id}>
                   <div className="product-3 marginzero">
                     <div className="img">
-                      <a href={`/products/${product.slug}`}>
-                        <img
+                      <Link href={`/products/${product.slug}`}>
+                      <Image
                           src={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${product.first_image?.image.replace(
                             "/media",
                             ""
                           )}`}
                           alt={product.first_image?.img_alt || "Ürün görseli"}
                           title={product.first_image?.img_title || "Ürün görseli"}
+                          width={300} // Genişlik belirtin
+                          height={300} // Yükseklik belirtin
+                          priority // Eğer sayfa ilk yükleme sırasında bu görselin yüklenmesi gerekiyorsa
                         />
-                      </a>
+                      </Link>
                       {product.discount_percentage > 0 && (
                         <span className="caption">
                           <span className="off">{product.discount_percentage}%</span>

@@ -1,4 +1,3 @@
-"use client";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import Person2Icon from "@mui/icons-material/Person2";
@@ -9,6 +8,7 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Link from "next/link";
 
+// Tema oluşturma
 const theme = createTheme({
   typography: {
     fontSize: 20, // Daha okunabilir bir font boyutu ayarlandı
@@ -16,9 +16,10 @@ const theme = createTheme({
 });
 
 export default function MobileBottomNav() {
-  const [value, setValue] = React.useState("home");
+  const [value, setValue] = React.useState<string>("home");
 
-  const handleChange = (event, newValue) => {
+  // handleChange fonksiyonu parametre türlerini belirtiyoruz
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 

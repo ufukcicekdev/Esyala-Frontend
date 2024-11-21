@@ -20,10 +20,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    domain: "esyala.com",
+
     title: "Hakkımızda | Eşyala",
     description: "Esyala.com hakkında bilgi edinin. Kaliteli hizmet ve müşteri memnuniyeti için buradayız. Misyonumuz, vizyonumuz ve değerlerimiz hakkında daha fazla bilgi alın.",
-    image: "https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/banners/WhatsApp_Image_2024-05-04_at_15.webp",
   },
 };
 

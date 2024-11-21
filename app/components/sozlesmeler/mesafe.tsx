@@ -9,13 +9,13 @@ function Mesafe() {
       <p className="mb-4">
         İşbu Sözleşme aşağıdaki taraflar arasında aşağıda belirtilen hüküm ve şartlar çerçevesinde imzalanmıştır.
         <br />
-        A. ‘ALICI’ ; (sözleşmede bundan sonra "ALICI" olarak anılacaktır)
+        A. &apos;ALICI&apos; ; (sözleşmede bundan sonra &apos;ALICI&apos; olarak anılacaktır)
         <br />
         AD- SOYAD:
         <br />
         ADRES:
         <br />
-        B. ‘SATICI’ ; (sözleşmede bundan sonra "SATICI" olarak anılacaktır)
+        B. &apos;SATICI&apos; ; (sözleşmede bundan sonra &apos;SATICI&apos; olarak anılacaktır)
         <br />
         AD- SOYAD:
         <br />

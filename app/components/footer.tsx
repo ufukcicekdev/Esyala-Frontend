@@ -12,15 +12,20 @@ import Kimlik from "./sozlesmeler/kimlik";
 import Odeme from "./sozlesmeler/odeme";
 import Mesafe from "./sozlesmeler/mesafe";
 import { fetchFooterCategory } from "@/lib/main_api";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import CustomDialog from "./sozlesmeler/dialog";
+
+
+interface  FooterCategory {
+    name: string;
+    slug: string;
+}
+
+
 
 const Footer = () => {
 
-    const [dialogContent, setDialogContent] = useState("");
-
-
-    const [footerCategoryList, setFooterCategoryList] = useState([]);
+    const [footerCategoryList, setFooterCategoryList] = useState<FooterCategory[] | null>(null);
 
     useEffect(() => {
         const loadFooterCategory = async () => {
@@ -125,12 +130,12 @@ const Footer = () => {
 
 
                                 <ul className="list-unstyled f-widget-nav">
-                                    {footerCategoryList.length > 0 &&
+                                    {footerCategoryList &&footerCategoryList.length > 0 &&
                                         footerCategoryList.map((category, index) => (
                                             <li key={index}>
-                                                <a href={`/category/${category.slug}/`} title={category.name}>
+                                                <Link href={`/category/${category.slug}/`} title={category.name}>
                                                     {category.name}
-                                                </a>
+                                                </Link>
                                             </li>
                                         ))
                                     }
@@ -163,47 +168,47 @@ const Footer = () => {
                                 <ul className="list-unstyled social-network"> 
 
                                     <li>
-                                        <a
+                                        <Link
                                             target="_blank"
                                             rel="nofollow noreferrer"
                                             href="https://www.facebook.com/esyalacom"
                                             className="flex items-center"
                                         >
                                             <FaFacebook className="text-blue-600 hover:text-blue-800" size={20} />
-                                        </a>
+                                        </Link>
                                     </li>
 
                                     <li>
-                                        <a
+                                        <Link
                                             target="_blank"
                                             rel="nofollow noreferrer"
                                             href="https://www.instagram.com/esyalacom/"
                                             className="flex items-center"
                                         >
                                             <FaInstagram className="text-pink-600 hover:text-pink-800" size={20} />
-                                        </a>
+                                        </Link>
                                     </li>
 
                                     <li>
-                                        <a
+                                        <Link
                                             target="_blank"
                                             rel="nofollow noreferrer"
                                             href="https://www.linkedin.com/company/102235289/admin/feed/posts/?feedType=following"
                                             className="flex items-center"
                                         >
                                             <FaLinkedin className="text-blue-700 hover:text-blue-900" size={20} />
-                                        </a>
+                                        </Link>
                                     </li>
 
                                     <li>
-                                        <a
+                                        <Link
                                             target="_blank"
                                             rel="nofollow noreferrer"
                                             href="https://www.youtube.com/@esyalacom"
                                             className="flex items-center"
                                         >
                                             <FaYoutube className="text-red-600 hover:text-red-800" size={20} />
-                                        </a>
+                                        </Link>
                                     </li>
 
                                 </ul>
@@ -219,7 +224,7 @@ const Footer = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-xs-12 text-center">
-                            <p>© <a href="/" title="Eşyala">esyala.</a> - Her Hakkı Saklıdır</p>
+                            <p>© <Link href="/" title="Eşyala">esyala.</Link> - Her Hakkı Saklıdır</p>
                         </div>
                         <div className="col-xs-12">
                             <div className="bank-card align-center">

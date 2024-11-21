@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
 
-export function AutoDismissAlert({ severity, message }) {
+// severity parametresi için "success", "error", "warning", "info" değerlerini alacağını belirtiyoruz
+interface AlertProps {
+  severity: "success" | "error" | "warning" | "info";
+  message: string;
+}
+
+export function AutoDismissAlert({ severity, message }: AlertProps) {
   const [showAlert, setShowAlert] = useState(true);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowAlert(false);
@@ -45,5 +51,4 @@ export function AutoDismissAlert({ severity, message }) {
       </Alert>
     </Stack>
   );
-  
 }

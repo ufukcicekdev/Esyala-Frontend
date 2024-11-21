@@ -7,14 +7,16 @@ export default function LoginForm() {
   const [formData, setFormData] = useState({ email: "", password: "" });
 
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Formun varsayılan davranışını engeller
     try {
       const data = await handleLogin(formData.email, formData.password);

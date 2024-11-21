@@ -37,7 +37,7 @@ export default function page() {
                             <div className="txt wow fadeInUp" data-wow-delay="0.4s">
                                 <h2>SSS</h2>
                                 <p><strong>Hoş Geldiniz!</strong></p>
-                                <p>Esyala.com'a hoş geldiniz! Sıkça Sorulan Sorular (SSS) sayfamızda, platformumuzu ve sunduğumuz hizmetleri daha iyi anlamanıza yardımcı olmak için bir dizi yaygın soruyu yanıtladık.</p>
+                                <p>Esyala.com&apos;a hoş geldiniz! Sıkça Sorulan Sorular (SSS) sayfamızda, platformumuzu ve sunduğumuz hizmetleri daha iyi anlamanıza yardımcı olmak için bir dizi yaygın soruyu yanıtladık.</p>
                                 <p>Eğer sorularınızın cevaplarını burada bulamazsanız, lütfen bizimle iletişime geçmekten çekinmeyin. Müşteri destek ekibimiz size yardımcı olmaktan mutluluk duyacaktır.</p>
                                 <p><strong>Unutmayın, sizin memnuniyetiniz bizim önceliğimizdir!</strong></p>
                             </div>

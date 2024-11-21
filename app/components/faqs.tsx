@@ -8,7 +8,13 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-function TabPanel({ children, value, index }) {
+interface TabPanelProps {
+    children: React.ReactNode;  // children, herhangi bir React bileşeni veya metin olabilir
+    value: number;              // value, sayısal bir değer olmalı
+    index: number;              // index, sayısal bir değer olmalı
+}
+
+function TabPanel({ children, value, index }: TabPanelProps) {
     return (
         <div role="tabpanel" hidden={value !== index}>
             {value === index && (
@@ -19,7 +25,6 @@ function TabPanel({ children, value, index }) {
         </div>
     );
 }
-
 export function GeneralViewAccordion() {
     const items = [
         {
@@ -601,9 +606,12 @@ export function Sales() {
 
 
 export default function ScrollableTabsButtonVisible() {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState<number>(0);
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (
+        event: React.SyntheticEvent,  
+        newValue: number             
+    ) => {
         setValue(newValue);
     };
 

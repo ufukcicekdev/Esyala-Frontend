@@ -6,18 +6,24 @@ import { useEffect, useState } from "react";
 import { fetchCategory } from "@/lib/main_api";
 import MobileBottomNav from "./MobileBottomNav";
 import { AutoDismissAlert } from "./messages/Alert";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import React from "react";
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+
+interface Category {
+  name: string;
+  slug: string;
+  children: Category[]; // Rekürsif yapı
+}
+
 
 
 
 const Header = () => {
 
 
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[] | null>(null);
 
   const rantalCategory = "rental";
 
@@ -28,10 +34,10 @@ const Header = () => {
         if (response.status && response.data) {
           setCategories(response.data);
         }
-      } catch (error) {
+      } catch {
         <AutoDismissAlert
-          tag="error"
-          message={["Kategoriler alınamadı"]}
+          severity="error"
+          message={"Kategoriler alınamadı"}
         />
 
       }
@@ -41,7 +47,7 @@ const Header = () => {
   }, []);
 
 
-  const renderSubCategories = (category) => {
+  const renderSubCategories = (category: Category) => {  // Burada category'ye tip ekliyoruz
     if (category.children && category.children.length > 0) {
       return (
         <ul className="sub-category-list">
@@ -79,6 +85,7 @@ const Header = () => {
     }
     return null; // Eğer alt kategori yoksa, hiçbir şey render edilmez.
   };
+  
 
   return (
     <header id="mt-header" className="style19">
@@ -234,7 +241,7 @@ const Header = () => {
                               </Link>
                             </div>
                           </div>
-                          {categories.length > 0 ? (
+                          {categories && categories.length > 0 ? (
                             categories.map((category) => (
                               <div key={category.slug} className="mt-col-3">
                                 <div className="sub-dropcont mt-03">

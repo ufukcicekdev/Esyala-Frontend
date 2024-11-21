@@ -1,26 +1,30 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchAbout } from "@/lib/main_api";
-import { Link } from "lucide-react";
+import Link from 'next/link';
 import Image from 'next/image';
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
+interface Member {
+    level: string;
+    [key: string]: any;
+}
+
 const About = () => {
-    const [teamData, setTeamData] = useState([]);
-    const [sortedMembers, setSortedMembers] = useState({});
+    const [sortedMembers, setSortedMembers] = useState<Record<string, Member[]>>({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchTeamData = async () => {
             const response = await fetchAbout();
             if (response?.data) {
-                const teamMembers = response.data;
+                const teamMembers: Member[] = response.data;
 
                 // Üyeleri level'a göre grupla
-                const membersByLevel = teamMembers.reduce((acc, member) => {
+                const membersByLevel = teamMembers.reduce<Record<string, Member[]>>((acc, member) => {
                     if (!acc[member.level]) {
                         acc[member.level] = [];
                     }
@@ -28,11 +32,11 @@ const About = () => {
                     return acc;
                 }, {});
 
-                setTeamData(teamMembers);
                 setSortedMembers(membersByLevel);
             }
             setLoading(false);
         };
+
         fetchTeamData();
     }, []);
 
@@ -46,7 +50,7 @@ const About = () => {
                                 <h1>Hakkımızda</h1>
                                 <nav className="breadcrumbs">
                                     <ul className="list-unstyled">
-                                        <li><a href="/">Ana Sayfa <i className="fa fa-angle-right"></i></a></li>
+                                        <li> <Link href="/">AnaSayfa <i className="fa fa-angle-right"></i></Link></li>
                                         <li>Hakkımızda</li>
                                     </ul>
                                 </nav>
@@ -72,47 +76,47 @@ const About = () => {
                                     <ul className="list-unstyled social-network">
 
                                         <li>
-                                            <a
+                                            <Link
                                                 target="_blank"
                                                 rel="nofollow noreferrer"
                                                 href="https://www.facebook.com/esyalacom"
                                                 className="flex items-center"
                                             >
                                                 <FaFacebook className="text-blue-600 hover:text-blue-800" size={20} />
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a
+                                            <Link
                                                 target="_blank"
                                                 rel="nofollow noreferrer"
                                                 href="https://www.instagram.com/esyalacom/"
                                                 className="flex items-center"
                                             >
                                                 <FaInstagram className="text-pink-600 hover:text-pink-800" size={20} />
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a
+                                            <Link
                                                 target="_blank"
                                                 rel="nofollow noreferrer"
                                                 href="https://www.linkedin.com/company/102235289/admin/feed/posts/?feedType=following"
                                                 className="flex items-center"
                                             >
                                                 <FaLinkedin className="text-blue-700 hover:text-blue-900" size={20} />
-                                            </a>
+                                            </Link>
                                         </li>
 
                                         <li>
-                                            <a
+                                            <Link
                                                 target="_blank"
                                                 rel="nofollow noreferrer"
                                                 href="https://www.youtube.com/@esyalacom"
                                                 className="flex items-center"
                                             >
                                                 <FaYoutube className="text-red-600 hover:text-red-800" size={20} />
-                                            </a>
+                                            </Link>
                                         </li>
 
                                     </ul>
@@ -149,25 +153,31 @@ const About = () => {
                                                         <li key={platform}>
                                                             {/* Conditionally render icons based on the platform */}
                                                             {platform === 'facebook' && (
-                                                                <a href={link} target="_blank" rel="noopener noreferrer">
-                                                                    <FaFacebook size={35} />
-                                                                </a>
+
+                                                                <Link
+                                                                target="_blank"
+                                                                rel="nofollow noreferrer"
+                                                                href={link || "/"}
+                                                        
+                                                                >
+                                                                <FaYoutube size={35} />
+                                                                </Link>
                                                             )}
                                                             {platform === 'twitter' && (
-                                                                <a href={link} target="_blank" rel="noopener noreferrer">
+                                                                <Link href={link || "/"} target="_blank" rel="noopener noreferrer">
                                                                     <FaInstagram  size={35}/>
-                                                                </a>
+                                                                </Link>
                                                             )}
                                                             
                                                             {platform === 'youtube' && (
-                                                                <a href={link} target="_blank" rel="noopener noreferrer">
+                                                                <Link href={link || "/"} target="_blank" rel="noopener noreferrer">
                                                                     <FaYoutube size={35} />
-                                                                </a>
+                                                                </Link>
                                                             )}
                                                             {platform === 'linkedin' && (
-                                                                <a href={link} target="_blank" rel="noopener noreferrer">
+                                                                <Link href={link || "/"} target="_blank" rel="noopener noreferrer">
                                                                     <FaLinkedin   size={35}/>
-                                                                </a>
+                                                                </Link>
                                                             )}
                                                         </li>
                                                     ))}

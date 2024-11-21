@@ -8,6 +8,16 @@ import axios from 'axios';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+interface Brand {
+    id: number;
+    name: string;
+    image: string;
+    img_alt: string;
+    img_title: string;
+    is_active: boolean;
+}
+
+
 // API veri çekme fonksiyonu (Brand API'si için)
 export async function fetchBrandData() {
     try {
@@ -24,7 +34,7 @@ export async function fetchBrandData() {
 }
 
 export default function VirtualSwiperBrand() {
-    const [brands, setBrands] = useState<any[]>([]);
+    const [brands, setBrands] = useState<Brand[] | null>(null);
 
     // useEffect ile veri çekme
     useEffect(() => {
@@ -68,7 +78,7 @@ export default function VirtualSwiperBrand() {
                         }}
                         virtual
                     >
-                        {brands.map((brand, index) => (
+                        {brands && brands.map((brand, index) => (
                             <SwiperSlide key={brand.id} virtualIndex={index}>
                                 <Box
                                     sx={{

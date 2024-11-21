@@ -8,6 +8,20 @@ import axios from 'axios';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+
+interface Banner {
+  id: number;
+  title: string;
+  subtitle: string;
+  image: string;
+  text_color: string;
+  description: string;
+  title_position: string;
+  link: string;
+  is_active: boolean;
+}
+
+
 // API veri çekme fonksiyonu
 export async function fetchHomeMainBanner() {
   try {
@@ -24,7 +38,7 @@ export async function fetchHomeMainBanner() {
 }
 
 export default function SwiperMainSlider() {
-  const [banners, setBanners] = useState<any[]>([]);
+  const [banners, setBanners] = useState<Banner[] | null>(null);
 
   // useEffect ile veri çekme
   useEffect(() => {
@@ -50,7 +64,7 @@ export default function SwiperMainSlider() {
         modules={[Autoplay, Pagination]}
         className="mySwiper"
       >
-        {banners.map((banner) => (
+        {banners && banners.map((banner) => (
           banner.is_active && (
             <SwiperSlide key={banner.id}>
               <Box

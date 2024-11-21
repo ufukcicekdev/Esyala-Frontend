@@ -1,4 +1,5 @@
 // lib/api.ts
+"use client";
 import axios from "axios";
 
 const instance = axios.create({
@@ -11,6 +12,7 @@ export async function fetchBlogs() {
     try {
         const response = await instance.get("/blog/");
         if (response.data?.status === true && response.data?.data?.length > 0) {
+            console.log(response.data);
             return response.data;
         }
         else {
@@ -22,21 +24,21 @@ export async function fetchBlogs() {
     }
 }
 
-export async function fetchBlogDetail(slug) {
+export async function fetchBlogDetail(slug: string) {
     try {
+        console.log("slug", slug);
         const response = await instance.get(`/blog/${slug}/`);
         
         if (response.data?.status === true && response.data?.data?.length > 0) {
             return response.data.data[0]; // İlk blog detayını döndür
         } else {
-            console.warn("API response is empty or status is false:", response.data?.messages || "No message provided");
             return { error: response.data?.messages || "Blog bulunamadı." };
         }
     } catch (error) {
-        console.error("Blog verisi alınırken hata oluştu:", error.message);
         return { error: "Blog detayları alınırken bir hata oluştu." };
     }
 }
+
 
 
 export async function fetchBlogCategory() {
@@ -44,13 +46,11 @@ export async function fetchBlogCategory() {
         const response = await instance.get(`/blog/blog_categories/`);
         
         if (response.data?.status === true && response.data?.data?.length > 0) {
-            return response.data; // İlk blog detayını döndür
+            return response.data; 
         } else {
-            console.warn("API response is empty or status is false:", response.data?.messages || "No message provided");
             return { error: response.data?.messages || "Blog bulunamadı." };
         }
     } catch (error) {
-        console.error("Blog kategori verisi alınırken hata oluştu:", error.message);
         return { error: "Blog kategori verisi alınırken hata oluştu" };
     }
 }
@@ -62,18 +62,16 @@ export async function fetchPopularBlogs() {
         if (response.data?.status === true && response.data?.data?.length > 0) {
             return response.data; // İlk blog detayını döndür
         } else {
-            console.warn("API response is empty or status is false:", response.data?.messages || "No message provided");
             return { error: response.data?.messages || "Blog bulunamadı." };
         }
     } catch (error) {
-        console.error("Popüler Blog verisi alınırken hata oluştu:", error.message);
         return { error: "Popüler Blog verisi alınırken hata oluştu" };
     }
 }
 
 
 
-export async function fetchBlogCategoryDetail(slug) {
+export async function fetchBlogCategoryDetail(slug: string) {
     try {
         const response = await instance.get(`/blog/blog_category_product/${slug}/`);
         
@@ -84,7 +82,6 @@ export async function fetchBlogCategoryDetail(slug) {
             return response.data["messages"]
         }
     } catch (error) {
-        console.error("Blog verisi alınırken hata oluştu:", error.message);
         return { error: "Blog detayları alınırken bir hata oluştu." };
     }
 }

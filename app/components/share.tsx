@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 
 function Share() {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [copyMessage, setCopyMessage] = useState("Kopyala");
 
   const togglePopup = () => {
@@ -25,7 +25,8 @@ function Share() {
     }
   };
 
-  const shareToPlatform = (platform) => {
+  // Platform parametresine tür belirtme
+  const shareToPlatform = (platform: "facebook" | "twitter" | "linkedin" | "whatsapp" | "telegram") => {
     const url = encodeURIComponent(window.location.href);
     const platforms = {
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
@@ -55,18 +56,16 @@ function Share() {
           <div className="content">
             <p>Bu linki paylaşın:</p>
             <ul className="icons">
-              {["facebook", "twitter", "linkedin", "whatsapp", "telegram"].map(
-                (platform) => (
-                  <li key={platform}>
-                    <button
-                      className="share-btn"
-                      onClick={() => shareToPlatform(platform)}
-                    >
-                      <i className={`fa fa-${platform}`}></i>
-                    </button>
-                  </li>
-                )
-              )}
+              {["facebook", "twitter", "linkedin", "whatsapp", "telegram"].map((platform) => (
+                <li key={platform}>
+                  <button
+                    className="share-btn"
+                    onClick={() => shareToPlatform(platform as "facebook" | "twitter" | "linkedin" | "whatsapp" | "telegram")}
+                  >
+                    <i className={`fa fa-${platform}`}></i>
+                  </button>
+                </li>
+              ))}
             </ul>
             <div className="field">
               <input

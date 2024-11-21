@@ -1,4 +1,4 @@
-import { Link } from "lucide-react";
+import Link from "next/link";
 import LoginForm from "../components/forms/LoginForm";
 
 
@@ -26,7 +26,7 @@ function Signin() {
                             <nav className="breadcrumbs">
                                 <ul className="list-unstyled">
                                     <li>
-                                        <a href="/">Anasayfa <i className="fa fa-angle-right"></i></a>
+                                        <Link href="/">Anasayfa <i className="fa fa-angle-right"></i></Link>
                                     </li>
                                     <li>Giriş</li>
                                 </ul>
@@ -43,20 +43,20 @@ function Signin() {
                             <div className="txt wow fadeInUp" data-wow-delay="0.4s">
                                 <h2>Hesabınıza Giriş Yapın ve Alışverişe Başlayın!</h2>
                                 <p>
-                                    Merhaba! Esyala.com'a hoş geldiniz. Hesabınıza giriş yaparak alışveriş yapmaya
+                                    Merhaba! Esyala.com&apos;a hoş geldiniz. Hesabınıza giriş yaparak alışveriş yapmaya
                                     başlayabilirsiniz. Eğer daha önce hesap oluşturduysanız, lütfen kullanıcı adınızı veya
                                     e-posta adresinizi ve şifrenizi girerek giriş yapın.
                                 </p>
                                 <p>
-                                    Hesabınızı oluşturmadıysanız, hemen ücretsiz bir hesap oluşturabilir ve Esyala.com'un sunduğu
+                                    Hesabınızı oluşturmadıysanız, hemen ücretsiz bir hesap oluşturabilir ve Esyala.com&apos;un sunduğu
                                     avantajlardan yararlanmaya başlayabilirsiniz.
                                 </p>
                                 <p>
-                                    Giriş yapmak için aşağıdaki formu doldurun ve "Giriş Yap" butonuna tıklayın. Eğer şifrenizi
-                                    unuttuysanız, "Şifremi Unuttum" seçeneğiyle şifrenizi sıfırlayabilirsiniz.
+                                    Giriş yapmak için aşağıdaki formu doldurun ve &apos;Giriş Yap&apos; butonuna tıklayın. Eğer şifrenizi
+                                    unuttuysanız, &apos;Şifremi Unuttum&apos; seçeneğiyle şifrenizi sıfırlayabilirsiniz.
                                 </p>
                                 <p>
-                                    Eğer hala bir hesabınız yoksa, hemen kayıt olun ve Esyala.com'un dünyasına adım atın. Kayıt
+                                    Eğer hala bir hesabınız yoksa, hemen kayıt olun ve Esyala.com&apos;un dünyasına adım atın. Kayıt
                                     olmak hızlı, kolay ve ücretsizdir!
                                 </p>
                             </div>

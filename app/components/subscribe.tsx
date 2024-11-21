@@ -2,31 +2,30 @@ import React, { useState } from 'react';
 import { useAlert } from '../context/AlertContext';
 
 export default function Subscribe() {
-    const [email, setEmail] = useState('');
-    const showAlert = useAlert();
+  const [email, setEmail] = useState('');
+  const showAlert = useAlert();
   
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        const response = await fetch('http://localhost:8000/main/subscribe/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
-        });
-  
-        const data = await response.json();
-        if (data.status) {
-          showAlert('success', data.messages || 'Abonelik başarılı!');
-        } else {
-          showAlert('warning', data.messages || 'Bir hata oluştu.');
-        }
-      } catch (error) {
-        showAlert('error', 'Abone olurken bir hata oluştu.');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Türü belirledik
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:8000/main/subscribe/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      if (data.status) {
+        showAlert('success', data.messages || 'Abonelik başarılı!');
+      } else {
+        showAlert('warning', data.messages || 'Bir hata oluştu.');
       }
-    };
-  
+    } catch {
+      showAlert('error', 'Abone olurken bir hata oluştu.');
+    }
+  };
 
   return (
     <>
@@ -49,5 +48,3 @@ export default function Subscribe() {
     </>
   );
 }
-
-

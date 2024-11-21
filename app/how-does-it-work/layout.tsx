@@ -24,10 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    domain: "esyala.com",
     title: "Nasıl Çalışır | Eşyala",
     description: "Esyala.com'un nasıl çalıştığını öğrenin. Kullanıcı dostu ara yüzümüzle işlerinizi kolaylaştırın ve etkili sonuçlar elde edin.",
-    image: "https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/banners/WhatsApp_Image_2024-05-04_at_15.webp",
   },
 };
 

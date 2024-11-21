@@ -20,10 +20,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    domain: "esyala.com",
     title: "Giriş | Eşyala",
     description: "Esyala.com, kullanıcıların online alışveriş yapabileceği güvenilir bir platformdur. En yeni ürünler, kolay ödeme seçenekleri ve hızlı teslimatla alışveriş deneyiminizi en üst seviyeye taşıyoruz. Şimdi başlayın ve ihtiyaçlarınıza uygun ürünleri keşfedin.",
-    image: "https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/banners/WhatsApp_Image_2024-05-04_at_15.webp",
   },
 };
 
