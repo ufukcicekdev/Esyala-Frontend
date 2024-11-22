@@ -25,7 +25,7 @@ interface Banner {
 // API veri çekme fonksiyonu
 export async function fetchHomeMainBanner() {
   try {
-    const response = await axios.get("http://127.0.0.1:8000/main/get_home_main_banner/");
+    const response = await axios.get("https://esyala-backend-production.up.railway.app/main/get_home_main_banner/");
     if (response.data["status"] === true) {
       return response.data["data"];
     } else {

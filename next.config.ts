@@ -1,11 +1,14 @@
+
 /** @type {import('next').NextConfig} */
+const isMobile = process.env.NEXT_PUBLIC_IS_MOBILE === 'true';
 const nextConfig = {
+  ...(isMobile ? {output: 'export'} : {}),
+  reactStrictMode: true,
   images: {
+    unoptimized: true,
     domains: ['filestorages.fra1.cdn.digitaloceanspaces.com'],
   },
-  experimental: {
-    appDir: true, // Eğer "app" dizinini kullanıyorsanız bu gerekli.
-  },
+
   eslint: {
     ignoreDuringBuilds: true,
   },

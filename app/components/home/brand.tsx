@@ -21,7 +21,7 @@ interface Brand {
 // API veri çekme fonksiyonu (Brand API'si için)
 export async function fetchBrandData() {
     try {
-        const response = await axios.get('http://127.0.0.1:8000/main/get_brand/');
+        const response = await axios.get('https://esyala-backend-production.up.railway.app/main/get_brand/');
         if (response.data["status"] === true) {
             return response.data["data"];
         } else {

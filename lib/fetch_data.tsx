@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 import { fetchBlogDetail } from '@/lib/blog_api';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import BlogCategory from '../components/blogcategory';
-import PopulerBlogs from '../components/populerblogs';
+
 import Share from '@/app/components/share';
 import Image from 'next/image';
 import { Container, Grid, Box, Typography } from '@mui/material';
+import BlogCategory from '@/app/blog/components/blogcategory';
+import PopulerBlogs from '@/app/blog/components/populerblogs';
 
 
 interface Blog {
@@ -17,6 +18,7 @@ interface Blog {
     created_at: string;
     banner: string;
     views: number;
+    slug:string;
     category?: {
         name: string;
         slug: string;

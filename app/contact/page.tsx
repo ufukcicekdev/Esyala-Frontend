@@ -64,7 +64,7 @@ const Contact = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/main/create_contact_us/', {
+      const response = await fetch('https://esyala-backend-production.up.railway.app/main/create_contact_us/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

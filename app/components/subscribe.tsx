@@ -8,7 +8,7 @@ export default function Subscribe() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Türü belirledik
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/main/subscribe/', {
+      const response = await fetch('https://esyala-backend-production.up.railway.app/main/subscribe/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
