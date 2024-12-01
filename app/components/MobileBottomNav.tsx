@@ -8,7 +8,8 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
-import LoginDialog from "./Dialogs/LoginDialog";
+import AuthDialogs from "./Dialogs/AuthDialogs";
+import Avatar from "@mui/material/Avatar";
 
 // Tema oluşturma
 const theme = createTheme({
@@ -19,8 +20,21 @@ const theme = createTheme({
 
 export default function MobileBottomNav() {
   const [value, setValue] = useState<string>("home");
-  const [openLoginDialog, setOpenLoginDialog] = useState(false); // LoginDialog'ın açık olup olmadığını kontrol etmek için state
   const { isAuthenticated, user, logout } = useAuth(); // useAuth'dan gerekli veriler alınıyor
+
+  const [currentDialog, setCurrentDialog] = useState<"login" | "register" | "forgotPassword" | null>(null); // currentDialog state'i
+  const [authDialogOpen, setAuthDialogOpen] = useState(false); // authDialogOpen state'i
+
+
+  const handleAuthDialogOpen = (dialog: "login" | "register" | "forgotPassword") => {
+    setCurrentDialog(dialog); // currentDialog'ı güncelliyoruz
+    setAuthDialogOpen(true); // Dialog'u açıyoruz
+  };
+
+  const handleAuthDialogClose = () => {
+    setAuthDialogOpen(false); // Dialog'u kapatıyoruz
+    setCurrentDialog(null); // currentDialog'ı null yapıyoruz
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -33,7 +47,7 @@ export default function MobileBottomNav() {
       window.location.href = "/profile";
     } else {
       // Eğer giriş yapmamışsa, LoginDialog'ı aç
-      setOpenLoginDialog(true);
+      handleAuthDialogOpen("login")
     }
   };
 
@@ -73,7 +87,22 @@ export default function MobileBottomNav() {
           <BottomNavigationAction
             label="Profil"
             value="profile"
-            icon={<Person2Icon sx={{ fontSize: { xs: 20, sm: 24, md: 28 } }} />}
+            icon={
+              isAuthenticated ? (
+                <Avatar
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    fontSize: 18,
+                    backgroundColor: "#3f51b5",
+                  }}
+                >
+                  {user?.username?.charAt(0).toUpperCase() || "?"}
+                </Avatar>
+              ) : (
+                <Person2Icon sx={{ fontSize: { xs: 20, sm: 24, md: 28 } }} />
+              )
+            }
             sx={{
               "& .MuiBottomNavigationAction-label": {
                 fontSize: { xs: "10px", sm: "12px", md: "14px" },
@@ -98,8 +127,12 @@ export default function MobileBottomNav() {
         </BottomNavigation>
       </div>
 
-      {/* LoginDialog burada açılacak */}
-      <LoginDialog open={openLoginDialog} onClose={() => setOpenLoginDialog(false)} openSignUp={() => console.log('Sign Up')} />
+      <AuthDialogs
+        openDialog={handleAuthDialogOpen}
+        closeDialog={handleAuthDialogClose}
+        currentDialog={currentDialog}
+      />
+      
     </ThemeProvider>
   );
 }

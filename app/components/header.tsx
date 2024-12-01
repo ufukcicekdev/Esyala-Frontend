@@ -16,10 +16,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import LoginDialog from "./Dialogs/LoginDialog";
-import RegisterDialog from "./Dialogs/RegisterDialog";
 import { useAuth } from "../context/AuthContext";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
+import AuthDialogs from "./Dialogs/AuthDialogs"; // AuthDialogs bileşenini import ediyoruz
 
 interface Category {
   name: string;
@@ -32,12 +31,11 @@ const Header = () => {
   const [error, setError] = useState<string | null>(null);
   const { isAuthenticated, user, logout } = useAuth();
 
-  // Dropdown menu için state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  // Dialog open states
-  const [openLogin, setOpenLogin] = useState(false);
-  const [openRegister, setOpenRegister] = useState(false);
+  // AuthDialog için state
+  const [currentDialog, setCurrentDialog] = useState<"login" | "register" | "forgotPassword" | null>(null); // currentDialog state'i
+  const [authDialogOpen, setAuthDialogOpen] = useState(false); // authDialogOpen state'i
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -54,32 +52,26 @@ const Header = () => {
     fetchCategories();
   }, []);
 
-  const handleLoginClick = () => {
-    setOpenLogin(true);
+  const handleAuthDialogOpen = (dialog: "login" | "register" | "forgotPassword") => {
+    setCurrentDialog(dialog); // currentDialog'ı güncelliyoruz
+    setAuthDialogOpen(true); // Dialog'u açıyoruz
   };
 
-  const handleRegisterClick = () => {
-    setOpenRegister(true);
-  };
-
-  const handleCloseLogin = () => {
-    setOpenLogin(false);
-  };
-
-  const handleCloseRegister = () => {
-    setOpenRegister(false);
+  const handleAuthDialogClose = () => {
+    setAuthDialogOpen(false); // Dialog'u kapatıyoruz
+    setCurrentDialog(null); // currentDialog'ı null yapıyoruz
   };
 
   const handleUserClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget); // Dropdown menüsü için anchor element
+    setAnchorEl(event.currentTarget);
   };
 
   const handleCloseMenu = () => {
-    setAnchorEl(null); // Dropdown menüsünü kapat
+    setAnchorEl(null);
   };
 
   const handleLogout = () => {
-    logout(); // Çıkış işlemi
+    logout();
     handleCloseMenu();
   };
 
@@ -143,6 +135,8 @@ const Header = () => {
     <header id="mt-header" className="style19">
       {error && <AutoDismissAlert severity="error" message={error} />}
 
+
+
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" color="default">
           <Toolbar>
@@ -199,7 +193,6 @@ const Header = () => {
                 className="flex justify-end items-center hidden md:flex"
               >
                 {isAuthenticated ? (
-                  // Kullanıcı giriş yaptıysa profil simgesi ve dropdown menü
                   <>
                     <IconButton color="primary" onClick={handleUserClick}>
                       <Avatar
@@ -214,7 +207,6 @@ const Header = () => {
                       </Avatar>
                     </IconButton>
 
-                    {/* Dropdown Menüsü */}
                     <Menu
                       anchorEl={anchorEl}
                       open={Boolean(anchorEl)}
@@ -235,12 +227,11 @@ const Header = () => {
                     </Menu>
                   </>
                 ) : (
-                  // Kullanıcı giriş yapmamışsa giriş ve kayıt butonlarını göster
                   <>
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={handleLoginClick}
+                      onClick={() => handleAuthDialogOpen("login")}
                       className="ml-2"
                     >
                       Giriş Yap
@@ -248,7 +239,7 @@ const Header = () => {
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={handleRegisterClick}
+                      onClick={() => handleAuthDialogOpen("register")}
                       className="ml-2"
                     >
                       Üye Ol
@@ -261,7 +252,6 @@ const Header = () => {
         </AppBar>
       </Box>
 
-      {/* Kategoriler Menüsü */}
       <div className="mt-nav-holder breadcrumb-header">
         <nav>
           <ul className="breadcrumb">
@@ -270,10 +260,16 @@ const Header = () => {
         </nav>
       </div>
 
-      <MobileBottomNav />
+      
 
-      <LoginDialog open={openLogin} onClose={handleCloseLogin} />
-      <RegisterDialog open={openRegister} onClose={handleCloseRegister} />
+      <MobileBottomNav/>
+
+      {/* AuthDialogs Bileşeni */}
+      <AuthDialogs
+        openDialog={handleAuthDialogOpen}
+        closeDialog={handleAuthDialogClose}
+        currentDialog={currentDialog}
+      />
     </header>
   );
 };
