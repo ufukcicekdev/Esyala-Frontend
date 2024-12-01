@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Virtual } from 'swiper/modules';
 import Image from 'next/image';
@@ -14,7 +14,6 @@ interface Brand {
     image: string;
     img_alt: string;
     img_title: string;
-    is_active: boolean;
 }
 
 
@@ -47,21 +46,30 @@ export default function VirtualSwiperBrand() {
 
     return (
         <div className="" style={{ marginTop: '10px' }}>
-            <h2
-                className=""
-                style={{
-                    textAlign: 'center',
-                    margin: '0 0 7px',
-                    fontSize: '26px',
-                    lineHeight: '30px',
-                    fontWeight: '700',
-                    textTransform: 'uppercase',
-                    fontFamily: 'Montserrat, sans-serif',
-                    color: '#3a3a3a'
-                }}
-                >
-                Markalar
-                </h2>
+            <Typography
+                        variant="h2"
+                        sx={{
+                            fontSize: {
+                                xs: "24px", // Küçük ekranlar (mobil)
+                                sm: "32px", // Orta ekranlar (tablet)
+                                md: "40px", // Büyük ekranlar
+                                lg: "44px", // Çok büyük ekranlar
+                            },
+                            lineHeight: {
+                                xs: "28px",
+                                sm: "36px",
+                                md: "42px",
+                                lg: "46px",
+                            },
+                            fontWeight: 700,
+                            marginBottom: "15px",
+                            letterSpacing: "1px",
+                            textTransform: "uppercase",
+                            color: "#383838",
+                        }}
+                    >
+                        Markalar
+                    </Typography>
             <div className="patner-slider">
                 <Box sx={{ width: '80%', margin: 'auto', mt: 2 }}>
                     <Swiper

@@ -3,7 +3,7 @@ import { fetchBlogs } from '@/lib/blog_api';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-
+import { Container } from '@mui/material';
 interface BlogList  {
     title: string;
     short_description: string;
@@ -41,7 +41,7 @@ function BlogList() {
 
 
     return (
-        <div className="col-xs-12 col-sm-8 wow fadeInUp">
+        <>
             {blogList && blogList.length > 0 ? (
                 blogList.map((blog, index) => (
                     <article className="blog-post style2" key={index}>
@@ -73,7 +73,7 @@ function BlogList() {
             ) : (
                 <p className="text-center">Yükleniyor...</p>
             )}
-        </div>
+        </>
     )
 }
 

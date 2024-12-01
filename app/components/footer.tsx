@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Subscribe from './subscribe';
 import Image from 'next/image';
-
 import Uyelik from "./sozlesmeler/uyelik";
 import Aydınlatma from "./sozlesmeler/aydınlatma";
 import Cayma from "./sozlesmeler/cayma";
@@ -16,7 +15,7 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import CustomDialog from "./sozlesmeler/dialog";
 
 
-interface  FooterCategory {
+interface FooterCategory {
     name: string;
     slug: string;
 }
@@ -130,7 +129,7 @@ const Footer = () => {
 
 
                                 <ul className="list-unstyled f-widget-nav">
-                                    {footerCategoryList &&footerCategoryList.length > 0 &&
+                                    {footerCategoryList && footerCategoryList.length > 0 &&
                                         footerCategoryList.map((category, index) => (
                                             <li key={index}>
                                                 <Link href={`/category/${category.slug}/`} title={category.name}>
@@ -146,9 +145,10 @@ const Footer = () => {
                                 <h3 className="f-widget-heading">Bilgilendirme</h3>
                                 <ul className="list-unstyled f-widget-nav">
 
-                                    <li><Link href="/" title="Blog">Anasayfa</Link></li>
-                                    <li><Link href="/about" title="Blog">Hakkımızda</Link></li>
-                                    <li><Link href="/contact" title="Blog">İletişim</Link></li>
+                                    <li><Link href="/" title="Anasayfa">Anasayfa</Link></li>
+                                    <li><Link href="/blog" title="Blog">Blog</Link></li>
+                                    <li><Link href="/about" title="Hakkımızda">Hakkımızda</Link></li>
+                                    <li><Link href="/contact" title="İletişim">İletişim</Link></li>
                                     <li><Link href="/how-does-it-work" title="Nasıl Çalışır">Nasıl Çalışır</Link></li>
                                     <li><Link href="/faqs" title="Sık Sorulan Sorular">SSS</Link></li>
                                     <CustomDialog dialogData={dialogData} />
@@ -165,7 +165,7 @@ const Footer = () => {
                             <div className="f-widget-newsletter">
                                 <Subscribe />
                                 <h4 className="f-widget-heading follow">Bizi Takip Edin</h4>
-                                <ul className="list-unstyled social-network"> 
+                                <ul className="list-unstyled social-network">
 
                                     <li>
                                         <Link

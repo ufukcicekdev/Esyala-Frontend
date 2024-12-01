@@ -116,18 +116,29 @@ margin-bottom: 5px;
 /* Mobilde görünür yapmak için */
 @media (max-width: 767px) {
 
-#user-icon{
-    display: none;
-}
-.icon-magnifier{
-    display: none;
-}
+    .mobile-bottom-nav {
+        display: block;
+    }
+    .breadcrumb-header {
+        display: none;
+    }
+    
+    #user-icon{
+        display: none;
+    }
+    .icon-magnifier{
+        display: none;
+    }
 }
 
 @media (max-width: 991px) {
 .mobile-bottom-nav {
     display: block;
 }
+.breadcrumb-header {
+    display: none;
+}
+
 #user-icon{
     display: none;
 }
@@ -166,3 +177,48 @@ margin-bottom: 70px;
   }
 
 
+
+
+
+  /* Breadcrumb için genel stil */
+.breadcrumb {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .breadcrumb-item {
+    position: relative;
+  }
+  
+  .breadcrumb-item a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+  }
+  
+
+  /* Dropdown menü */
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    list-style: none;
+    z-index: 10;
+  }
+  
+  .dropdown-menu li {
+    margin: 0;
+    padding: 0.5rem 1rem;
+  }
+  
+  .dropdown-menu li a {
+    text-decoration: none;
+    color: #333;
+  }
+  

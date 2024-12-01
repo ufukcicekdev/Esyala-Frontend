@@ -10,16 +10,14 @@ import "./static/css/share.css";
 import "./static/css/header.css";
 import "./static/css/team.css";
 import "./globals.css";
-
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Container, Grid, Box } from "@mui/material";
 import { AlertProvider } from './context/AlertContext.js';
 
 import Header from "./components/header";
 import Footer from "./components/footer";
-
-
-
-
-
+import { AuthProvider } from "./context/AuthContext";
 
 // Global metadata
 export const metadata: Metadata = {
@@ -52,19 +50,51 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <head>
-        {/* Head kısmındaki meta etiketler, title vb. buraya eklenebilir */}
+        {/* Viewport meta etiketi eklenerek mobilde düzgün çalışması sağlandı */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className="antialiased">
+      <body style={{ margin: 0, padding: 0, overflowX: "hidden" }}>
+      <AuthProvider> 
         <AlertProvider>
-          <div id="wrapper">
-            <div className="w1">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "100vh",
+              bgcolor: "background.default",
+              overflowX: "hidden", // Box içinde yatay taşmayı engelle
+            }}
+          >
+            {/* Header */}
+            <Box component="header" sx={{ flexGrow: 0 }}>
               <Header />
-              {children}
+            </Box>
+
+            {/* Ana İçerik */}
+            <Container
+              maxWidth="lg"
+              sx={{
+                flex: 1,
+                mt: 3,
+                mb: 3,
+                p: { xs: 2, sm: 3 },
+                overflowX: "hidden", 
+              }}
+            >
+              <Grid container spacing={2} sx={{ overflowX: "hidden" }}>
+                <Grid item xs={12}>
+                  {children}
+                </Grid>
+              </Grid>
+            </Container>
+
+            {/* Footer */}
+            <Box component="footer" sx={{ flexGrow: 0 }}>
               <Footer />
-              <span id="back-top" className="fa fa-arrow-up"></span>
-            </div>
-          </div>
+            </Box>
+          </Box>
         </AlertProvider>
+        </AuthProvider>
       </body>
     </html>
   );

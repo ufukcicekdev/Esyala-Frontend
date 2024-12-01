@@ -1,58 +1,48 @@
-import Link from 'next/link';
 import BlogCategory from './components/blogcategory';
 import PopulerBlogs from './components/populerblogs';
 import BlogList from './components/blogList';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Banner from '../components/banner';
+import { Grid } from '@mui/material';
 
 function Blog() {
-    
+  return (
+    <>
+      {/* Banner Bölümü */}
+      <Banner
+        backgroundImage="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img43.jpg"
+        title="Blog"
+        breadcrumbs={[
+          { label: "Ana Sayfa", href: "/" },
+          { label: "Blog", href: "/blog" },
+        ]}
+      />
 
-    return (
-        <main id="mt-main">
-            {/* Banner Bölümü */}
-            <section className="mt-contact-banner style4 wow fadeInUp" data-wow-delay="0.4s" style={{
-                backgroundImage: 'url(https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img43.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                height: '250px',
-                width: '100%',
-            }}>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-xs-12 text-center">
-                            <h1>Blog</h1>
-                            <nav className="breadcrumbs">
-                                <ul className="list-unstyled">
-                                    <li><Link href="/">Ana Sayfa <i className="fa fa-angle-right"></i></Link></li>
-                                    <li><Link href="/blog">Blog</Link></li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      {/* Blog Detayları */}
+      <div className="mt-blog-detail style1">
+        <Container maxWidth="lg">
+          <Box sx={{ width: '100%', margin: 'auto', mt: 1 }}>
+            {/* Grid yapısı */}
+            <Grid container spacing={3}>
+              {/* BlogList sol tarafa yerleşir */}
+              <Grid item xs={12} sm={8}>
+                <BlogList />
+              </Grid>
 
-            {/* Blog Detayları */}
-            <div className="mt-blog-detail style1">
-                <Container maxWidth="xl">
-                <Box sx={{ width: '80%', margin: 'auto', mt: 1 }}>
-                    <div className="row">
-                        <BlogList/>
-
-                        <div className="col-xs-12 col-sm-4 text-right sidebar wow fadeInUp" data-wow-delay="0.4s">  
-                            <BlogCategory/>
-                            
-                            <PopulerBlogs/>
-
-                        </div>
-
-                    </div>
+              {/* Sağ tarafta BlogCategory ve PopulerBlogs, ancak mobilde sol tarafa kaymayacak */}
+              <Grid item xs={12} sm={4}>
+                <Box className="text-right sidebar wow fadeInUp">
+                  <BlogCategory />
+                  <PopulerBlogs />
                 </Box>
-                </Container>
-            </div>
-        </main>
-    );
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
+      </div>
+    </>
+  );
 }
 
 export default Blog;

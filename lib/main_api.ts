@@ -106,20 +106,32 @@ export async function fetchFooterCategory() {
 
 
 
-
-export async function fetchCategoryProduct(category_slugs:string) {
+export async function fetchCategoryProduct(category_slugs: string | string[], page: number, itemsPerPage: number) {
     try {
-        const response = await instance.get(`/main/category/${category_slugs}/`);
-        if (response.data.results.status === true) {
-            return response.data.results; 
+        const slugPath = Array.isArray(category_slugs)
+            ? category_slugs.join('/')
+            : category_slugs;
+
+        const response = await instance.get(`/main/category/${slugPath}/`, {
+            params: {
+                page: page,
+                items_per_page: itemsPerPage,
+            }
+        });
+
+        // API yanıtını kontrol et
+        if (response.data?.results?.status === true) {
+            return response.data.results; // Burada dönen verinin formatını kontrol edin
         } else {
-            
             return { error: response.data?.messages || "Ürün bulunamadı." };
         }
     } catch (error) {
+        console.error('Error:', error);
         return { error: "Ürün detayları alınırken bir hata oluştu." };
     }
 }
+
+
 
 
 export async function fetchRentalProduct() {

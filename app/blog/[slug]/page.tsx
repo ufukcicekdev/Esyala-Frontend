@@ -2,8 +2,10 @@ import BlogDetail from "@/lib/fetch_data";
 
 
 
+const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export async function generateStaticParams() {
-  const response = await fetch('https://esyala-backend-production.up.railway.app/blog/');
+  const response = await fetch(`${prodUrl}/blog/`);
   
   const categories = await response.json();
 
@@ -11,8 +13,6 @@ export async function generateStaticParams() {
       slug: category.slug,  
   }));
 }
-
-
 
 
 export default async function Page({
@@ -23,10 +23,6 @@ export default async function Page({
   const slug = (await params).slug;
 
   return (
-    <main id="mt-main">
-
-      <BlogDetail slug={slug} />
-
-    </main>
+    <BlogDetail slug={slug} />
   );
 }

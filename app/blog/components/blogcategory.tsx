@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 
 interface BlogCategory {
     name: string;
-    slug: string; 
+    slug: string;
 }
 
 
@@ -37,7 +37,16 @@ function BlogCategory() {
         <>
             {blogcategoryList && blogcategoryList.length > 0 ? (
                 <section className="widget category-widget">
-                    <h3>Kategoriler</h3>
+                    <h3
+                        style={{
+                            textDecoration: "underline",
+                            textDecorationThickness: "2px",
+                            textUnderlineOffset: "4px",
+                            color: "#333",
+                        }}
+                    >
+                        Kategoriler
+                    </h3>
                     <ul className="list-unstyled widget-nav">
                         {blogcategoryList.map((blogcategory, index) => (
                             <li key={index}>

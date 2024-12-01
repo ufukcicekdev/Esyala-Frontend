@@ -1,4 +1,3 @@
-// app/category/[[...slug]].tsx
 import ProductCategory from "@/lib/ProductCategory";
 import React from "react";
 

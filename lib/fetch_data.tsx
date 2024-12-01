@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { Container, Grid, Box, Typography } from '@mui/material';
 import BlogCategory from '@/app/blog/components/blogcategory';
 import PopulerBlogs from '@/app/blog/components/populerblogs';
+import Banner from '@/app/components/banner';
 
 
 interface Blog {
@@ -18,7 +19,7 @@ interface Blog {
     created_at: string;
     banner: string;
     views: number;
-    slug:string;
+    slug: string;
     category?: {
         name: string;
         slug: string;
@@ -51,35 +52,19 @@ export default function BlogDetail({ slug }: { slug: string }) {
     }
 
     return (
-        <>
-            <section className="mt-contact-banner style4 wow fadeInUp" data-wow-delay="0.4s" style={{
-                backgroundImage: 'url(https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img43.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                height: '250px',
-                width: '100%',
-            }}>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-xs-12 text-center">
-                            <h1>Blog</h1>
-                            <nav className="breadcrumbs">
-                                <ul className="list-unstyled">
-                                    <li>
-                                        <Link href="/">AnaSayfa <i className="fa fa-angle-right"></i></Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/blog">Blog <i className="fa fa-angle-right"></i></Link>
-                                    </li>
-                                    <li>
-                                        <span>{blog.title}</span>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        <Container maxWidth="lg">
+
+            <Banner
+                backgroundImage="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img43.jpg"
+                title={blog.title}
+                breadcrumbs={[
+                    { label: "Ana Sayfa", href: "/" },
+                    { label: "Blog", href: "/blog" },
+
+                ]}
+            />
+
+
 
             <div className="mt-blog-detail style1">
                 <Container maxWidth="xl" sx={{ mt: 3 }}>
@@ -111,7 +96,7 @@ export default function BlogDetail({ slug }: { slug: string }) {
                                 </Box>
 
                                 {/* Blog Text */}
-                                <Box className="blog-txt" textAlign="center">
+                                <Box className="blog-txt">
                                     {/* Blog Metadata */}
                                     <Box
                                         component="ul"
@@ -139,8 +124,28 @@ export default function BlogDetail({ slug }: { slug: string }) {
                                         <Share />
                                     </Box>
 
-                                    {/* Title */}
-                                    <Typography variant="h1" sx={{ fontWeight: 'bold', mb: 2 }}>
+                                    <Typography
+                                        variant="h1"
+                                        sx={{
+                                            fontSize: {
+                                                xs: "24px", // Küçük ekranlar (mobil)
+                                                sm: "32px", // Orta ekranlar (tablet)
+                                                md: "40px", // Büyük ekranlar
+                                                lg: "44px", // Çok büyük ekranlar
+                                            },
+                                            lineHeight: {
+                                                xs: "28px",
+                                                sm: "36px",
+                                                md: "42px",
+                                                lg: "46px",
+                                            },
+                                            fontWeight: 700,
+                                            marginBottom: "15px",
+                                            letterSpacing: "1px",
+                                            textTransform: "uppercase",
+                                            color: "#383838",
+                                        }}
+                                    >
                                         {blog.title}
                                     </Typography>
 
@@ -200,7 +205,7 @@ export default function BlogDetail({ slug }: { slug: string }) {
                     </Grid>
                 </Container>
             </div>
-        </>
+        </Container>
     );
 }
 

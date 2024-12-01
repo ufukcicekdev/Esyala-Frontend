@@ -26,7 +26,6 @@ export async function fetchBlogs() {
 
 export async function fetchBlogDetail(slug: string) {
     try {
-        console.log("slug", slug);
         const response = await instance.get(`/blog/${slug}/`);
         
         if (response.data?.status === true && response.data?.data?.length > 0) {

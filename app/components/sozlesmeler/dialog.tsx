@@ -4,6 +4,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 // dialogData'nın türünü belirtin
 interface CustomDialogProps {
@@ -39,7 +41,22 @@ export default function CustomDialog({ dialogData }: CustomDialogProps) {
             fullWidth
             maxWidth="lg" // Dialog genişliğini ayarlar
           >
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle>
+              <span>{title}</span>
+              {/* Çarpı Butonu */}
+              <IconButton
+                aria-label="close"
+                onClick={handleClose}
+                sx={{
+                  position: 'absolute',
+                  right: 8,
+                  top: 8,
+                  color: (theme) => theme.palette.grey[500],
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
             <DialogContent>
               <div className="py-4">
                 {dialogData[title]}

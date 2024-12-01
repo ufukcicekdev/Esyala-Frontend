@@ -5,13 +5,13 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 
-interface BlogList  {
+interface BlogList {
     title: string;
     short_description: string;
     created_at: string;
     banner: string;
     views: number;
-    slug:string;
+    slug: string;
     category?: {
         name: string;
         slug: string;
@@ -44,7 +44,16 @@ function PopulerBlogs() {
         <>
             {populerblogList && populerblogList.length > 0 ? (
                 <section className="widget popular-widget">
-                    <h3>Popüler Gönderiler</h3>
+                    <h3
+                        style={{
+                            textDecoration: "underline",
+                            textDecorationThickness: "2px",
+                            textUnderlineOffset: "4px",
+                            color: "#333",
+                        }}
+                    >
+                        Popüler Gönderiler
+                    </h3>
                     <ul className="list-unstyled text-right popular-post">
                         {populerblogList.map((populerBlog, index) => (
                             <li key={index}>
@@ -54,9 +63,9 @@ function PopulerBlogs() {
                                             src={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${populerBlog.banner.replace('/media', '')}`}
                                             alt={populerBlog.title}
                                             title={populerBlog.title}
-                                            width={100}  
-                                            height={50} 
-                                            loading ="lazy"
+                                            width={100}
+                                            height={50}
+                                            loading="lazy"
                                         />
                                     </Link>
                                 </div>

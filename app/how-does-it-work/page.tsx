@@ -1,6 +1,5 @@
 "use client";
 import * as React from 'react';
-import { IoIosArrowForward } from 'react-icons/io';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -12,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from "@mui/material";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Link from 'next/link';
+import Banner from '../components/banner';
 
 const theme = createTheme({ typography: { fontSize: 30 } });
 
@@ -64,7 +63,7 @@ function VerticalLinearStepper() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{ maxWidth: 800, margin: 'auto' }}>
+            <Box sx={{ maxWidth: "lg", margin: 'auto' }}>
                 <Stepper activeStep={activeStep} orientation="vertical">
                     {steps.map((step, index) => (
                         <Step key={step.label}>
@@ -112,36 +111,25 @@ function VerticalLinearStepper() {
 
 export default function Page() {
     return (
-        <main id="mt-main">
-            <section className="mt-contact-banner style4 wow fadeInUp" data-wow-delay="0.4s" style={{
-                backgroundImage: 'url(https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img43.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                height: '250px',
-                width: '100%',
-            }}>
-                <Container maxWidth="xl">
-                    <Grid container spacing={4} sx={{ width: '100%', height: '100%' }}>
-                        <Grid item xs={12} textAlign="center">
-                            <Typography variant="h3">Nasıl Çalışır</Typography>
-                            <nav className="breadcrumbs">
-                                <ul className="list-unstyled">
-                                    <li><Link href="/">Ana Sayfa <IoIosArrowForward className="inline-block ml-1" /></Link></li>
-                                    <li>Nasıl Çalışır</li>
-                                </ul>
-                            </nav>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </section>
+            
+        <>
+            <Banner
+                backgroundImage="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img43.jpg"
+                title="Nasıl Çalışır"
+                breadcrumbs={[
+                    { label: "Ana Sayfa", href: "/" },
+                    { label: "Nasıl Çalışır", href: "/how-does-it-work" },
 
-            <Container maxWidth="xl">
+                ]}
+            />
+
+            <Container maxWidth="lg">
                 <Grid container justifyContent="center" spacing={4}>
                     <Grid item xs={12} md={8}>
                         <VerticalLinearStepper />
                     </Grid>
                 </Grid>
             </Container>
-        </main>
+        </>
     );
 }
