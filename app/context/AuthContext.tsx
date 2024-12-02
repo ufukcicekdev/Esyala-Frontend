@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(response.data.user);
           }
         } catch (err) {
-          console.error("Session expired:", err);
           setIsAuthenticated(false);
           setUser(null);
           setError("Session expired. Please log in again.");
@@ -82,7 +81,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(user);
       setError(null);
     } catch (err) {
-      console.error("Login error:", err);
       setError("Invalid email or password.");
     } finally {
       setLoading(false);
@@ -109,7 +107,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("access_token", access);
         setError(null);
       } catch (err) {
-        console.error("Token refresh error:", err);
         logout(); // Clear session if refresh fails
         setError("Session expired. Please log in again.");
       }

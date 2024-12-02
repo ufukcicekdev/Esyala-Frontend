@@ -1,4 +1,3 @@
-// RegisterDialog.tsx
 import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -8,12 +7,15 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import { useAlert } from "@/app/context/AlertContext";
 
 interface RegisterDialogProps {
   open: boolean;
   onClose: () => void;
   onSwitchToLogin: () => void; // Login'e geçiş fonksiyonu
 }
+
+const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL; // Çevresel değişkenlerden API URL'si
 
 const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitchToLogin }) => {
   const [formData, setFormData] = useState({
@@ -29,6 +31,8 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitch
     password: "",
     confirmPassword: "",
   });
+
+  const showAlert = useAlert();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -69,11 +73,44 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitch
     return valid;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
-      // Kayıt işlemini burada yapabilirsiniz
-      console.log("Kayıt başarılı!", formData);
-      onClose(); // Form gönderildiğinde dialog kapanabilir
+      const requestBody = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        password2: formData.confirmPassword,
+      };
+
+      try {
+        const response = await fetch(`${prodUrl}/customerauth/user/register/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (data.messages && Array.isArray(data.messages)) {
+            // Gelen hata mesajlarını göster
+            data.messages.forEach((message: string) => {
+              showAlert("error", message);
+            });
+          } else {
+            // Genel hata mesajı
+            showAlert("error", "Bir hata oluştu. Lütfen tekrar deneyin.");
+          }
+        } else {
+          // Başarılı mesaj
+          showAlert("success", "Kayıt başarılı! Lütfen e-postanızı doğrulayın.");
+          onClose(); // Dialog'u kapat
+        }
+      } catch (error) {
+        showAlert("error", "Sunucu hatası. Lütfen daha sonra tekrar deneyin.");
+      }
     }
   };
 

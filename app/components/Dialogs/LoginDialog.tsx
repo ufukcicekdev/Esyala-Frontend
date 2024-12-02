@@ -6,6 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { useAlert } from "@/app/context/AlertContext";
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -22,6 +23,7 @@ const LoginDialog: FC<LoginDialogProps> = ({ open, onClose, onSwitchToRegister, 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const showAlert = useAlert();
 
   const handleSubmit = async () => {
     try {
@@ -35,14 +37,14 @@ const LoginDialog: FC<LoginDialogProps> = ({ open, onClose, onSwitchToRegister, 
         localStorage.setItem("access_token", token.access);
         localStorage.setItem("refresh_token", token.refresh);
         localStorage.setItem("user", JSON.stringify(user));
-
+        showAlert("error", message);
         onClose();
         window.location.reload();
       } else {
-        setError("Giriş işlemi sırasında bir hata oluştu.");
+        showAlert("error", message);
+       
       }
     } catch (err) {
-      setError("Giriş işlemi sırasında bir hata oluştu.");
       console.error(err);
     }
   };
