@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 // severity parametresi için "success", "error", "warning", "info" değerlerini alacağını belirtiyoruz
 interface AlertProps {
   severity: "success" | "error" | "warning" | "info";
-  message: string;
+  message: string | string[]; // message artık ya string ya da array olabilir
 }
 
 export function AutoDismissAlert({ severity, message }: AlertProps) {
@@ -35,19 +35,26 @@ export function AutoDismissAlert({ severity, message }: AlertProps) {
         zIndex: 9999,
         maxWidth: "90%",
         width: "auto",
-        padding: "2rem", 
+        padding: "2rem",
       }}
       spacing={2}
     >
       <Alert
         severity={severity}
         sx={{
-          fontSize: "2rem", 
-          wordWrap: "break-word", 
-          textAlign: "center", 
+          fontSize: "2rem",
+          wordWrap: "break-word",
+          textAlign: "center",
         }}
       >
-        {message}
+        {/* Eğer message bir dizi ise her bir öğeyi yeni bir satırda göster */}
+        {Array.isArray(message) ? (
+          message.map((msg, index) => (
+            <div key={index}>{msg}</div> // array içindeki her öğe için bir <div> oluşturuluyor
+          ))
+        ) : (
+          message // Eğer message bir string ise, direkt olarak göster
+        )}
       </Alert>
     </Stack>
   );

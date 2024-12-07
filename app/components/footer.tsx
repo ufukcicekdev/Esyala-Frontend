@@ -1,5 +1,6 @@
+// components/Footer.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Subscribe from './subscribe';
 import Image from 'next/image';
@@ -10,51 +11,31 @@ import Cerez from "./sozlesmeler/cerez";
 import Kimlik from "./sozlesmeler/kimlik";
 import Odeme from "./sozlesmeler/odeme";
 import Mesafe from "./sozlesmeler/mesafe";
-import { fetchFooterCategory } from "@/lib/main_api";
-import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import CustomDialog from "./sozlesmeler/dialog";
-
-
-interface FooterCategory {
-    name: string;
-    slug: string;
-}
-
-
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
+import { useFooterCategory } from "../context/FooterCategoryProvider";
 
 const Footer = () => {
+    
+    const { footerCategoryList, loading } = useFooterCategory();
 
-    const [footerCategoryList, setFooterCategoryList] = useState<FooterCategory[] | null>(null);
 
-    useEffect(() => {
-        const loadFooterCategory = async () => {
-            try {
-                const footerCategoryResult = await fetchFooterCategory();
-                if (footerCategoryResult && footerCategoryResult.status) {
-                    setFooterCategoryList(footerCategoryResult.data);
-                } else {
-                    console.error("Blog verisi alınamadı.");
-                }
-            } catch (error) {
-                console.error("Blogları yüklerken bir hata oluştu:", error);
-            }
-        };
-        loadFooterCategory();
+  const dialogData = {
+    "Üyelik Sözleşmesi": <Uyelik />,
+    "Aydınlatma Metni": <Aydınlatma />,
+    "Cayma, Fesih ve İade Koşulları": <Cayma />,
+    "Çerez (Cookie) Politikası": <Cerez />,
+    "Kimlik ve Findeks Raporu": <Kimlik />,
+    "Ödeme ve Teslimat Bilgileri": <Odeme />,
+    "Mesafeli Satış Sözleşmesi": <Mesafe />
+  };
 
-    }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-    const dialogData = {
-        "Üyelik Sözleşmesi": <Uyelik />,
-        "Aydınlatma Metni": <Aydınlatma />,
-        "Cayma, Fesih ve İade Koşulları": <Cayma />,
-        "Çerez (Cookie) Politikası": <Cerez />,
-        "Kimlik ve Findeks Raporu": <Kimlik />,
-        "Ödeme ve Teslimat Bilgileri": <Odeme />,
-        "Mesafeli Satış Sözleşmesi": <Mesafe />
-    };
-
-    return (
-        <footer id="mt-footer" className="style7 wow fadeInUp">
+  return (
+    <footer id="mt-footer" className="style7 wow fadeInUp">
 
             <aside className="f-promo-box dark">
                 <div className="container">
@@ -241,11 +222,7 @@ const Footer = () => {
             </div>
 
         </footer>
-    );
-}
+  );
+};
 
 export default Footer;
-
-
-
-

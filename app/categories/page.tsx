@@ -7,7 +7,8 @@ import { Typography } from "@mui/material";
 interface Category {
   name: string;
   slug: string;
-  icon?: string; // İkon alanı opsiyonel
+  icon?: string; 
+  image?:string// İkon alanı opsiyonel
 }
 
 const CategoriesPage: React.FC = () => {
@@ -61,7 +62,7 @@ const CategoriesPage: React.FC = () => {
             key={category.slug}
             name={category.name}
             slug={category.slug}
-            icon={category.icon} // Eğer ikon varsa
+            image={category.image} 
           />
         ))}
       </div>

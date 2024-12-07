@@ -5,12 +5,20 @@ interface BannerProps {
     backgroundImage: string;
     title: string;
     breadcrumbs: { label: string; href: string }[];
-    textColor?: string; 
+    textColor?: string;
+    className?: string; // Add className prop to accept external classes
 }
 
-const Banner: React.FC<BannerProps> = ({ backgroundImage, title, breadcrumbs, textColor = "#383838" }) => { // Default değer siyah
+const Banner: React.FC<BannerProps> = ({ 
+    backgroundImage, 
+    title, 
+    breadcrumbs, 
+    textColor = "#383838", 
+    className // Accept className as a prop
+}) => {
     return (
         <Box
+            className={className} // Apply the className prop here
             sx={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: "cover",

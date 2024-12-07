@@ -1,12 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { fetchCategoryProduct } from "@/lib/main_api";
+import React, { useState, useEffect } from "react";
 import { AutoDismissAlert } from "@/app/components/messages/Alert";
 import Link from "next/link";
 import Image from "next/image";
 import Banner from "@/app/components/banner";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { useProducts } from "./useProducts"; // custom hook'u import ettik
+import { fetchProductCategoryList } from "./main_api";
+import { CircularProgress } from "@mui/material";
 
 interface Breadcrumb {
   name: string;
@@ -25,61 +27,34 @@ interface Category {
   subcategories: Subcategory[];
 }
 
-interface Product {
-  id: number;
-  name: string;
-  slug: string;
-  first_image?: {
-    image: string;
-    img_alt: string;
-    img_title: string;
-  };
-  discount_percentage: number;
-  selling_price: string;
-  selling_old_price: string;
-  truncated_description: string;
-}
-
 export default function ProductCategory({ slug }: { slug: string }) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
-  const [productCount, setProductCount] = useState(0);
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
+  const { products, loading, error, productCount } = useProducts(slug, page, itemsPerPage);
 
+  // Kategori verisini yalnızca ilk yüklemede al
   useEffect(() => {
-    const loadCategoryProducts = async () => {
-      setLoading(true);
+    const loadCategoryData = async () => {
       try {
-        const productData = await fetchCategoryProduct(slug, page, itemsPerPage);
-
-        if (productData.error) {
-          setError(productData.error || "Bilinmeyen bir hata oluştu.");
-        } else if (productData.data) {
-          const { product, product_count, category } = productData.data;
-          setProducts(product || []);
-          setProductCount(product_count || 0);
-          setCategory(category || null);
-        } else {
-          setError("Ürün verisi hatalı. Beklenmeyen yapı.");
+        const response = await fetchProductCategoryList(slug);
+        if (response.status && response.data?.category) {
+          setCategory(response.data.category);
         }
       } catch (err) {
-        setError("Bir hata oluştu. Lütfen tekrar deneyin.");
-      } finally {
-        setLoading(false);
+        console.error("Kategori verisi alınırken hata oluştu", err);
       }
     };
-    loadCategoryProducts();
-  }, [slug, page]);
+
+    loadCategoryData();
+  }, [slug]);
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+    setPage(value); // Sayfa numarasını güncelle
   };
 
-  if (loading) {
-    return <p>Yükleniyor...</p>;
+  if (!category) {
+    return <div><CircularProgress /></div>;
   }
 
   if (error) {
@@ -91,20 +66,16 @@ export default function ProductCategory({ slug }: { slug: string }) {
     );
   }
 
-  // Ürünlerin olup olmadığını kontrol et
   const hasProducts = products.length > 0;
 
   return (
     <>
       <Banner
+        className="product-banner"
         backgroundImage="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/static/images/img-76.jpg"
-        title={
-          category?.breadcrumb && category.breadcrumb.length > 0
-            ? category.breadcrumb.at(-1)?.name
-            : "Kategori"
-        }
+        title={category?.breadcrumb?.at(-1)?.name || "Kategori"}
         breadcrumbs={
-          category?.breadcrumb && category.breadcrumb.length > 0
+          category?.breadcrumb?.length
             ? [
               { label: "Ana Sayfa", href: "/" },
               ...category.breadcrumb.map((crumb, index) => ({
@@ -115,20 +86,18 @@ export default function ProductCategory({ slug }: { slug: string }) {
                   .join("/")}`,
               })),
             ]
-            : [
-              { label: "Ana Sayfa", href: "/" },
-              { label: "Kategori", href: `/category/${slug}` },
-            ]
+            : [{ label: "Ana Sayfa", href: "/" }, { label: "Kategori", href: `/category/${slug}` }]
         }
         textColor="#ffffff"
       />
 
       <div className="container">
         <div className="row">
-          <aside id="sidebar" className="col-xs-12 col-sm-4 col-md-3">
+          <aside id="sidebar" className="product-sidebar col-xs-12 col-sm-4 col-md-3">
             <section className="shop-widget">
               <h2>Kategoriler</h2>
               <ul className="list-unstyled category-list">
+                {/* Alt kategoriler, kategori verisi yüklendikten sonra */}
                 {category?.subcategories?.map((subcategory) => (
                   <li key={subcategory.slug}>
                     <Link href={`/category/${category?.breadcrumb?.[0]?.slug}/${subcategory.slug}`}>
@@ -137,9 +106,7 @@ export default function ProductCategory({ slug }: { slug: string }) {
                   </li>
                 ))}
                 <li>
-                  <Link href={`/category/${category?.breadcrumb?.[0]?.slug}/`}>
-                    Tüm Ürünler
-                  </Link>
+                  <Link href={`/category/${category?.breadcrumb?.[0]?.slug}/`}>Tüm Ürünler</Link>
                 </li>
               </ul>
             </section>
@@ -148,12 +115,16 @@ export default function ProductCategory({ slug }: { slug: string }) {
           <div className="col-xs-12 col-sm-8 col-md-9">
             <header className="mt-shoplist-header">
               <div className="mt-textbox">
-                <p><strong>{productCount}</strong> sonuç</p>
+                <p>
+                  <strong>{productCount}</strong> sonuç
+                </p>
               </div>
             </header>
 
             <ul className="mt-productlisthold list-inline" id="card-view">
-              {hasProducts ? (
+              {loading ? (
+                <p>Ürünler Yükleniyor...</p> // Yükleniyor durumu
+              ) : hasProducts ? (
                 products.map((product) => (
                   <li key={product.id}>
                     <div className="product-3 marginzero">
@@ -203,12 +174,26 @@ export default function ProductCategory({ slug }: { slug: string }) {
               )}
             </ul>
 
-            <Stack spacing={2} alignItems="center" marginTop={3}>
+            <Stack
+              spacing={2}
+              alignItems="center"
+              marginTop={3}
+              sx={{
+                width: '100%', // Tam genişlik
+                display: 'flex',
+                justifyContent: 'center', // Ortalamak için
+              }}
+            >
               <Pagination
-                count={Math.ceil(productCount / itemsPerPage)}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
+                count={Math.ceil(productCount / itemsPerPage)} // Sayfa sayısını hesapla
+                page={page} // Mevcut sayfa (kontrollü mod)
+                onChange={handlePageChange} // Sayfa değiştirme fonksiyonu
+                color="primary" // Renk
+                siblingCount={0} // Yakın sayfaları gösterme
+                sx={{
+                  width: '100%', // Genişlik tamamen sayfa
+                  maxWidth: 600, // Max genişlik sınırlaması (isteğe bağlı)
+                }}
               />
             </Stack>
           </div>

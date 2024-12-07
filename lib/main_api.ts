@@ -133,6 +133,28 @@ export async function fetchCategoryProduct(category_slugs: string | string[], pa
 
 
 
+export async function fetchProductCategoryList(category_slugs: string | string[]) {
+    try {
+        const slugPath = Array.isArray(category_slugs)
+            ? category_slugs.join('/')
+            : category_slugs;
+
+        const response = await instance.get(`/main/productCategoryList/${slugPath}/`);
+        console.log("*********",response);
+        if (response.data?.status === true) {
+            return response.data; // Burada dönen verinin formatını kontrol edin
+        } else {
+            return { error: response.data?.messages || "Kategori bulunamadı." };
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return { error: "Kategori detayları alınırken bir hata oluştu." };
+    }
+}
+
+
+
+
 
 export async function fetchRentalProduct() {
     try {

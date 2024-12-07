@@ -10,7 +10,7 @@ interface Category {
 
 interface BreadcrumbsComponentProps {
   product: {
-    name?: string; // Optional product name
+    name?: string;
     category_breadcrumb: {
       main_category: Category;
       sub_categories: Category[];
@@ -18,6 +18,9 @@ interface BreadcrumbsComponentProps {
   };
   selectedSubCategory: string;
   handleSubCategoryChange: (slug: string) => void;
+  handleMenuClick: (event: React.MouseEvent<HTMLElement>) => void;  // Add this line
+  handleMenuClose: () => void;  // Add this line
+  anchorEl: HTMLElement | null;  // Add this line
 }
 
 const BreadcrumbsComponent: React.FC<BreadcrumbsComponentProps> = ({
@@ -38,11 +41,11 @@ const BreadcrumbsComponent: React.FC<BreadcrumbsComponentProps> = ({
   return (
     <Breadcrumbs
       aria-label="breadcrumb"
-      mb={2}
       sx={{
         display: 'flex',
         justifyContent: 'flex-start', // Sola hizalamak için eklenmiş
         flexWrap: 'wrap', // Uzun breadcrumb'lar için satırları kaydırma
+        marginBottom: 2, // Correct way to apply margin bottom using sx prop
       }}
     >
       {/* Main Category */}

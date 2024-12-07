@@ -129,6 +129,9 @@ margin-bottom: 5px;
     .icon-magnifier{
         display: none;
     }
+    .login-register-button{
+        display: none;
+    }
 }
 
 @media (max-width: 991px) {
@@ -145,6 +148,10 @@ margin-bottom: 5px;
 .icon-magnifier{
     display: none;
 }
+.login-register-button{
+    display: none;
+}
+
 }
 
 .user-icon1 {

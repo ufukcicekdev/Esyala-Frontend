@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("access_token", access);
         setError(null);
       } catch (err) {
-        logout(); // Clear session if refresh fails
+        logout(); 
         setError("Session expired. Please log in again.");
       }
     } else {

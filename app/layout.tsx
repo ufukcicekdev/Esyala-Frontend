@@ -16,8 +16,10 @@ import { Container, Grid, Box } from "@mui/material";
 import { AlertProvider } from './context/AlertContext.js';
 
 import Header from "./components/header";
-import Footer from "./components/footer";
 import { AuthProvider } from "./context/AuthContext";
+import { CategoryProvider } from "./context/CategoryProvider";
+import { FooterCategoryProvider } from "./context/FooterCategoryProvider";
+import Footer from "./components/footer";
 
 // Global metadata
 export const metadata: Metadata = {
@@ -66,8 +68,11 @@ export default function RootLayout({
             }}
           >
             {/* Header */}
+            
             <Box component="header" sx={{ flexGrow: 0 }}>
-              <Header />
+            <CategoryProvider>
+            <Header />
+            </CategoryProvider>
             </Box>
 
             {/* Ana İçerik */}
@@ -89,12 +94,15 @@ export default function RootLayout({
             </Container>
 
             {/* Footer */}
-            <Box component="footer" sx={{ flexGrow: 0 }}>
-              <Footer />
-            </Box>
+            <FooterCategoryProvider>
+              <Box component="footer" sx={{ flexGrow: 0 }}>
+                <Footer/>
+              </Box>
+            </FooterCategoryProvider>
           </Box>
         </AlertProvider>
-        </AuthProvider>
+
+      </AuthProvider>
       </body>
     </html>
   );

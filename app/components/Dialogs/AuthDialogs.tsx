@@ -1,4 +1,3 @@
-// AuthDialogs.tsx
 import React from "react";
 import LoginDialog from "./LoginDialog";
 import RegisterDialog from "./RegisterDialog";
@@ -20,7 +19,7 @@ export default function AuthDialogs({
           open={true}
           onClose={closeDialog}
           onSwitchToRegister={() => openDialog("register")}
-          onSwitchToForgotPassword={() => openDialog("forgotPassword")}
+          onSwitchToForgotPassword={() => openDialog("forgotPassword")} 
         />
       )}
 
@@ -28,7 +27,7 @@ export default function AuthDialogs({
         <RegisterDialog
           open={true}
           onClose={closeDialog}
-          onSwitchToLogin={() => openDialog("login")} // Burada geçiş fonksiyonunu doğru sağlıyoruz
+          onSwitchToLogin={() => openDialog("login")}
         />
       )}
 

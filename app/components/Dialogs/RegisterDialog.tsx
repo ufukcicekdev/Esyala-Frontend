@@ -7,15 +7,17 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import { useAlert } from "@/app/context/AlertContext";
 
 interface RegisterDialogProps {
   open: boolean;
   onClose: () => void;
-  onSwitchToLogin: () => void; // Login'e geçiş fonksiyonu
+  onSwitchToLogin: () => void;
 }
 
-const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL; // Çevresel değişkenlerden API URL'si
+const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitchToLogin }) => {
   const [formData, setFormData] = useState({
@@ -95,18 +97,15 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitch
 
         if (!response.ok) {
           if (data.messages && Array.isArray(data.messages)) {
-            // Gelen hata mesajlarını göster
             data.messages.forEach((message: string) => {
               showAlert("error", message);
             });
           } else {
-            // Genel hata mesajı
             showAlert("error", "Bir hata oluştu. Lütfen tekrar deneyin.");
           }
         } else {
-          // Başarılı mesaj
           showAlert("success", "Kayıt başarılı! Lütfen e-postanızı doğrulayın.");
-          onClose(); // Dialog'u kapat
+          onClose();
         }
       } catch (error) {
         showAlert("error", "Sunucu hatası. Lütfen daha sonra tekrar deneyin.");
@@ -116,7 +115,22 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitch
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Üye Ol</DialogTitle>
+      <DialogTitle>
+        Üye Ol
+        <IconButton
+          edge="end"
+          color="inherit"
+          onClick={onClose}
+          aria-label="close"
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -169,9 +183,6 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitch
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Kapat
-        </Button>
         <Button onClick={handleSubmit} color="primary">
           Kayıt Ol
         </Button>

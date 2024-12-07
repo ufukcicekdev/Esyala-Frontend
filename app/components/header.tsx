@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { fetchCategory } from "@/lib/main_api";
+import { useState } from "react";
 import MobileBottomNav from "./MobileBottomNav";
 import { AutoDismissAlert } from "./messages/Alert";
 
@@ -18,48 +17,36 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import { useAuth } from "../context/AuthContext";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
-import AuthDialogs from "./Dialogs/AuthDialogs"; // AuthDialogs bileşenini import ediyoruz
+import AuthDialogs from "./Dialogs/AuthDialogs";
+import { useCategories } from "../context/CategoryProvider";
+
+
 
 interface Category {
   name: string;
   slug: string;
   children: Category[];
+  image:string;
 }
 
 const Header = () => {
-  const [categories, setCategories] = useState<Category[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
   const { isAuthenticated, user, logout } = useAuth();
+  const { categories, error, loading } = useCategories(); // Category context error
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  // AuthDialog için state
-  const [currentDialog, setCurrentDialog] = useState<"login" | "register" | "forgotPassword" | null>(null); // currentDialog state'i
-  const [authDialogOpen, setAuthDialogOpen] = useState(false); // authDialogOpen state'i
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetchCategory();
-        if (response.status && response.data) {
-          setCategories(response.data);
-        }
-      } catch {
-        setError("Kategoriler alınamadı");
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const [currentDialog, setCurrentDialog] = useState<"login" | "register" | "forgotPassword" | null>(null);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
   const handleAuthDialogOpen = (dialog: "login" | "register" | "forgotPassword") => {
-    setCurrentDialog(dialog); // currentDialog'ı güncelliyoruz
-    setAuthDialogOpen(true); // Dialog'u açıyoruz
+    setCurrentDialog(dialog);
+    setAuthDialogOpen(true);
   };
 
   const handleAuthDialogClose = () => {
-    setAuthDialogOpen(false); // Dialog'u kapatıyoruz
-    setCurrentDialog(null); // currentDialog'ı null yapıyoruz
+    setAuthDialogOpen(false);
+    setCurrentDialog(null);
   };
 
   const handleUserClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -82,36 +69,20 @@ const Header = () => {
           href={`/category/${category.slug}/`}
           className="flex flex-col items-center px-4 py-3 bg-gray-100 text-gray-800 font-semibold shadow-sm transition-all hover:text-blue-600 rounded-lg"
         >
-          <span className="text-3xl mb-3">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M8.27051 14.9515L9.86319 9.86221L14.9524 8.26953L13.3598 13.3588L8.27051 14.9515Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-              <circle
-                cx="11.611"
-                cy="11.611"
-                r="9.61098"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></circle>
-            </svg>
+          <span className="mb-3 w-12 h-12"> {/* Resmi yuvarlak alanda göstermek için boyut ekledik */}
+            <Image
+              src={category.image} // Kategorinin resim URL'si
+              alt={category.name} // Resmin alternatif metni
+              width={48} // Resmin genişliği (w-12 => 48px)
+              height={48} // Resmin yüksekliği (h-12 => 48px)
+              className="object-cover rounded-full" // Yuvarlak hale getirmek için
+            />
           </span>
           <span className="text-lg font-semibold">{category.name}</span>
         </Link>
+
+
+
 
         {category.children && category.children.length > 0 && (
           <ul className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-10 group-hover:opacity-100 group-hover:pointer-events-auto">
@@ -133,14 +104,15 @@ const Header = () => {
 
   return (
     <header id="mt-header" className="style19">
-      {error && <AutoDismissAlert severity="error" message={error} />}
-
-
+      {(localError || error) && (
+        <AutoDismissAlert severity="error" message={localError || error || ''} />
+      )}
 
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" color="default">
           <Toolbar>
             <Grid container alignItems="center" spacing={2}>
+              {/* Logo ve slogan */}
               <Grid item xs={12} sm={12} md={3} className="flex items-center">
                 <div className="mt-logo text-center">
                   <Link href="/">
@@ -161,15 +133,8 @@ const Header = () => {
                 </div>
               </Grid>
 
-              {/* Search Bar */}
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                md={6}
-                className="flex items-center"
-                sx={{ my: 3 }}
-              >
+              {/* Arama kutusu */}
+              <Grid item xs={12} sm={12} md={4} className="flex items-center" sx={{ my: 3 }}>
                 <TextField
                   variant="outlined"
                   placeholder="Ara..."
@@ -184,13 +149,24 @@ const Header = () => {
                 />
               </Grid>
 
+
+
               {/* Giriş Yap ve Üye Ol Butonları */}
               <Grid
                 item
                 xs={12}
                 sm={12}
                 md={3}
-                className="flex justify-end items-center hidden md:flex"
+                sx={{
+                  display: {
+                    xs: 'none', // Varsayılan olarak gizli
+                    md: 'flex', // 992px ve üzeri görünsün
+                  },
+                  '@media (max-width: 991px)': {
+                    display: 'none', // Tam 991px ve altı için gizli
+                  },
+                }}
+                className="flex justify-end items-center"
               >
                 {isAuthenticated ? (
                   <>
@@ -228,22 +204,24 @@ const Header = () => {
                   </>
                 ) : (
                   <>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => handleAuthDialogOpen("login")}
-                      className="ml-2"
-                    >
-                      Giriş Yap
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleAuthDialogOpen("register")}
-                      className="ml-2"
-                    >
-                      Üye Ol
-                    </Button>
+                    <div className="login-register-button">
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => handleAuthDialogOpen("login")}
+                        className="ml-2"
+                      >
+                        Giriş Yap
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleAuthDialogOpen("register")}
+                        className="ml-2"
+                      >
+                        Üye Ol
+                      </Button>
+                    </div>
                   </>
                 )}
               </Grid>
@@ -260,11 +238,9 @@ const Header = () => {
         </nav>
       </div>
 
-      
 
-      <MobileBottomNav/>
+      <MobileBottomNav />
 
-      {/* AuthDialogs Bileşeni */}
       <AuthDialogs
         openDialog={handleAuthDialogOpen}
         closeDialog={handleAuthDialogClose}
