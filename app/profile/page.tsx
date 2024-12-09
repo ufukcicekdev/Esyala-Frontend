@@ -4,7 +4,6 @@ import {
   Box,
   Tabs,
   Tab,
-  Typography,
   Avatar,
   Button,
   useMediaQuery,
@@ -12,9 +11,13 @@ import {
   IconButton,
   AppBar,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import ProfileEditDialog from "../components/profile/user_info";
+import ProfileNotifyDialog from "../components/profile/ProfileNotifyDialog";
+import OrderList from "../components/profile/OrderList";
 
 // Tab Panel Helper Component
 interface TabPanelProps {
@@ -33,7 +36,7 @@ const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -51,17 +54,24 @@ interface UserProfile {
 }
 
 const Profile: React.FC = () => {
-  const [tabValue, setTabValue] = useState(0); // Varsayılan sekme 'Profil Bilgileri'
+  const [tabValue, setTabValue] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false); // Dialog açma durumu
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [notifyDialogOpen, setNotifyDialogOpen] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     username: "",
-  first_name: "",
-  last_name: "",
-  email: "",
-  birth_date: "",
-  tckn: ""
+    first_name: "",
+    last_name: "",
+    email: "",
+    birth_date: "",
+    tckn: "",
   });
+
+  const [notifications, setNotifications] = useState({
+    emailNotifications: false,
+    smsNotifications: false,
+  });
+
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -73,16 +83,27 @@ const Profile: React.FC = () => {
   };
 
   const toggleDialog = () => {
-    setDialogOpen(!dialogOpen); // Dialog penceresini açıp kapatmak
+    setDialogOpen(!dialogOpen);
+  };
+
+  const toggleNotifyDialog = () => {
+    setNotifyDialogOpen(!notifyDialogOpen);
   };
 
   const handleProfileSave = (updatedProfile: UserProfile) => {
-    setUserProfile(updatedProfile); // Profil bilgisini güncelle
+    setUserProfile(updatedProfile);
+  };
+
+  const handleNotificationsSave = (updatedNotifications: {
+    emailNotifications: boolean;
+    smsNotifications: boolean;
+  }) => {
+    setNotifications(updatedNotifications);
   };
 
   return (
     <Box sx={{ display: "flex", flexDirection: isMobile ? "column" : "row", minHeight: "100vh" }}>
-      {/* Mobilde Drawer (Çekmece Menüsü) */}
+      {/* Mobilde AppBar */}
       {isMobile && (
         <>
           <AppBar position="sticky">
@@ -90,9 +111,12 @@ const Profile: React.FC = () => {
               <IconButton edge="start" color="inherit" onClick={toggleDrawer}>
                 <MenuIcon />
               </IconButton>
-              <Typography variant="h6" sx={{ ml: 2 }}>
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 Profil
               </Typography>
+              <IconButton color="inherit" onClick={toggleNotifyDialog}>
+                <NotificationsIcon />
+              </IconButton>
             </Toolbar>
           </AppBar>
           <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
@@ -100,9 +124,9 @@ const Profile: React.FC = () => {
               <Avatar
                 alt="User Avatar"
                 src="https://via.placeholder.com/150"
-                sx={{ width: 80, height: 80, mb: 2 }}
+                sx={{ width: 100, height: 100, mb: 2, mx: "auto" }}
               />
-              <Typography variant="h6">Ufuk Çiçek</Typography>
+              <Typography variant="h6" align="center">Ufuk Çiçek</Typography>
               <Button variant="contained" color="primary" sx={{ my: 2 }} fullWidth onClick={toggleDialog}>
                 Profili Düzenle
               </Button>
@@ -112,6 +136,13 @@ const Profile: React.FC = () => {
                 onChange={handleTabChange}
                 textColor="primary"
                 indicatorColor="primary"
+                sx={{
+                  "& .MuiTab-root": {
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                  },
+                }}
               >
                 <Tab label="Siparişlerim" />
                 <Tab label="Adreslerim" />
@@ -135,20 +166,37 @@ const Profile: React.FC = () => {
           <Avatar
             alt="User Avatar"
             src="https://via.placeholder.com/150"
-            sx={{ width: 80, height: 80, mb: 2 }}
+            sx={{ width: 100, height: 100, mb: 2, mx: "auto" }}
           />
-          <Typography variant="h6">Ufuk Çiçek</Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="h6" align="center">Ufuk Çiçek</Typography>
+          <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
             Backend Developer
           </Typography>
           <Button variant="contained" color="primary" sx={{ my: 2 }} fullWidth onClick={toggleDialog}>
             Profili Düzenle
           </Button>
+          <Button
+            variant="outlined"
+            startIcon={<NotificationsIcon />}
+            sx={{ my: 2 }}
+            fullWidth
+            onClick={toggleNotifyDialog}
+          >
+            Bildirimler
+          </Button>
           <Tabs
+            orientation="vertical"
             value={tabValue}
             onChange={handleTabChange}
             textColor="primary"
             indicatorColor="primary"
+            sx={{
+              "& .MuiTab-root": {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+              },
+            }}
           >
             <Tab label="Siparişlerim" />
             <Tab label="Adreslerim" />
@@ -159,42 +207,20 @@ const Profile: React.FC = () => {
       {/* Sağ İçerik */}
       <Box sx={{ flexGrow: 1, p: 3 }}>
         <TabPanel value={tabValue} index={0}>
-          <Typography variant="h6" gutterBottom>
-            Profil Bilgileri
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            <strong>Email:</strong> {userProfile.email}
-          </Typography>
-        
+          <Typography variant="h6" sx={{ mb: 2 }}>Siparişlerim</Typography>
+          <OrderList /> {/* userId'yi dinamik olarak alabilirsiniz */}
         </TabPanel>
 
         <TabPanel value={tabValue} index={1}>
-          <Typography variant="h6" gutterBottom>
-            Siparişlerim
-          </Typography>
-          <ul>
-            <li>Sipariş #1: Ürün A - 250 TL</li>
-            <li>Sipariş #2: Ürün B - 150 TL</li>
-            <li>Sipariş #3: Ürün C - 300 TL</li>
-          </ul>
-        </TabPanel>
-
-        <TabPanel value={tabValue} index={2}>
-          <Typography variant="h6" gutterBottom>
-            Adreslerim
-          </Typography>
-          <ul>
-            <li>Ev Adresi: Mahalle, Sokak, Şehir</li>
-            <li>İş Adresi: Ofis Adresi, Şehir</li>
-          </ul>
+          <Typography variant="h6" sx={{ mb: 2 }}>Adreslerim</Typography>
         </TabPanel>
       </Box>
 
-      {/* Profil Düzenleme Dialogu */}
-      <ProfileEditDialog
-        open={dialogOpen}
-        onClose={toggleDialog}
-        onSave={handleProfileSave}
+      <ProfileEditDialog open={dialogOpen} onClose={toggleDialog} onSave={handleProfileSave} />
+      <ProfileNotifyDialog
+        open={notifyDialogOpen}
+        onClose={toggleNotifyDialog}
+        onSave={handleNotificationsSave}
       />
     </Box>
   );

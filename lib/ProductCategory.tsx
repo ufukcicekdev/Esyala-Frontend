@@ -8,7 +8,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useProducts } from "./useProducts"; // custom hook'u import ettik
 import { fetchProductCategoryList } from "./main_api";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
 
 interface Breadcrumb {
   name: string;
@@ -121,58 +121,64 @@ export default function ProductCategory({ slug }: { slug: string }) {
               </div>
             </header>
 
-            <ul className="mt-productlisthold list-inline" id="card-view">
-              {loading ? (
-                <p>Ürünler Yükleniyor...</p> // Yükleniyor durumu
-              ) : hasProducts ? (
-                products.map((product) => (
-                  <li key={product.id}>
-                    <div className="product-3 marginzero">
-                      <div className="img">
-                        <Link href={`/product/${product.slug}`}>
-                          <Image
-                            src={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${product.first_image?.image.replace(
-                              "/media",
-                              ""
-                            )}`}
-                            alt={product.first_image?.img_alt || "Ürün görseli"}
-                            title={product.first_image?.img_title || "Ürün görseli"}
-                            width={300}
-                            height={300}
-                            priority
-                          />
-                        </Link>
-                        {product.discount_percentage > 0 && (
-                          <span className="caption">
-                            <span className="off">{product.discount_percentage}%</span>
-                            <span className="best-price">En İyi Fiyat</span>
-                          </span>
-                        )}
-                      </div>
-                      <div className="txt">
-                        <strong className="title">
-                          <Link href={`/product/${product.slug}`}>{product.name}</Link>
-                        </strong>
-                        <h4>{category?.name}</h4>
-                        {product.selling_old_price !== "0.00" && (
-                          <del className="off">
-                            <i className="fa fa-try"></i>
-                            <span>{product.selling_old_price}</span>
-                          </del>
-                        )}
-                        <span className="price">
-                          <i className="fa fa-try"></i>
-                          <span>{product.selling_price}</span>
-                        </span>
-                        <p>{product.truncated_description}</p>
-                      </div>
-                    </div>
-                  </li>
-                ))
-              ) : (
-                <p>Ürün bulunamadı</p>
-              )}
-            </ul>
+            <div className="product-list">
+  {loading ? (
+    <p>Ürünler Yükleniyor...</p> // Yükleniyor durumu
+  ) : hasProducts ? (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {products.map((product) => (
+        <Card key={product.id} sx={{ maxWidth: 345, margin: 2 }}>
+          <CardMedia
+            component="img"
+            height="200"
+            image={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${product.first_image?.image.replace(
+              "/media",
+              ""
+            )}`}
+            alt={product.first_image?.img_alt || "Ürün görseli"}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              <Link href={`/product/${product.slug}`}>{product.name}</Link>
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {category?.name}
+            </Typography>
+            {product.selling_old_price !== "0.00" && (
+              <Typography
+                variant="body2"
+                color="error"
+                style={{ textDecoration: "line-through", fontSize: "0.9rem", marginBottom: "5px" }}
+              >
+                <i className="fa fa-try"></i> {product.selling_old_price}
+              </Typography>
+            )}
+            <Typography
+              variant="h6"
+              color="primary"
+              sx={{
+                fontWeight: "bold",
+                fontSize: "1.25rem",
+                marginTop: "10px",
+              }}
+            >
+              <i className="fa fa-try"></i> {product.selling_price}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {product.truncated_description}
+            </Typography>
+          </CardContent>
+          <Button size="small" color="primary" href={`/product/${product.slug}`}>
+            Detaylar
+          </Button>
+        </Card>
+      ))}
+    </div>
+  ) : (
+    <p>Ürün bulunamadı</p>
+  )}
+</div>
+
 
             <Stack
               spacing={2}

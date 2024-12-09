@@ -8,6 +8,28 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Environment variable
 });
 
+// Interceptor to handle token expiration
+api.interceptors.response.use(
+  response => response, // Success response
+  async (error) => {
+    const originalRequest = error.config;
+
+    // If error status is 401 (Unauthorized) and we have a refresh token
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;  // Prevent infinite loop
+      await refreshSession(); // Try to refresh session
+      const newAccessToken = getAccessToken(); // Get new token from localStorage
+      if (newAccessToken) {
+        // Retry the original request with the new access token
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return axios(originalRequest); // Retry the request
+      }
+    }
+
+    return Promise.reject(error); // If refresh fails, reject the promise
+  }
+);
+
 // User interface
 interface User {
   id: string;
@@ -98,14 +120,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Refresh session
   const refreshSession = async () => {
     const refreshToken = localStorage.getItem("refresh_token");
+    console.log("refreshToken", refreshToken);
     if (refreshToken) {
       try {
         const response = await api.post("/customerauth/user/token/refresh/", { refresh: refreshToken });
         const { access } = response.data;
-
+        console.log("response", response);
         // Update access token
         localStorage.setItem("access_token", access);
-        setError(null);
+        setError(null); // Clear any previous error
       } catch (err) {
         logout(); 
         setError("Session expired. Please log in again.");

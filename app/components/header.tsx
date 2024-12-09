@@ -26,7 +26,7 @@ interface Category {
   name: string;
   slug: string;
   children: Category[];
-  image:string;
+  image: string;
 }
 
 const Header = () => {
@@ -69,9 +69,10 @@ const Header = () => {
           href={`/category/${category.slug}/`}
           className="flex flex-col items-center px-4 py-3 bg-gray-100 text-gray-800 font-semibold shadow-sm transition-all hover:text-blue-600 rounded-lg"
         >
-          <span className="mb-3 w-12 h-12"> {/* Resmi yuvarlak alanda göstermek için boyut ekledik */}
+          <span className="mb-3 w-12 h-12">
+            {/* Resmi yuvarlak alanda göstermek için boyut ekledik */}
             <Image
-              src={category.image} // Kategorinin resim URL'si
+              src={category.image ? category.image : "/path/to/default-image.jpg"} // Varsayılan resim yolu
               alt={category.name} // Resmin alternatif metni
               width={48} // Resmin genişliği (w-12 => 48px)
               height={48} // Resmin yüksekliği (h-12 => 48px)

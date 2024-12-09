@@ -117,16 +117,12 @@ export default function ProductDetail({ slug }: { slug: string }) {
                             {product.images.map((image, index) => (
                                 <div key={index}>
                                     <Link
-                                        href={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${image.image.replace(
-                                            "/media", ""
-                                        )}`}
+                                        href={image.image}
                                         data-fancybox="gallery"
                                         data-caption={image.img_alt}
                                     >
                                         <Image
-                                            src={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${image.image.replace(
-                                                "/media", ""
-                                            )}`}
+                                            src={image.image}
                                             alt={image.img_alt}
                                             title={image.img_title}
                                             width={500}
