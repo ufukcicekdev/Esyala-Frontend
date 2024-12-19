@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Drawer, List, ListItem, ListItemAvatar, Avatar, Box, Container, Button, Typography, IconButton } from "@mui/material";
+import { Drawer, Box, Container, Button, Typography, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useCart } from "@/app/context/CartContext";
 import Link from 'next/link';
-import Image from 'next/image';  // Next.js Image bileşenini import edin
+import Image from 'next/image'; // Next.js Image bileşenini import edin
 
 interface Product {
     id: number;
@@ -20,17 +20,20 @@ interface Product {
 
 interface CartItem {
     id: number;
-    product: Product;
+    name: string;
     quantity: number;
-    is_rental: boolean;
-    rental_price: string | null;
-    rental_period: string | null;
+    rentalPeriod?: string | null;
+    rentalPrice: string | null; 
+    isRental: boolean; 
+    sellingPrice: string | null; 
+    product:Product;
 }
 
 interface SidebarProps {
     isOpen: boolean;
     onClose: () => void;
 }
+
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const { cartItems, removeFromCart, totalPrice, updateQuantity } = useCart();
@@ -92,26 +95,36 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                         />
                     )}
 
-                    <List sx={{ flexGrow: 1, overflowY: 'auto' }}>
+                    <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
                         {cartItems.length > 0 ? (
                             cartItems.map((item) => (
-                                <ListItem button key={item.id} sx={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
-                                    <ListItemAvatar>
-                                        <Avatar
-                                            alt={item.product.name}
+                                <Box
+                                    key={item.id}
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        padding: '8px 0',
+                                        borderBottom: '1px solid #ddd',
+                                    }}
+                                >
+                                    <Box sx={{ marginRight: 2 }}>
+                                        <Image
                                             src={item.product.first_image.image || '/default-image.jpg'}
-                                            sx={{ width: 50, height: 50 }}
+                                            alt={item.product.first_image.img_alt}
+                                            width={50}
+                                            height={50}
+                                            style={{ borderRadius: '8px' }}
                                         />
-                                    </ListItemAvatar>
-                                    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', marginLeft: 1 }}>
+                                    </Box>
+                                    <Box sx={{ flexGrow: 1 }}>
                                         <Link href={`/product/${item.product.slug}`} passHref>
                                             <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'primary.main', textDecoration: 'underline', cursor: 'pointer' }}>
                                                 {item.product.name}
                                             </Typography>
                                         </Link>
-                                        {item.is_rental ? (
+                                        {item.isRental ? (
                                             <Typography variant="body2" color="textSecondary">
-                                                Kiralık - Süre: {item.rental_period} Ay - Fiyat: {item.rental_price}₺
+                                                Kiralık - Süre: {item.rentalPeriod} Ay - Fiyat: {item.rentalPrice}₺
                                             </Typography>
                                         ) : (
                                             <Typography variant="body2" color="textSecondary">
@@ -119,7 +132,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                                             </Typography>
                                         )}
 
-                                        {!item.is_rental && (
+                                        {/* Quantity increase/decrease */}
+                                        {!item.isRental && (
                                             <Box mt={1} display="flex" justifyContent="center" alignItems="center">
                                                 <Button
                                                     onClick={() => handleDecreaseQuantity(item)}
@@ -146,7 +160,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                                     >
                                         <CloseIcon />
                                     </IconButton>
-                                </ListItem>
+                                </Box>
                             ))
                         ) : (
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
@@ -168,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                                 </Link>
                             </Box>
                         )}
-                    </List>
+                    </Box>
                 </Container>
 
                 <Box sx={{ padding: 2, backgroundColor: 'background.paper', borderTop: '1px solid', borderColor: 'divider' }}>

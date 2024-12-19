@@ -28,9 +28,9 @@ interface Address {
     username: string;
     usersurname: string;
     phone: string;
-    city: { name: string };
-    region: { name: string };
-    neighborhood: { name: string };
+    city: { id: number; name: string };
+    region: { district_id: number; name: string };
+    neighborhood: { neighborhood_id: number; name: string };
     address_name: string;
     address_line1: string;
     postal_code: string;
@@ -38,7 +38,7 @@ interface Address {
     firm_taxcode: string;
     firm_tax_home: string;
     is_default: boolean;
-}
+  }
 
 interface AddressesProps {
     addressModel: "billing" | "shipping";

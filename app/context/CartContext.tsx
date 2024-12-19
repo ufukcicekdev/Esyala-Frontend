@@ -1,7 +1,20 @@
 "use client";
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
 import { useAlert } from "./AlertContext";
 import { addToCartApi, getCartApi, removeCartApi, updateQuantityCartApi } from "@/lib/product/product_api";
+
+interface Product {
+    id: number;
+    name: string;
+    slug: string;
+    first_image: {
+        image: string;
+        img_alt: string;
+        img_title: string;
+    };
+    selling_price: string | null;
+    rental_prices?: { name: string; rental_price: string }[];
+}
 
 interface CartItem {
     id: number;
@@ -11,6 +24,7 @@ interface CartItem {
     rentalPrice: string | null; 
     isRental: boolean; 
     sellingPrice: string | null; 
+    product: Product;
 }
 
 interface CartContextType {
@@ -39,6 +53,21 @@ interface CartResponseData {
     };
 }
 
+// CartProvider'ın props tipini tanımladık
+interface CartProviderProps {
+  children: ReactNode;
+}
+
+interface AddtoCartRequestData {
+    id: number; 
+        quantity: number; 
+        isRental: boolean; 
+        rentalPrice: string | null; 
+        sellingPrice: string | null; 
+        sessionKey: string | null; 
+        rentalPeriod: string | null;
+}
+
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const useCart = (): CartContextType => {
@@ -49,7 +78,7 @@ export const useCart = (): CartContextType => {
     return context;
 };
 
-export const CartProvider: React.FC = ({ children }) => {
+export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [cartCount, setCartCount] = useState<number>(0);
     const [totalPrice, setTotalPrice] = useState<number>(0);
@@ -152,7 +181,7 @@ export const CartProvider: React.FC = ({ children }) => {
 
     return (
         <CartContext.Provider value={{ cartCount, cartItems, totalPrice, addToCart, removeFromCart, updateQuantity }}>
-            {children}
+            {children}  {/* children doğru şekilde kullanıldı */}
         </CartContext.Provider>
     );
 };

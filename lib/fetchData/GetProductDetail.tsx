@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
 import Slider from "react-slick";
-import { Container, Grid, Box, Typography, CircularProgress, FormControl, Select, MenuItem, Button, CardContent, Card, Tabs, Tab, TextField, Rating } from "@mui/material";
+import { Container, Grid, Box, Typography, CircularProgress, FormControl, Select, MenuItem, Button, CardContent, Card, Tabs, Tab, TextField, Rating, SelectChangeEvent } from "@mui/material";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import BreadcrumbsComponent from "@/app/components/breadcrumbsComponent";
@@ -90,8 +90,8 @@ export default function ProductDetail({ slug }: { slug: string }) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
 
-    const [selectedOption, setSelectedOption] = useState<string>("buy"); // 'buy' veya 'rent'
-    const [selectedRentalPrice, setSelectedRentalPrice] = useState<string>(""); // Seçilen kiralama fiyatı
+    const [selectedOption, setSelectedOption] = useState<string>("buy"); 
+    const [selectedRentalPrice, setSelectedRentalPrice] = useState<string>(""); 
 
     const [comments, setComments] = useState<Comment[]>([]);
     const [questions, setQuestions] = useState<Questions[]>([]);
@@ -135,20 +135,24 @@ export default function ProductDetail({ slug }: { slug: string }) {
         }
     
         try {
-            await createProductComment(product?.id, {
-                rating: rating,
-                product: product?.id,
-                comment: newComment,
-                user: user?.id,
-            });
+            if (product?.id && user?.id) {
+                await createProductComment(product.id, {
+                    rating: rating,
+                    product: product.id,
+                    comment: newComment,
+                    user: user.id,
+                });
+
+                setNewComment("");
+                setRating(5);
+                showAlert("success", "Yorum eklendi!");
+
+        
+                const updatedCommentsResponse = await fetchProductComments(product?.id);
+                setComments(updatedCommentsResponse);
+            } 
     
-            setNewComment("");
-            setRating(5);
-            showAlert("success", "Yorum eklendi!");
-    
-            // Yeni yorumu ekledikten sonra, yorumlar kısmını yenile
-            const updatedCommentsResponse = await fetchProductComments(product?.id);
-            setComments(updatedCommentsResponse);
+            
     
         } catch (error) {
             showAlert("error", "Yorum eklenemedi!");
@@ -162,17 +166,20 @@ export default function ProductDetail({ slug }: { slug: string }) {
         }
     
         try {
-            await createProductQuestion(product?.id, {
-                product: product?.id,
-                question_text: newQuestion,
-                user: user?.id,
-            });
-    
-            setNewQuestion("");
-            showAlert("success", "Soru gönderildi!");
-    
-            const questionsResponse = await fetchProductQuestions(product?.id);
-            setQuestions(questionsResponse);
+            if (product?.id && user?.id) {
+                await createProductQuestion(product.id, {
+                    product: product?.id,
+                    question_text: newQuestion,
+                    user: user?.id,
+                });
+        
+                setNewQuestion("");
+                showAlert("success", "Soru gönderildi!");
+        
+                const questionsResponse = await fetchProductQuestions(product.id);
+                setQuestions(questionsResponse);
+            }
+            
     
         } catch (error) {
             showAlert("error", "Soru eklenemedi!");
@@ -279,9 +286,7 @@ export default function ProductDetail({ slug }: { slug: string }) {
                         <PriceSection
                             product={product}
                             selectedOption={selectedOption}
-                            selectedRentalPrice={selectedRentalPrice}
                             handleOptionChange={handleOptionChange}
-                            handleRentalChange={handleRentalChange}
                         />
                         <Card sx={{ my: 3 }} style={{ padding: "20px", borderRadius: "8px", backgroundColor: "#f9f9f9" }}>
                             <CardContent>
@@ -511,7 +516,7 @@ const PriceSection = ({
         }
     }, [selectedOption, product.rental_prices]);
 
-    const handleRentalChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const handleRentalChange = (event: SelectChangeEvent<string>) => {
         setSelectedRentalPrice(event.target.value as string);
     };
 

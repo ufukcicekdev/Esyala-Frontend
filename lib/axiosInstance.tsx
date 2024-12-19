@@ -1,7 +1,8 @@
 "use client";
 import axios from "axios";
 import { useAuth } from "@/app/context/AuthContext";  // AuthContext'ten hook alıyoruz
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
+
 
 // Axios instance
 const instance = axios.create({
@@ -22,7 +23,7 @@ instance.interceptors.request.use(
   }
 );
 
-const AxiosInterceptorWrapper = ({ children }) => {
+const AxiosInterceptorWrapper = ({ children }: { children: ReactNode }) => {
   const { refreshSession } = useAuth();
   const [retryCount, setRetryCount] = useState(0);
 
@@ -36,7 +37,9 @@ const AxiosInterceptorWrapper = ({ children }) => {
           originalRequest._retry = true;
           setRetryCount(retryCount + 1);  // Retry count artırıyoruz
 
-          const newAccessToken = await refreshSession(); // Yeni token alıyoruz
+          await refreshSession(); // Yeni token alıyoruz
+          
+          const newAccessToken = localStorage.getItem("access_token");
 
           if (newAccessToken) {
             originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;

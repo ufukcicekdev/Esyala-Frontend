@@ -2,6 +2,7 @@
 import { fetchBlogs } from "@/lib/blogApi/blog_api";
 import BlogCategoryData from "./get_data";
 
+const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface CategoryBlog {
   title: string;
@@ -19,7 +20,7 @@ interface CategoryBlog {
 
 
 export async function generateStaticParams() {
-  const response = await fetch('https://esyala-backend-production.up.railway.app/blog/');
+  const response = await fetch(`${prodUrl}/blog/`);
   
   const categories = await response.json();
 
@@ -27,6 +28,8 @@ export async function generateStaticParams() {
       slug: category.slug,  
   }));
 }
+
+
 
 
 

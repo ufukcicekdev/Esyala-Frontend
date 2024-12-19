@@ -139,7 +139,7 @@ const AddAddressDialog: React.FC<AddAddressDialogProps> = ({ open, onClose, onSa
                     <InputLabel>Adres Tipi</InputLabel>
                     <Select
                         value={addressType}
-                        onChange={(e) => setAddressType(e.target.value)}
+                        onChange={(e) => setAddressType(Number(e.target.value))}
                         label="Adres Tipi"
                     >
                         <MenuItem value={1}>Bireysel</MenuItem>
@@ -151,7 +151,7 @@ const AddAddressDialog: React.FC<AddAddressDialogProps> = ({ open, onClose, onSa
                     <InputLabel>Adres Modeli</InputLabel>
                     <Select
                         value={addressModel}
-                        onChange={(e) => setAddressModel(e.target.value)}
+                        onChange={(e) => setAddressModel(Number(e.target.value))}
                         label="Adres Modeli"
                     >
                         <MenuItem value={1}>Fatura Adresi</MenuItem>
