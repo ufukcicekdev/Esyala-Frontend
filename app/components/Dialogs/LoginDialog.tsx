@@ -45,7 +45,7 @@ const LoginDialog: FC<LoginDialogProps> = ({
         localStorage.setItem("user", JSON.stringify(user));
         showAlert("success", message);
         onClose();
-        window.location.reload();
+        //window.location.reload();
       } else {
         showAlert("error", message);
       }
