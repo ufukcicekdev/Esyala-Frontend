@@ -98,6 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { token, user } = data;
       localStorage.setItem("access_token", token.access);
       localStorage.setItem("refresh_token", token.refresh);
+      setIsAuthenticated(true)
       setUser(user);
       setError(null);
     } catch (err) {
