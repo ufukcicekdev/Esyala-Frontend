@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const token = getAccessToken(); // Erişim token'ını al
     if (token) {
       try {
-        const data = await request("customerauth/user/auth/verify", { method: "GET" });
+        const data = await request("/customerauth/user/auth/verify", { method: "GET" });
         setIsAuthenticated(true);
         setUser(data.user); // Kullanıcıyı set et
       } catch (err) {
