@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { fetchAbout } from "@/lib/main_api";
+import { fetchAbout } from "@/lib/mainApi/main_api";
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";

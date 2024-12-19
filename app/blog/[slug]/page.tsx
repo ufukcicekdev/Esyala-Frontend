@@ -1,4 +1,4 @@
-import BlogDetail from "@/lib/fetch_data";
+import BlogDetail from "@/lib/fetchData/fetch_data";
 
 
 

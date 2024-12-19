@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
-import { fetchFooterCategory } from '@/lib/main_api';
+import { fetchFooterCategory } from '@/lib/mainApi/main_api';
 
 interface FooterCategory {
   name: string;

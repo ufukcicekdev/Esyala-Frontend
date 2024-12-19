@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CategoryCard from "./CategoryCard";
-import { fetchCategory } from "@/lib/main_api";
+import { fetchCategory } from "@/lib/mainApi/main_api";
 import { Typography } from "@mui/material";
 
 interface Category {

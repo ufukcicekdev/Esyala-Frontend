@@ -19,8 +19,8 @@ import { useAuth } from "../context/AuthContext";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import AuthDialogs from "./Dialogs/AuthDialogs";
 import { useCategories } from "../context/CategoryProvider";
-
-
+import Sidebar from "./SideBar/basket";
+import CartIcon from "./CartIcon";
 
 interface Category {
   name: string;
@@ -38,6 +38,8 @@ const Header = () => {
 
   const [currentDialog, setCurrentDialog] = useState<"login" | "register" | "forgotPassword" | null>(null);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar açma kapama durumu
 
   const handleAuthDialogOpen = (dialog: "login" | "register" | "forgotPassword") => {
     setCurrentDialog(dialog);
@@ -62,6 +64,10 @@ const Header = () => {
     handleCloseMenu();
   };
 
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen); // Sidebar açma/kapama
+  };
+
   const renderCategories = (categories: Category[]) => {
     return categories.map((category) => (
       <li key={category.slug} className="relative group">
@@ -70,20 +76,16 @@ const Header = () => {
           className="flex flex-col items-center px-4 py-3 bg-gray-100 text-gray-800 font-semibold shadow-sm transition-all hover:text-blue-600 rounded-lg"
         >
           <span className="mb-3 w-12 h-12">
-            {/* Resmi yuvarlak alanda göstermek için boyut ekledik */}
             <Image
-              src={category.image ? category.image : "/path/to/default-image.jpg"} // Varsayılan resim yolu
-              alt={category.name} // Resmin alternatif metni
-              width={48} // Resmin genişliği (w-12 => 48px)
-              height={48} // Resmin yüksekliği (h-12 => 48px)
-              className="object-cover rounded-full" // Yuvarlak hale getirmek için
+              src={category.image ? category.image : "/path/to/default-image.jpg"}
+              alt={category.name}
+              width={48}
+              height={48}
+              className="object-cover rounded-full"
             />
           </span>
           <span className="text-lg font-semibold">{category.name}</span>
         </Link>
-
-
-
 
         {category.children && category.children.length > 0 && (
           <ul className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-10 group-hover:opacity-100 group-hover:pointer-events-auto">
@@ -151,7 +153,6 @@ const Header = () => {
               </Grid>
 
 
-
               {/* Giriş Yap ve Üye Ol Butonları */}
               <Grid
                 item
@@ -160,26 +161,20 @@ const Header = () => {
                 md={3}
                 sx={{
                   display: {
-                    xs: 'none', // Varsayılan olarak gizli
-                    md: 'flex', // 992px ve üzeri görünsün
+                    xs: 'none',
+                    md: 'flex',
                   },
                   '@media (max-width: 991px)': {
-                    display: 'none', // Tam 991px ve altı için gizli
+                    display: 'none',
                   },
                 }}
                 className="flex justify-end items-center"
               >
+                 <CartIcon onClick={handleSidebarToggle} />
                 {isAuthenticated ? (
                   <>
                     <IconButton color="primary" onClick={handleUserClick}>
-                      <Avatar
-                        sx={{
-                          width: 40,
-                          height: 40,
-                          fontSize: 18,
-                          backgroundColor: "#3f51b5",
-                        }}
-                      >
+                      <Avatar sx={{ width: 40, height: 40, fontSize: 18, backgroundColor: "#3f51b5" }}>
                         {user?.username?.charAt(0).toUpperCase() || "?"}
                       </Avatar>
                     </IconButton>
@@ -206,20 +201,10 @@ const Header = () => {
                 ) : (
                   <>
                     <div className="login-register-button">
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => handleAuthDialogOpen("login")}
-                        className="ml-2"
-                      >
+                      <Button variant="outlined" color="primary" onClick={() => handleAuthDialogOpen("login")} className="ml-2">
                         Giriş Yap
                       </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleAuthDialogOpen("register")}
-                        className="ml-2"
-                      >
+                      <Button variant="contained" color="primary" onClick={() => handleAuthDialogOpen("register")} className="ml-2">
                         Üye Ol
                       </Button>
                     </div>
@@ -239,7 +224,6 @@ const Header = () => {
         </nav>
       </div>
 
-
       <MobileBottomNav />
 
       <AuthDialogs
@@ -247,6 +231,9 @@ const Header = () => {
         closeDialog={handleAuthDialogClose}
         currentDialog={currentDialog}
       />
+
+      {/* Sidebar */}
+      <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarToggle} />
     </header>
   );
 };

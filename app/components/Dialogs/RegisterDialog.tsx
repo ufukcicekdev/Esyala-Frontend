@@ -19,7 +19,11 @@ interface RegisterDialogProps {
 
 const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitchToLogin }) => {
+const RegisterDialog: React.FC<RegisterDialogProps> = ({
+  open,
+  onClose,
+  onSwitchToLogin,
+}) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -114,8 +118,14 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitch
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         Üye Ol
         <IconButton
           edge="end"
@@ -124,14 +134,22 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitch
           aria-label="close"
           sx={{
             position: "absolute",
-            right: 8,
-            top: 8,
+            right: "8px",
+            top: "8px",
           }}
         >
           <CloseIcon />
         </IconButton>
       </DialogTitle>
+
       <DialogContent>
+        <Typography
+          variant="subtitle1"
+          align="center"
+          sx={{ mb: 2, color: "gray" }}
+        >
+          Hesap oluşturmak için aşağıdaki bilgileri doldurun.
+        </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -182,17 +200,38 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({ open, onClose, onSwitch
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleSubmit} color="primary">
+
+      <DialogActions
+        sx={{
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 2,
+          pb: 3,
+        }}
+      >
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{
+            textTransform: "none",
+            fontWeight: "bold",
+          }}
+        >
           Kayıt Ol
         </Button>
+        <Typography variant="body2" align="center">
+          Zaten bir hesabınız var mı?{" "}
+          <Button
+            onClick={onSwitchToLogin}
+            color="primary"
+            sx={{ textTransform: "none", fontWeight: "bold" }}
+          >
+            Giriş Yapın
+          </Button>
+        </Typography>
       </DialogActions>
-      <Typography variant="body2" align="center" style={{ marginTop: "10px" }}>
-        Zaten Üye misiniz?{" "}
-        <Button onClick={onSwitchToLogin} color="primary">
-          Giriş Yapın
-        </Button>
-      </Typography>
     </Dialog>
   );
 };

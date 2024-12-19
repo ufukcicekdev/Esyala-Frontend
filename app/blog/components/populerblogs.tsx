@@ -1,5 +1,5 @@
 "use client";
-import { fetchPopularBlogs } from '@/lib/blog_api';
+import { fetchPopularBlogs } from '@/lib/blogApi/blog_api';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -60,7 +60,7 @@ function PopulerBlogs() {
                                 <div className="img-post">
                                     <Link href={`/blog/${populerBlog.slug}/`}>
                                         <Image
-                                            src={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${populerBlog.banner.replace('/media', '')}`}
+                                            src={populerBlog.banner}
                                             alt={populerBlog.title}
                                             title={populerBlog.title}
                                             width={100}

@@ -1,5 +1,5 @@
 "use client";
-import { fetchBlogCategoryDetail } from '@/lib/blog_api';
+import { fetchBlogCategoryDetail } from '@/lib/blogApi/blog_api';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import PopulerBlogs from '../../components/populerblogs';
@@ -94,7 +94,7 @@ export default function BlogCategoryData({ slug }: { slug: string }) {
                                 >
                                     <Box className="img-holder" sx={{ position: 'relative', overflow: 'hidden' }}>
                                         <Image
-                                            src={'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul' + blog.banner.replace('/media', '')}
+                                            src={blog.banner}
                                             alt={blog.title}
                                             width={500}
                                             height={300}

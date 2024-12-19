@@ -1,4 +1,3 @@
-// lib/api.ts
 "use client";
 import axios from "axios";
 
@@ -27,9 +26,9 @@ export async function fetchBlogs() {
 export async function fetchBlogDetail(slug: string) {
     try {
         const response = await instance.get(`/blog/${slug}/`);
-        
+        console.log("response-----",response);
         if (response.data?.status === true && response.data?.data?.length > 0) {
-            return response.data.data[0]; // İlk blog detayını döndür
+            return response.data.data[0]; 
         } else {
             return { error: response.data?.messages || "Blog bulunamadı." };
         }

@@ -1,4 +1,4 @@
-import ProductCategory from "@/lib/ProductCategory";
+import ProductCategory from "@/lib/fetchData/ProductCategory";
 import React from "react";
 
 

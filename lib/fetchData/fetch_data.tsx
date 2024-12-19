@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { fetchBlogDetail } from '@/lib/blog_api';
+import { fetchBlogDetail } from '@/lib/blogApi/blog_api';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -83,10 +83,7 @@ export default function BlogDetail({ slug }: { slug: string }) {
                                 {/* Image */}
                                 <Box className="img-holder" sx={{ mb: 2 }}>
                                     <Image
-                                        src={`https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul${blog.banner.replace(
-                                            '/media',
-                                            ''
-                                        )}`}
+                                        src={blog.banner}
                                         alt={blog.title}
                                         width={800}
                                         height={450}

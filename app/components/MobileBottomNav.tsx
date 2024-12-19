@@ -1,6 +1,5 @@
 import HomeIcon from "@mui/icons-material/Home";
 import Person2Icon from "@mui/icons-material/Person2";
-import CallIcon from "@mui/icons-material/Call";
 import CategoryIcon from "@mui/icons-material/Category";
 import React, { useState } from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
@@ -10,6 +9,9 @@ import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
 import AuthDialogs from "./Dialogs/AuthDialogs";
 import Avatar from "@mui/material/Avatar";
+import Sidebar from "./SideBar/basket";
+
+import CartIcon from "./CartIcon"; // CartIcon bileşenini dahil et
 
 // Tema oluşturma
 const theme = createTheme({
@@ -24,6 +26,9 @@ export default function MobileBottomNav() {
 
   const [currentDialog, setCurrentDialog] = useState<"login" | "register" | "forgotPassword" | null>(null); // currentDialog state'i
   const [authDialogOpen, setAuthDialogOpen] = useState(false); // authDialogOpen state'i
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar açma kapama durumu
+
 
 
   const handleAuthDialogOpen = (dialog: "login" | "register" | "forgotPassword") => {
@@ -47,9 +52,16 @@ export default function MobileBottomNav() {
       window.location.href = "/profile";
     } else {
       // Eğer giriş yapmamışsa, LoginDialog'ı aç
-      handleAuthDialogOpen("login")
+      handleAuthDialogOpen("login");
     }
   };
+
+  // Open the cart sidebar
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen); // Sidebar açma/kapama
+  };
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -111,18 +123,16 @@ export default function MobileBottomNav() {
             onClick={handleProfileClick} // Profil butonuna tıklandığında
           />
 
-          {/* İletişim */}
+          {/* Cart (Sepet) */}
           <BottomNavigationAction
-            label="İletişim"
-            value="contact"
-            icon={<CallIcon sx={{ fontSize: { xs: 20, sm: 24, md: 28 } }} />}
+            label="Sepet"
+            value="cart"
+            icon={<CartIcon onClick={handleSidebarToggle} />}
             sx={{
               "& .MuiBottomNavigationAction-label": {
                 fontSize: { xs: "10px", sm: "12px", md: "14px" },
               },
             }}
-            component={Link}
-            href="/contact"
           />
         </BottomNavigation>
       </div>
@@ -132,7 +142,7 @@ export default function MobileBottomNav() {
         closeDialog={handleAuthDialogClose}
         currentDialog={currentDialog}
       />
-      
+      <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarToggle} />
     </ThemeProvider>
   );
 }

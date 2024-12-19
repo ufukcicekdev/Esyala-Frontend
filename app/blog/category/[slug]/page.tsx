@@ -1,5 +1,5 @@
 
-import { fetchBlogs } from "@/lib/blog_api";
+import { fetchBlogs } from "@/lib/blogApi/blog_api";
 import BlogCategoryData from "./get_data";
 
 

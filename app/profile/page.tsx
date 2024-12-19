@@ -18,8 +18,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ProfileEditDialog from "../components/profile/user_info";
 import ProfileNotifyDialog from "../components/profile/ProfileNotifyDialog";
 import OrderList from "../components/profile/OrderList";
+import Addresses from "../components/profile/AddressList";
+import AddAddressDialog from "../components/profile/NewAddressDialog";
+import { AddCircleOutline as AddIcon } from '@mui/icons-material'; // + ikonu için
 
-// Tab Panel Helper Component
+
 interface TabPanelProps {
   children: React.ReactNode;
   value: number;
@@ -34,16 +37,11 @@ const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => {
       id={`tabpanel-${index}`}
       aria-labelledby={`tab-${index}`}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 };
 
-// User Profile Interface
 interface UserProfile {
   username: string;
   first_name: string;
@@ -54,7 +52,8 @@ interface UserProfile {
 }
 
 const Profile: React.FC = () => {
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0); // Main tabs (Siparişlerim / Adreslerim)
+  const [addressTabValue, setAddressTabValue] = useState(0); // Address sub-tabs (Fatura Adresi / Sipariş Adresi)
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [notifyDialogOpen, setNotifyDialogOpen] = useState(false);
@@ -72,10 +71,16 @@ const Profile: React.FC = () => {
     smsNotifications: false,
   });
 
+  const [addAddressDialogOpen, setAddAddressDialogOpen] = useState(false); // Yeni adres dialogu için state
+
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
+  };
+
+  const handleAddressTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setAddressTabValue(newValue);
   };
 
   const toggleDrawer = () => {
@@ -90,6 +95,10 @@ const Profile: React.FC = () => {
     setNotifyDialogOpen(!notifyDialogOpen);
   };
 
+  const toggleAddAddressDialog = () => {
+    setAddAddressDialogOpen(!addAddressDialogOpen); // Yeni adres dialogu için fonksiyon
+  };
+
   const handleProfileSave = (updatedProfile: UserProfile) => {
     setUserProfile(updatedProfile);
   };
@@ -99,6 +108,12 @@ const Profile: React.FC = () => {
     smsNotifications: boolean;
   }) => {
     setNotifications(updatedNotifications);
+  };
+
+  const handleNewAddressSave = (newAddress: any) => {
+    // Burada yeni adresi kaydetmek için gerekli işlemi yapın
+    console.log(newAddress);
+    toggleAddAddressDialog(); // Dialogu kapat
   };
 
   return (
@@ -213,6 +228,46 @@ const Profile: React.FC = () => {
 
         <TabPanel value={tabValue} index={1}>
           <Typography variant="h6" sx={{ mb: 2 }}>Adreslerim</Typography>
+
+          {/* Yeni Adres Ekle Butonu */}
+          <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 2 }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<AddIcon />} // + ikonu
+              sx={{
+                borderRadius: '50px', // Yuvarlak buton kenarları
+                padding: '8px 24px', // Buton içi boşluk
+                textTransform: 'none',
+                fontWeight: 600,
+                '&:hover': {
+                  backgroundColor: '#f0f0f0', // Hover efekti
+                },
+              }}
+              onClick={toggleAddAddressDialog}
+            >
+              Yeni Adres Ekle
+            </Button>
+          </Box>
+
+          {/* Adres Tabları */}
+          <Tabs
+            value={addressTabValue}
+            onChange={handleAddressTabChange}
+            indicatorColor="primary"
+            textColor="primary"
+            sx={{ mt: 2 }}
+          >
+            <Tab label="Fatura Adresi" />
+            <Tab label="Sipariş Adresi" />
+          </Tabs>
+
+          <TabPanel value={addressTabValue} index={0}>
+            <Addresses addressModel="billing" />
+          </TabPanel>
+          <TabPanel value={addressTabValue} index={1}>
+            <Addresses addressModel="shipping" />
+          </TabPanel>
         </TabPanel>
       </Box>
 
@@ -221,6 +276,11 @@ const Profile: React.FC = () => {
         open={notifyDialogOpen}
         onClose={toggleNotifyDialog}
         onSave={handleNotificationsSave}
+      />
+      <AddAddressDialog
+        open={addAddressDialogOpen}
+        onClose={toggleAddAddressDialog}
+        onSave={handleNewAddressSave} // Yeni adres kaydedildiğinde
       />
     </Box>
   );

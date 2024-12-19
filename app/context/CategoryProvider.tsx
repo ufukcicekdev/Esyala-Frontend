@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { fetchCategory } from "@/lib/main_api";
+import { fetchCategory } from "@/lib/mainApi/main_api";
 
 // Kategori tiplerini tanımlıyoruz
 export interface Category {

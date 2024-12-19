@@ -1,5 +1,5 @@
 "use client";
-import { fetchBlogCategory } from '@/lib/blog_api';
+import { fetchBlogCategory } from '@/lib/blogApi/blog_api';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 

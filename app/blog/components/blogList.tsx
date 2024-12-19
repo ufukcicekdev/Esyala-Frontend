@@ -1,9 +1,8 @@
 "use client";
-import { fetchBlogs } from '@/lib/blog_api';
+import { fetchBlogs } from '@/lib/blogApi/blog_api';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Container } from '@mui/material';
 interface BlogList  {
     title: string;
     short_description: string;
@@ -48,7 +47,7 @@ function BlogList() {
                         <div className="img-holder">
                             <Link href={`/blog/${blog.slug}/`} title={blog.title}>
                                 <Image
-                                    src={'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul' + blog.banner.replace('/media', '')}
+                                    src={blog.banner}
                                     alt={blog.title}
                                     className="img-responsive"
                                     width={200}

@@ -1,12 +1,12 @@
 import React, { FC, useState } from "react";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import axios from "axios";
 import { useAlert } from "@/app/context/AlertContext";
 
@@ -17,8 +17,8 @@ const instance = axios.create({
 interface LoginDialogProps {
   open: boolean;
   onClose: () => void;
-  onSwitchToRegister: () => void; // Register'e geçiş fonksiyonu
-  onSwitchToForgotPassword: () => void; // Şifre sıfırlama fonksiyonu
+  onSwitchToRegister: () => void;
+  onSwitchToForgotPassword: () => void;
 }
 
 const LoginDialog: FC<LoginDialogProps> = ({
@@ -29,7 +29,6 @@ const LoginDialog: FC<LoginDialogProps> = ({
 }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
   const showAlert = useAlert();
 
   const handleSubmit = async () => {
@@ -62,104 +61,112 @@ const LoginDialog: FC<LoginDialogProps> = ({
       maxWidth="xs"
       fullWidth
       sx={{
-        "& .MuiDialogTitle-root": {
-          fontSize: "1.25rem",
-          fontWeight: "bold",
-        },
-        "& .MuiDialogContent-root": {
-          paddingBottom: "1rem",
+        "& .MuiDialog-paper": {
+          borderRadius: "12px",
+          padding: "24px",
+          backgroundColor: "#f9f9f9",
         },
       }}
     >
-      <DialogTitle
+      <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          mb: 2,
         }}
       >
-        Giriş Yap
+        <Typography variant="h5" fontWeight="bold">
+          Giriş Yap
+        </Typography>
         <IconButton
-          edge="end"
-          color="inherit"
           onClick={onClose}
-          aria-label="close"
           sx={{
-            position: "absolute",
-            right: "8px",
-            top: "8px",
+            color: "#9e9e9e",
           }}
         >
           <CloseIcon />
         </IconButton>
-      </DialogTitle>
-
+      </Box>
       <DialogContent>
-        {error && <div style={{ color: "red", marginBottom: "8px" }}>{error}</div>}
+        <Typography
+          variant="body2"
+          sx={{
+            color: "#6c6c6c",
+            mb: 3,
+          }}
+        >
+          Hesabınıza giriş yapmak için bilgilerinizi girin.
+        </Typography>
         <TextField
           label="Email"
+          type="email"
           fullWidth
-          margin="normal"
+          variant="outlined"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          variant="outlined"
-          sx={{ mb: 2 }}
+          sx={{
+            mb: 2,
+          }}
         />
         <TextField
           label="Şifre"
           type="password"
           fullWidth
-          margin="normal"
+          variant="outlined"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          variant="outlined"
         />
-      </DialogContent>
-
-      <DialogActions
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "16px 24px",
-        }}
-      >
         <Button
           onClick={onSwitchToForgotPassword}
-          color="secondary"
           sx={{
+            mt: 1,
             textTransform: "none",
-            fontWeight: "600",
             fontSize: "0.9rem",
-            marginRight: "auto",
+            color: "#007bff",
+            alignSelf: "flex-start",
           }}
         >
           Şifremi Unuttum
         </Button>
         <Button
           onClick={handleSubmit}
+          fullWidth
           variant="contained"
-          color="primary"
           sx={{
+            mt: 3,
             textTransform: "none",
             fontWeight: "600",
-            fontSize: "0.9rem",
-            width: "100px",
+            py: 1.5,
+            backgroundColor: "#007bff",
+            "&:hover": {
+              backgroundColor: "#0056b3",
+            },
           }}
         >
           Giriş Yap
         </Button>
-        <Button
-          onClick={onSwitchToRegister}
-          color="secondary"
+        <Typography
+          variant="body2"
+          align="center"
           sx={{
-            textTransform: "none",
-            fontWeight: "600",
-            fontSize: "0.9rem",
+            mt: 3,
+            color: "#6c6c6c",
           }}
         >
-          Üye Ol
-        </Button>
-      </DialogActions>
+          Hesabınız yok mu?{" "}
+          <Button
+            onClick={onSwitchToRegister}
+            sx={{
+              textTransform: "none",
+              fontSize: "0.9rem",
+              color: "#007bff",
+            }}
+          >
+            Üye Ol
+          </Button>
+        </Typography>
+      </DialogContent>
     </Dialog>
   );
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchCategoryProduct } from "./main_api";
+import { fetchCategoryProduct } from "../mainApi/main_api";
 
 interface Product {
   id: number;

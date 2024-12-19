@@ -196,6 +196,8 @@ const Contact = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
+                    inputProps={{ maxLength: 60 }}
+                    helperText={`${formData.subject.length}/60`} 
                     required
                     variant="outlined"
                     sx={{ backgroundColor: '#fff', borderRadius: '4px' }}
@@ -212,6 +214,8 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     variant="outlined"
+                    inputProps={{ maxLength: 500 }}
+                    helperText={`${formData.message.length}/500`} // Kullanıcıya kaç karakter yazdığını göster
                     sx={{ backgroundColor: '#fff', borderRadius: '4px' }}
                   />
                 </Grid>

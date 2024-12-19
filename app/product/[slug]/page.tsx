@@ -1,4 +1,4 @@
-import ProductDetail from "@/lib/GetProductDetail";
+import ProductDetail from "@/lib/fetchData/GetProductDetail";
 
 import React from "react";
 

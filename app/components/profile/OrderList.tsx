@@ -159,7 +159,7 @@ const OrderList: React.FC = () => {
                                         }
                                     }}
                                 >
-                                    Detaylar
+                                    Detay
                                 </Button>
                             </CardActions>
                         </Card>

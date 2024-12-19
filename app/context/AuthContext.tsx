@@ -1,44 +1,47 @@
 "use client";
 
 import React, { createContext, useState, useEffect, ReactNode } from "react";
-import axios from "axios";
+// Yardımcı fonksiyon: localStorage'dan erişim token'ını alır
+const getAccessToken = () => localStorage.getItem("access_token");
 
-// Axios instance
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Environment variable
-});
+// Yardımcı fonksiyon: refresh token'ını alır
+const getRefreshToken = () => localStorage.getItem("refresh_token");
 
-// Interceptor to handle token expiration
-api.interceptors.response.use(
-  response => response, // Success response
-  async (error) => {
-    const originalRequest = error.config;
 
-    // If error status is 401 (Unauthorized) and we have a refresh token
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;  // Prevent infinite loop
-      await refreshSession(); // Try to refresh session
-      const newAccessToken = getAccessToken(); // Get new token from localStorage
-      if (newAccessToken) {
-        // Retry the original request with the new access token
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-        return axios(originalRequest); // Retry the request
-      }
-    }
+// API temel URL'si
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-    return Promise.reject(error); // If refresh fails, reject the promise
+// API'ye yapılan istekleri yöneten yardımcı fonksiyon
+const request = async (url: string, options: RequestInit = {}) => {
+  const token = getAccessToken(); // Erişim token'ını al
+  if (token) {
+    options.headers = {
+      ...options.headers,
+      Authorization: `Bearer ${token}`, // Authorization başlığı ekle
+    };
   }
-);
 
-// User interface
-interface User {
-  id: string;
-  email: string;
-  username: string;
-  // Additional user fields
+  const response = await fetch(`${BASE_URL}${url}`, options);
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data?.message || "Bir hata oluştu");
+  }
+  return data;
+};
+
+
+
+interface User{
+  email:string;
+  first_name:string;
+  id:number;
+  last_name:string;
+  username:string;
 }
 
-// Auth context type definition
+
+
+// Auth context tip tanımlaması
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
@@ -49,109 +52,146 @@ interface AuthContextType {
   error: string | null;
 }
 
-// Create context
+// Context oluşturuluyor
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Provider component
+// Provider bileşeni
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Helper to get access token from localStorage
-  const getAccessToken = () => localStorage.getItem("access_token");
 
-  // Check authentication status
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = getAccessToken();
-      if (token) {
-        try {
-          const response = await api.get("/customerauth/user/auth/verify", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (response.status === 200) {
-            setIsAuthenticated(true);
-            setUser(response.data.user);
-          }
-        } catch (err) {
-          setIsAuthenticated(false);
-          setUser(null);
-          setError("Session expired. Please log in again.");
-        }
+  // Kullanıcının oturum açıp açmadığını kontrol eden fonksiyon
+  const checkAuth = async () => {
+    const token = getAccessToken(); // Erişim token'ını al
+    if (token) {
+      try {
+        const data = await request("customerauth/user/auth/verify", { method: "GET" });
+        setIsAuthenticated(true);
+        setUser(data.user); // Kullanıcıyı set et
+      } catch (err) {
+        setIsAuthenticated(false);
+        setUser(null);
+        setError("Oturum süresi dolmuş. Lütfen tekrar giriş yapın.");
       }
-      setLoading(false);
-    };
+    } else {
+      setIsAuthenticated(false);
+    }
+    setLoading(false);
+  };
 
-    checkAuth();
+  useEffect(() => {
+    checkAuth(); // Uygulama yüklendiğinde oturum kontrolü yap
   }, []);
 
-  // Login function
+  // Giriş yapma fonksiyonu
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      const response = await api.post("/customerauth/user/login/", { email, password });
-      const { token, user } = response.data;
-
-      // Store tokens and user data
+      const data = await request("customerauth/user/login/", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const { token, user } = data;
       localStorage.setItem("access_token", token.access);
       localStorage.setItem("refresh_token", token.refresh);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      setIsAuthenticated(true);
       setUser(user);
       setError(null);
     } catch (err) {
-      setError("Invalid email or password.");
+      setError("Geçersiz email veya şifre.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Logout function
-  const logout = () => {
-    localStorage.clear();
-    setIsAuthenticated(false);
-    setUser(null);
-    setError(null);
-  };
-
-  // Refresh session
-  const refreshSession = async () => {
-    const refreshToken = localStorage.getItem("refresh_token");
-    console.log("refreshToken", refreshToken);
-    if (refreshToken) {
-      try {
-        const response = await api.post("/customerauth/user/token/refresh/", { refresh: refreshToken });
-        const { access } = response.data;
-        console.log("response", response);
-        // Update access token
-        localStorage.setItem("access_token", access);
-        setError(null); // Clear any previous error
-      } catch (err) {
-        logout(); 
-        setError("Session expired. Please log in again.");
+  const logout = async () => {
+    try {
+      const response = await request("customerauth/user/logout/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+        },
+        body: JSON.stringify({
+          refresh: getRefreshToken(),
+        }),
+      });
+      if (response.status == true){
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        localStorage.removeItem("user");
+   
+        setIsAuthenticated(false);
+        setError(response.message);
       }
-    } else {
-      logout();
+      else
+      {
+        setError(response.message);
+      }
+
+    } catch (error: any) {
+      setError("Çıkış yapılırken bir hata oluştu.");
+      console.error("Çıkış hatası:", error.message || error);
     }
   };
+  
+
+  
+
+  const refreshSession = async () => {
+    console.log("buradsiiii");
+    const refreshToken = getRefreshToken(); // Refresh token'ı al
+
+    // Refresh token'ı bulunamazsa hata mesajı ver
+    if (!refreshToken) {
+        setError("Refresh token'ı bulunamadı. Lütfen tekrar giriş yapın.");
+        return;
+    }
+
+    try {
+        // Refresh token ile yeni erişim token'ı almak için doğru API endpoint'ini kullanıyoruz
+        const data = await request("customerauth/user/token/refresh/", {
+            method: "POST",
+            body: JSON.stringify({ refresh: refreshToken }),  // Refresh token'ı request body'sine ekliyoruz
+            headers: {
+                "Content-Type": "application/json",  // JSON formatı ile veri gönderiyoruz
+            },
+        });
+
+        const { access } = data;  // Yeni erişim token'ını alıyoruz
+        localStorage.setItem("access_token", access);  // Yeni erişim token'ını localStorage'a kaydediyoruz
+
+    } catch (err) {
+        console.error("Hata:", err);
+        logout();  // Hata oluşursa çıkış yapıyoruz
+        setError("Oturum süresi dolmuş. Lütfen tekrar giriş yapın.");
+    }
+};
+
 
   return (
     <AuthContext.Provider
       value={{ isAuthenticated, user, login, logout, refreshSession, loading, error }}
     >
-      {loading ? <div>Loading...</div> : children}
+      {loading ? (
+        <div className="loading-message">
+          Yükleniyor, lütfen bekleyin...
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook
+// Özel hook: AuthContext kullanımı
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useAuth, AuthProvider içinde kullanılmalıdır");
   }
   return context;
 };
