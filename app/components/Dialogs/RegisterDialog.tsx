@@ -9,15 +9,16 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useAlert } from "@/app/context/AlertContext";
+import { registerApi } from "@/lib/customerAuthApi/customerauth_api";
 
 interface RegisterDialogProps {
   open: boolean;
   onClose: () => void;
   onSwitchToLogin: () => void;
 }
-
-const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const RegisterDialog: React.FC<RegisterDialogProps> = ({
   open,
@@ -37,6 +38,8 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
     password: "",
     confirmPassword: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const showAlert = useAlert();
 
@@ -89,27 +92,13 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
       };
 
       try {
-        const response = await fetch(`${prodUrl}/customerauth/user/register/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        });
+        const response = await registerApi(requestBody);
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          if (data.messages && Array.isArray(data.messages)) {
-            data.messages.forEach((message: string) => {
-              showAlert("error", message);
-            });
-          } else {
-            showAlert("error", "Bir hata oluştu. Lütfen tekrar deneyin.");
-          }
-        } else {
+        if (response.status === true) {
           showAlert("success", "Kayıt başarılı! Lütfen e-postanızı doğrulayın.");
           onClose();
+        } else {
+          showAlert("error", response.message);
         }
       } catch (error) {
         showAlert("error", "Sunucu hatası. Lütfen daha sonra tekrar deneyin.");
@@ -179,11 +168,21 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
               fullWidth
               label="Şifre"
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
               error={!!errors.password}
               helperText={errors.password}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                ),
+              }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -191,11 +190,21 @@ const RegisterDialog: React.FC<RegisterDialogProps> = ({
               fullWidth
               label="Şifre Tekrarı"
               name="confirmPassword"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={formData.confirmPassword}
               onChange={handleChange}
               error={!!errors.confirmPassword}
               helperText={errors.confirmPassword}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                ),
+              }}
             />
           </Grid>
         </Grid>

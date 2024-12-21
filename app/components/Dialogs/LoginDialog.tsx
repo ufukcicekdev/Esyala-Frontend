@@ -7,12 +7,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
 import { useAlert } from "@/app/context/AlertContext";
-
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-});
+import { useAuth } from "@/app/context/AuthContext";
 
 interface LoginDialogProps {
   open: boolean;
@@ -31,27 +27,38 @@ const LoginDialog: FC<LoginDialogProps> = ({
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const showAlert = useAlert();
+  const { login } = useAuth();
 
   const handleSubmit = async () => {
-    try {
-      const response = await instance.post("/customerauth/user/login/", {
-        email,
-        password,
-      });
-      const { token, user, message, status } = response.data;
+    setError(null); // Hata mesajını temizle
+    if (!email.trim()) {
+      setError("Email alanı boş olamaz.");
+      return;
+    }
+    if (!password.trim()){
+      setError("Şifre alanı boş olamaz.");
+      return;
+    }
 
-      if (status === true) {
-        localStorage.setItem("access_token", token.access);
-        localStorage.setItem("refresh_token", token.refresh);
-        localStorage.setItem("user", JSON.stringify(user));
-        showAlert("success", message);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Geçerli bir email adresi giriniz.");
+      return;
+    }
+    
+    try {
+      const response = await login(email, password);
+      if (response.status === true) {
+        showAlert("success", "Giriş Başarılı");
         onClose();
-        window.location.reload();
       } else {
-        showAlert("error", message);
+        setError(response.message || "Giriş başarısız.");
+        showAlert("error", response.message || "Giriş başarısız.");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Giriş işlemi sırasında bir hata oluştu:", err);
+      setError("Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.");
+      showAlert("error", "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
 

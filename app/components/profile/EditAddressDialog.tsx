@@ -16,6 +16,7 @@ import {
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAlert } from "@/app/context/AlertContext";
+import { updateAddressApi } from "@/lib/customerAuthApi/customerauth_api";
 
 interface Address {
     id: number;
@@ -141,7 +142,7 @@ const EditAddressDialog: React.FC<EditAddressDialogProps> = ({
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name!]:  value, // name kontrolü
+            [name!]: value, // name kontrolü
         }));
     };
 
@@ -154,22 +155,22 @@ const EditAddressDialog: React.FC<EditAddressDialogProps> = ({
                 ...formData,
                 city: formData.city?.id, // Şehir id'sini sadece gönder
                 region: formData.region?.district_id, // Bölge id'sini sadece gönder
-                neighborhood: formData.neighborhood?.neighborhood_id, // Mahalle id'sini sadece gönder
-                address_type: addressType, // Adres tipi burada gönderiliyor
+                neighborhood: formData.neighborhood?.neighborhood_id,
+                address_type: addressType,
                 address_model: addressModel,
             };
 
-            await axios.put(
-                `${prodUrl}/customerauth/user/addresses/edit/${address.id}/`,
-                dataToSend,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            );
-            showAlert("success", "Başarıyla Güncellendi");
-            onClose(); // Dialog penceresini kapat
+            const response = await updateAddressApi(address.id, dataToSend);
+
+            if (response.status === true) {
+                showAlert("success", "Başarıyla Güncellendi");
+                onClose();
+            }
+            else {
+                showAlert("error", response.message);
+            }
+
+
         } catch (error) {
             console.error("Adres güncelleme hatası:", error);
         }
@@ -282,8 +283,20 @@ const EditAddressDialog: React.FC<EditAddressDialogProps> = ({
                     fullWidth
                     margin="dense"
                     value={formData.postal_code}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                        // Sadece sayılar ve en fazla 5 karakter kabul edilsin
+                        const value = e.target.value;
+                        if (/^\d{0,5}$/.test(value)) {  // 0 ila 5 arası rakamlar
+                            handleChange(e);
+                        }
+                    }}
+                    inputProps={{
+                        maxLength: 5,  // Maksimum 5 karakter
+                    }}
                 />
+
+
+
                 <TextField
                     name="phone"
                     label="Telefon"

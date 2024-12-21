@@ -34,11 +34,14 @@ export default function BlogDetail({ slug }: { slug: string }) {
         async function fetchData() {
             try {
                 const data = await fetchBlogDetail(slug);
-                if (!data) {
-                    router.push('/404'); // Blog bulunmazsa 404'e yönlendirme
-                } else {
-                    setBlog(data);
-                }
+                console.log("data",data);
+
+                setBlog(data)
+                // if (!data) {
+                //     router.push('/404'); 
+                // } else {
+                //     ;
+                // }
             } catch (error) {
                 console.error('Blog fetch error:', error);
                 router.push('/404');

@@ -3,10 +3,9 @@ import { Box, Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Virtual } from 'swiper/modules';
 import Image from 'next/image';
-import axios from 'axios';
-
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { fetchBrands } from '@/lib/mainApi/main_api';
 
 interface Brand {
     id: number;
@@ -20,11 +19,9 @@ interface Brand {
 // API veri çekme fonksiyonu (Brand API'si için)
 export async function fetchBrandData() {
     try {
-        const response = await axios.get('https://esyala-backend-production.up.railway.app/main/get_brand/');
-        if (response.data["status"] === true) {
-            return response.data["data"];
-        } else {
-            return []; // Hata durumunda boş array döndürüyoruz
+        const response = await fetchBrands()
+        if (response.status === true) {
+            return response.data;
         }
     } catch (error) {
         console.error("Brand verileri alınırken bir hata oluştu:", error);
@@ -34,6 +31,7 @@ export async function fetchBrandData() {
 
 export default function VirtualSwiperBrand() {
     const [brands, setBrands] = useState<Brand[] | null>(null);
+    
 
     // useEffect ile veri çekme
     useEffect(() => {

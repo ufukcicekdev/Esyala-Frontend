@@ -3,10 +3,9 @@ import { Box, Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import Image from 'next/image';
-import axios from 'axios';
-
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { getHomeMainBanner } from '@/lib/mainApi/main_api';
 
 interface Banner {
   id: number;
@@ -23,14 +22,14 @@ interface Banner {
 // API veri çekme fonksiyonu
 export async function fetchHomeMainBanner() {
   try {
-    const response = await axios.get("https://esyala-backend-production.up.railway.app/main/get_home_main_banner/");
-    if (response.data["status"] === true) {
-      return response.data["data"];
+    const response = await getHomeMainBanner();
+    if (response.status === true) {
+      return response.data;
     } else {
       return [];
     }
   } catch (error) {
-    console.error("Bannerlar alınırken bir hata oluştu:", error);
+    console.error('Bannerlar alınırken bir hata oluştu:', error);
     return [];
   }
 }
@@ -48,6 +47,8 @@ export default function SwiperMainSlider() {
 
   return (
     <Box sx={{ width: '100%', margin: 'auto', mt: 0 }}>
+      
+
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
@@ -60,6 +61,20 @@ export default function SwiperMainSlider() {
         }}
         modules={[Autoplay, Pagination]}
         className="mySwiper"
+        breakpoints={{
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 10,
+          },
+          768: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 1,
+            spaceBetween: 30,
+          },
+        }}
       >
         {banners &&
           banners.map(
@@ -70,17 +85,19 @@ export default function SwiperMainSlider() {
                     sx={{
                       position: 'relative',
                       width: '100%',
-                      aspectRatio: '2.5', // 1050/420 oranı (2.5:1)
+                      aspectRatio: {
+                        xs: '1', // Mobil cihazlar için (1:1 kare)
+                        sm: '1.5', // Tabletler için (1.5:1)
+                        md: '2.5', // Masaüstü için (2.5:1)
+                      },
                       overflow: 'hidden',
                       margin: 'auto',
                     }}
                   >
                     <Image
-                      src={
-                        'https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul' +
-                        banner.image.replace('/media', '')
-                      }
-                      alt={banner.title}
+                      src={banner.image}
+                      alt={`${banner.title} - ${banner.subtitle}`}
+                      title={`${banner.title} - ${banner.subtitle}`}
                       fill
                       style={{
                         objectFit: 'cover',
@@ -102,8 +119,14 @@ export default function SwiperMainSlider() {
                       }}
                     >
                       <div className="txt-wrap centerize">
-                        <a href={banner.link} title="Alışverişe Başla" tabIndex={0}>
+                        <a
+                          href={banner.link}
+                          title={`Daha Fazla Bilgi: ${banner.title}`}
+                          rel="noopener noreferrer"
+                          tabIndex={0}
+                        >
                           <Typography
+                            component="h2"
                             variant="h4"
                             sx={{
                               color: banner.text_color,
@@ -115,8 +138,14 @@ export default function SwiperMainSlider() {
                             {banner.title}
                           </Typography>
                         </a>
-                        <a href={banner.link} title="Alışverişe Başla" tabIndex={0}>
+                        <a
+                          href={banner.link}
+                          title={`Daha Fazla Bilgi: ${banner.subtitle}`}
+                          rel="noopener noreferrer"
+                          tabIndex={0}
+                        >
                           <Typography
+                            component="h3"
                             variant="h6"
                             sx={{
                               color: banner.text_color,

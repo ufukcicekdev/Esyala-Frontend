@@ -12,6 +12,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useAlert } from "@/app/context/AlertContext";
+import { getNotifySettings, updateNotifySettings } from "@/lib/customerAuthApi/customerauth_api";
 
 interface ProfileNotifyDialogProps {
   open: boolean;
@@ -40,38 +41,24 @@ const ProfileNotifyDialog: React.FC<ProfileNotifyDialogProps> = ({
 
   useEffect(() => {
     const fetchNotificationSettings = async () => {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      const userId: string | null = user ? user.id : null;
-      const accessToken: string | null = localStorage.getItem("access_token");
+      try {
+        // GET isteği ile bildirim ayarlarını al
 
-      const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const response = await getNotifySettings()
 
-      if (userId && accessToken && prodUrl) {
-        try {
-          // GET isteği ile bildirim ayarlarını al
-          const response = await fetch(`${prodUrl}/customerauth/user/notifications/${userId}`, {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${accessToken}`,
-            },
+        if (response.status === true) {
+          
+          setNotifications({
+            emailNotifications: response.data.receive_email_notifications,
+            smsNotifications: response.data.receive_sms_notifications,
           });
-
-          if (response.ok) {
-            const data = await response.json();
-            // API'den gelen veriyi uyarlıyoruz
-            setNotifications({
-              emailNotifications: data.receive_email_notifications,
-              smsNotifications: data.receive_sms_notifications,
-            });
-          } else {
-            console.error("Bildirim ayarları alınamadı");
-          }
-        } catch (error) {
-          console.error("API isteği sırasında hata oluştu", error);
+        } else {
+          console.error("Bildirim ayarları alınamadı");
         }
-      } else {
-        console.error("User ID, access token veya API URL eksik");
+      } catch (error) {
+        console.error("API isteği sırasında hata oluştu", error);
       }
+ 
     };
 
     if (open) {
@@ -88,40 +75,19 @@ const ProfileNotifyDialog: React.FC<ProfileNotifyDialogProps> = ({
   };
 
   const handleSave = async () => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId: string | null = user ? user.id : null;
-    const accessToken: string | null = localStorage.getItem("access_token");
-
-    const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL; // API URL'sini çevresel değişkenden al
-
-    if (userId && accessToken && prodUrl) {
       try {
-        // PUT isteği ile bildirim ayarlarını güncelle
-        const response = await fetch(`${prodUrl}/customerauth/user/notifications/${userId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            receive_email_notifications: notifications.emailNotifications,
-            receive_sms_notifications: notifications.smsNotifications,
-          }),
-        });
+        const response = await updateNotifySettings(notifications.emailNotifications, notifications.smsNotifications)
 
-        if (response.ok) {
-          onSave(notifications);  // Bildirimleri kaydet
+        if (response.status === true) {
+          onSave(notifications);  
           showAlert("success", "Bildirimler Güncellendi");
-          onClose();  // Dialog'u kapat
+          onClose();  
         } else {
             showAlert("error", "Bildirimler güncellenemedi");
         }
       } catch (error) {
         console.error("API isteği sırasında hata oluştu", error);
       }
-    } else {
-      console.error("User ID, access token veya API URL eksik");
-    }
   };
 
   return (

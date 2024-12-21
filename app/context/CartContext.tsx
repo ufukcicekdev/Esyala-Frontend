@@ -83,7 +83,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const [cartCount, setCartCount] = useState<number>(0);
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const showAlert = useAlert();
-
     const addToCart = async (item: {
         id: number; 
         quantity: number; 
@@ -99,7 +98,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
             is_rental: item.isRental,
             rental_price: item.rentalPrice,
             selling_price: item.sellingPrice,
-            session_key: item.sessionKey,
             rental_period: item.rentalPeriod,
         };
         
@@ -164,7 +162,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         const fetchCart = async () => {
             try {
                 const response: CartResponseData = await getCartApi();
-                console.log(response);
                 if (response.cart?.cart_items) {
                     setCartItems(response.cart.cart_items);
                     setCartCount(response.cart.cart_items.length);

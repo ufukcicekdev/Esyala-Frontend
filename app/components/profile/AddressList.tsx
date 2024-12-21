@@ -18,6 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAlert } from "@/app/context/AlertContext";
 import EditAddressDialog from "./EditAddressDialog";
+import { getAddressApi } from "@/lib/customerAuthApi/customerauth_api";
 
 const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -60,43 +61,34 @@ const Addresses: React.FC<AddressesProps> = ({ addressModel }) => {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [addressToDelete, setAddressToDelete] = useState<number | null>(null);
 
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId: string | null = user ? user.id : null;
-    const accessToken: string | null = localStorage.getItem("access_token");
 
-    const fetchAddresses = () => {
-        if (userId && accessToken) {
-            setLoading(true);
-            axios
-                .get(`${prodUrl}customerauth/user/addresses/`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                })
-                .then((response) => {
-                    if (response.data.status === true) {
-                        const filteredAddresses = response.data.address.filter(
-                            (address: Address) =>
-                                address.address_model === ADDRESS_MODEL_MAP[addressModel]
-                        );
-                        setAddresses(filteredAddresses);
-                    } else {
-                        showAlert("error", "Adres verisi alınamadı");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Adres verisi alınırken bir hata oluştu:", error);
-                    showAlert("error", "Adres verisi alınırken bir hata oluştu");
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
+    const fetchAddresses = async () => {
+   
+        setLoading(true);
+        try {
+            const response = await getAddressApi();
+            if (response.status === true) {
+                const filteredAddresses = response.address.filter(
+                    (address: Address) =>
+                        address.address_model === ADDRESS_MODEL_MAP[addressModel]
+                );
+                setAddresses(filteredAddresses);
+            } else {
+                showAlert("error", "Adres verisi alınamadı");
+            }
+        } catch (error) {
+            console.error("Adres verisi alınırken bir hata oluştu:", error);
+            showAlert("error", "Adres verisi alınırken bir hata oluştu");
+        } finally {
+            setLoading(false);
         }
+        
     };
+    
 
     useEffect(() => {
         fetchAddresses();
-    }, [userId, accessToken, addressModel]);
+    }, [addressModel]);
 
     const handleEdit = (address: Address) => {
         setSelectedAddress(address);

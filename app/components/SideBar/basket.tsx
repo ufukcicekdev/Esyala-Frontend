@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Drawer, Box, Container, Button, Typography, IconButton } from "@mui/material";
+import { Drawer, Box, Container, Button, Typography, IconButton, Grid } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useCart } from "@/app/context/CartContext";
 import Link from 'next/link';
-import Image from 'next/image'; // Next.js Image bileşenini import edin
+import Image from 'next/image';
 
 interface Product {
     id: number;
@@ -26,7 +26,7 @@ interface CartItem {
     rentalPrice: string | null; 
     isRental: boolean; 
     sellingPrice: string | null; 
-    product:Product;
+    product: Product;
 }
 
 interface SidebarProps {
@@ -34,12 +34,10 @@ interface SidebarProps {
     onClose: () => void;
 }
 
-
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const { cartItems, removeFromCart, totalPrice, updateQuantity } = useCart();
     const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
     const [isUpdating, setIsUpdating] = useState(false);
-
 
     const handleIncreaseQuantity = (item: CartItem) => {
         if (isUpdating) return;
@@ -65,142 +63,144 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
     return (
         <Drawer
-            anchor="right"
-            open={isOpen}
-            onClose={onClose}
-            sx={{
-                "& .MuiDrawer-paper": {
-                    width: '100%', // Full width on mobile
-                    maxWidth: 350, // Max width for larger screens
-                    padding: 2,
-                }
-            }}
-        >
-            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <Container maxWidth="xs" sx={{ flexGrow: 1, overflow: 'auto' }}>
-                    <Box display="flex" justifyContent="flex-end" mb={2}>
-                        <IconButton onClick={onClose}>
-                            <CloseIcon />
-                        </IconButton>
-                    </Box>
-
-                    {cartItems.length > 0 && (
-                        <Image
-                            src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/basket/shopping-basket.png"
-                            alt="Sepetim"
-                            width={20}
-                            height={20}
-                            layout="fixed" // Bu özellik, görüntülerin orantılı olmasını sağlar
-                            style={{ maxWidth: '100%', height: 'auto' }} // Resmin boyutunu sınırlayarak duyarlı hale getirir
-                        />
-                    )}
-
-                    <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-                        {cartItems.length > 0 ? (
-                            cartItems.map((item) => (
-                                <Box
-                                    key={item.id}
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        padding: '8px 0',
-                                        borderBottom: '1px solid #ddd',
-                                    }}
-                                >
-                                    <Box sx={{ marginRight: 2 }}>
-                                        <Image
-                                            src={item.product.first_image.image || '/default-image.jpg'}
-                                            alt={item.product.first_image.img_alt}
-                                            width={50}
-                                            height={50}
-                                            style={{ borderRadius: '8px' }}
-                                        />
-                                    </Box>
-                                    <Box sx={{ flexGrow: 1 }}>
-                                        <Link href={`/product/${item.product.slug}`} passHref>
-                                            <Typography variant="body1" sx={{ fontWeight: 'bold', color: 'primary.main', textDecoration: 'underline', cursor: 'pointer' }}>
-                                                {item.product.name}
-                                            </Typography>
-                                        </Link>
-                                        {item.isRental ? (
-                                            <Typography variant="body2" color="textSecondary">
-                                                Kiralık - Süre: {item.rentalPeriod} Ay - Fiyat: {item.rentalPrice}₺
-                                            </Typography>
-                                        ) : (
-                                            <Typography variant="body2" color="textSecondary">
-                                                Satılık - Fiyat: {item.product.selling_price}₺
-                                            </Typography>
-                                        )}
-
-                                        {/* Quantity increase/decrease */}
-                                        {!item.isRental && (
-                                            <Box mt={1} display="flex" justifyContent="center" alignItems="center">
-                                                <Button
-                                                    onClick={() => handleDecreaseQuantity(item)}
-                                                    disabled={quantities[item.id] <= 1}
-                                                    sx={{ padding: '6px 12px' }}
-                                                >
-                                                    -
-                                                </Button>
-                                                <Typography variant="h6" mx={2}>
-                                                    {quantities[item.id] || item.quantity}
-                                                </Typography>
-                                                <Button
-                                                    onClick={() => handleIncreaseQuantity(item)}
-                                                    sx={{ padding: '6px 12px' }}
-                                                >
-                                                    +
-                                                </Button>
-                                            </Box>
-                                        )}
-                                    </Box>
-                                    <IconButton
-                                        onClick={() => removeFromCart(item.id)}
-                                        sx={{ color: 'red', fontSize: '20px', '&:hover': { color: 'darkred' } }}
-                                    >
-                                        <CloseIcon />
-                                    </IconButton>
+        anchor="right"
+        open={isOpen}
+        onClose={onClose}
+        sx={{
+            "& .MuiDrawer-paper": {
+                width: {
+                    xs: '80%',  // Mobilde daha geniş bir sidebar
+                    sm: '50%',  // Tablet boyutunda yüzde 50 genişlik
+                    md: '30%',  // Masaüstü boyutunda yüzde 30 genişlik
+                },
+                padding: 2,
+                display: 'flex',
+                flexDirection: 'column',
+            },
+        }}
+    >
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <Container maxWidth="xs" sx={{ flexGrow: 1, overflow: 'auto' }}>
+                <Box display="flex" justifyContent="flex-end" mb={2}>
+                    <IconButton onClick={onClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
+    
+                <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+                    {cartItems.length > 0 ? (
+                        cartItems.map((item) => (
+                            <Box
+                                key={item.id}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: '8px 0',
+                                    borderBottom: '1px solid #ddd',
+                                }}
+                            >
+                                <Box sx={{ marginRight: 2 }}>
+                                    <Image
+                                        src={item.product.first_image.image || '/default-image.jpg'}
+                                        alt={item.product.first_image.img_alt}
+                                        width={50}  // Mobilde daha küçük bir resim boyutu
+                                        height={50}
+                                        style={{ borderRadius: '8px' }}
+                                    />
                                 </Box>
-                            ))
-                        ) : (
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                                <Image
-                                    src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/basket/empty-cart.png"
-                                    alt="Boş Sepet"
-                                    width={90}
-                                    height={90}
-                                    layout="intrinsic" // Bu özellik, görüntülerin orantılı olmasını sağlar
-                                    style={{ maxWidth: '100%', height: 'auto' }} // Resmin boyutunu sınırlayarak duyarlı hale getirir
-                                />
-                                <Typography variant="h6" color="textSecondary" sx={{ mb: 2 }}>
-                                    Sepetiniz boş.
-                                </Typography>
-                                <Link href="/" passHref>
-                                    <Button variant="contained" color="primary" onClick={onClose}>
-                                        Alışverişe Başla
-                                    </Button>
-                                </Link>
+                                <Box sx={{ flexGrow: 1 }}>
+                                    <Link href={`/product/${item.product.slug}`} passHref>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                fontWeight: 'bold',
+                                                color: 'primary.main',
+                                                textDecoration: 'underline',
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            {item.product.name}
+                                        </Typography>
+                                    </Link>
+                                    {item.isRental ? (
+                                        <Typography variant="caption" color="textSecondary">
+                                            Kiralık - Süre: {item.rentalPeriod} Ay - Fiyat: {item.rentalPrice}₺
+                                        </Typography>
+                                    ) : (
+                                        <Typography variant="caption" color="textSecondary">
+                                            Satılık - Fiyat: {item.product.selling_price}₺
+                                        </Typography>
+                                    )}
+    
+                                    {!item.isRental && (
+                                        <Box mt={1} display="flex" justifyContent="center" alignItems="center">
+                                            <Button
+                                                onClick={() => handleDecreaseQuantity(item)}
+                                                disabled={quantities[item.id] <= 1}
+                                                sx={{ padding: '8px 12px', fontSize: '1rem' }}
+                                            >
+                                                -
+                                            </Button>
+                                            <Typography variant="body2" mx={1} sx={{ fontSize: '1rem' }}>
+                                                {quantities[item.id] || item.quantity}
+                                            </Typography>
+                                            <Button
+                                                onClick={() => handleIncreaseQuantity(item)}
+                                                sx={{ padding: '8px 12px', fontSize: '1rem' }}
+                                            >
+                                                +
+                                            </Button>
+                                        </Box>
+                                    )}
+                                </Box>
+                                <IconButton
+                                    onClick={() => removeFromCart(item.id)}
+                                    sx={{ color: 'red', fontSize: '18px', '&:hover': { color: 'darkred' } }}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
                             </Box>
-                        )}
-                    </Box>
-                </Container>
-
-                <Box sx={{ padding: 2, backgroundColor: 'background.paper', borderTop: '1px solid', borderColor: 'divider' }}>
-                    {cartItems.length > 0 && (
-                        <>
-                            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                Toplam: {totalPrice}₺
+                        ))
+                    ) : (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                            <Image
+                                src="https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/basket/empty-cart.png"
+                                alt="Boş Sepet"
+                                width={100}
+                                height={100}
+                                layout="intrinsic"
+                                style={{ maxWidth: '100%', height: 'auto' }}
+                            />
+                            <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+                                Sepetiniz boş.
                             </Typography>
-                            <Link href="/checkout" passHref>
-                                <Button fullWidth variant="contained" color="primary" onClick={onClose}>
-                                    Ödeme Yap
+                            <Link href="/" passHref>
+                                <Button variant="contained" color="primary" sx={{ padding: '12px 16px', fontSize: '1rem' }} onClick={onClose}>
+                                    Alışverişe Başla
                                 </Button>
                             </Link>
-                        </>
+                        </Box>
                     )}
                 </Box>
+            </Container>
+    
+            <Box sx={{ padding: 2, backgroundColor: 'background.paper', borderTop: '1px solid', borderColor: 'divider' }}>
+                {cartItems.length > 0 && (
+                    <>
+                        <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.2rem', marginBottom: 2 }}>
+                            Toplam: {totalPrice}₺
+                        </Typography>
+                        <Link href="/checkout" passHref>
+                            <Button fullWidth variant="contained" color="primary" sx={{ padding: '12px 16px', fontSize: '1rem' }} onClick={onClose}>
+                                Ödeme Yap
+                            </Button>
+                        </Link>
+                    </>
+                )}
             </Box>
-        </Drawer>
+        </Box>
+    </Drawer>
+    
     );
 };
 

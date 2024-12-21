@@ -1,9 +1,7 @@
-"use client";
-import axios from "axios";
+import { AxiosError } from "axios";
+import instance from "../axiosInstance";
 
-const instance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-});
+
 
 
 
@@ -11,7 +9,6 @@ export async function fetchBlogs() {
     try {
         const response = await instance.get("/blog/");
         if (response.data?.status === true && response.data?.data?.length > 0) {
-            console.log(response.data);
             return response.data;
         }
         else {
@@ -26,9 +23,8 @@ export async function fetchBlogs() {
 export async function fetchBlogDetail(slug: string) {
     try {
         const response = await instance.get(`/blog/${slug}/`);
-        console.log("response-----",response);
-        if (response.data?.status === true && response.data?.data?.length > 0) {
-            return response.data.data[0]; 
+        if (response.data?.status === true) {
+            return response.data.data; 
         } else {
             return { error: response.data?.messages || "Blog bulunamadı." };
         }

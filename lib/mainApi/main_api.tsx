@@ -1,17 +1,13 @@
-// lib/api.ts
-import axios from "axios";
-
-const instance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-});
-
+import { AxiosError } from "axios";
+import instance from "../axiosInstance";
 
 
 
 export async function fetchBrands() {
     try {
         const response = await instance.get("/main/get_brand/");
-        if (response.data["status"] == true) {
+        console.log(response.data.status);
+        if (response.data.status === true) {
             return response.data;
         }
         else {
@@ -41,10 +37,10 @@ export async function fetchAbout() {
 
 
 
-export async function fetchHomeMainBanner() {
+export async function getHomeMainBanner() {
     try {
         const response = await instance.get("/main/get_home_main_banner/");
-        if (response.data["status"] == true) {
+        if (response.data.status == true) {
             return response.data;
         }
         else {
@@ -106,17 +102,24 @@ export async function fetchFooterCategory() {
 
 
 
-export async function fetchCategoryProduct(category_slugs: string | string[], page: number, itemsPerPage: number) {
+export async function fetchCategoryProduct(category_slugs: string | string[], page: number, itemsPerPage: number, filters: any) {
     try {
         const slugPath = Array.isArray(category_slugs)
             ? category_slugs.join('/')
             : category_slugs;
 
+        const params: any = {
+            page: page,
+            items_per_page: itemsPerPage,
+            ...filters, 
+        };
+
+        if (filters.is_rent !== undefined) {
+            params.is_rent = filters.is_rent;
+        }
+
         const response = await instance.get(`/main/category/${slugPath}/`, {
-            params: {
-                page: page,
-                items_per_page: itemsPerPage,
-            }
+            params: params, 
         });
 
         // API yanıtını kontrol et
@@ -140,9 +143,8 @@ export async function fetchProductCategoryList(category_slugs: string | string[]
             : category_slugs;
 
         const response = await instance.get(`/main/productCategoryList/${slugPath}/`);
-        console.log("*********",response);
         if (response.data?.status === true) {
-            return response.data; // Burada dönen verinin formatını kontrol edin
+            return response.data;
         } else {
             return { error: response.data?.messages || "Kategori bulunamadı." };
         }
@@ -182,3 +184,61 @@ export async function fetchSalesProduct() {
         return { error: "Ürün detayları alınırken bir hata oluştu." };
     }
 }
+
+
+
+export const getHomepageBestSellerProduct = async () => {
+    try {
+        const response = await instance.get(`/main/homepage_best_seller_products/`);
+        if (response.data.status === true) {
+            return response.data; 
+        } else {
+            return response.data;  
+        }
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+            return axiosError.response.data;  
+        }   
+    }
+};
+
+
+
+export const getHomepageFeaturedProduct = async () => {
+    try {
+        const response = await instance.get(`/main/homepage_featured_products/`);
+        if (response.data.status === true) {
+            return response.data; 
+        } else {
+            return response.data;  
+        }
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+            return axiosError.response.data;  
+        }   
+    }
+};
+
+
+
+export const getHomepageLatestProducts = async () => {
+    try {
+        const response = await instance.get(`/main/homepage_latest_products/`);
+        if (response.data.status === true) {
+            return response.data; 
+        } else {
+            return response.data;  
+        }
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+            return axiosError.response.data;  
+        }   
+    }
+};
+
+
+
+

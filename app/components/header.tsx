@@ -136,8 +136,12 @@ const Header = () => {
                 </div>
               </Grid>
 
-              {/* Arama kutusu */}
-              <Grid item xs={12} sm={12} md={4} className="flex items-center" sx={{ my: 3 }}>
+              <Grid
+                item
+                xs={12} sm={12} md={4}
+                className="flex items-center"
+                sx={{ my: 3, display: 'flex', justifyContent: 'center' }} // Genişliği merkezde tut
+              >
                 <TextField
                   variant="outlined"
                   placeholder="Ara..."
@@ -149,8 +153,10 @@ const Header = () => {
                       </InputAdornment>
                     ),
                   }}
+                  sx={{ maxWidth: 500 }}  // Maksimum genişlik belirleyebilirsiniz
                 />
               </Grid>
+
 
 
               {/* Giriş Yap ve Üye Ol Butonları */}
@@ -170,7 +176,10 @@ const Header = () => {
                 }}
                 className="flex justify-end items-center"
               >
-                 <CartIcon onClick={handleSidebarToggle} />
+                <CartIcon
+                  onClick={handleSidebarToggle}
+                />
+
                 {isAuthenticated ? (
                   <>
                     <IconButton color="primary" onClick={handleUserClick}>

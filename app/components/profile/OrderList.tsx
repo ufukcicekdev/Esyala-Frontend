@@ -22,6 +22,8 @@ import {
     useTheme,
 } from "@mui/material";
 import Link from "next/link";
+import { getOrderDetailApi, getOrdersApi } from "@/lib/customerAuthApi/customerauth_api";
+import { useAlert } from "@/app/context/AlertContext";
 
 interface Order {
     order_number: string;
@@ -62,25 +64,19 @@ const OrderList: React.FC = () => {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [orderDetail, setOrderDetail] = useState<OrderDetail | null>(null);
     const theme = useTheme();
+    const showAlert = useAlert();
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            const user = JSON.parse(localStorage.getItem("user") || "{}");
-            const userId: string | null = user ? user.id : null;
-            const accessToken: string | null = localStorage.getItem("access_token");
-            if (!userId) {
-                console.error("User ID bulunamadı");
-                return;
-            }
-            const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const fetchOrders = async () => {    
             try {
-                const response = await axios.get(`${prodUrl}/customerauth/user/orderlist/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
-                setOrders(response.data.orders);
-                setLoading(false);
+                const response =  await getOrdersApi();
+                if (response.status === true) {
+                    setOrders(response.orders);
+                    setLoading(false);
+                }
+                else{
+                    showAlert("error", response.message);
+                }
             } catch (error) {
                 console.error("Error fetching orders", error);
                 setLoading(false);
@@ -91,17 +87,8 @@ const OrderList: React.FC = () => {
     }, []);
 
     const handleOpenDialog = async (orderNumber: string) => {
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
-        const userId: string | null = user ? user.id : null;
-        const accessToken: string | null = localStorage.getItem("access_token");
-        const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
         try {
-            const response = await axios.get(`${prodUrl}/customerauth/user/orderdetail/${userId}/${orderNumber}/`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
+            const response = await getOrderDetailApi(orderNumber);
             setOrderDetail(response.data.orders[0]);
             setOpenDialog(true);
         } catch (error) {

@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useAlert } from "@/app/context/AlertContext";
+import { getProfileApi, updateProfileApi } from "@/lib/customerAuthApi/customerauth_api";
 
 const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -42,57 +43,38 @@ const ProfileEditDialog: React.FC<ProfileEditDialogProps> = ({ open, onClose, on
   const [loading, setLoading] = useState(false);
   const showAlert = useAlert();
   const theme = useTheme();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const userId: string | null = user ? user.id : null;
-  const accessToken: string | null = localStorage.getItem("access_token");
 
   useEffect(() => {
-    if (open && userId && accessToken) {
+    const fetchProfile = async () => {
       setLoading(true);
-      axios
-        .get(`${prodUrl}/customerauth/user/profile/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            setUpdatedProfile(response.data);
-          } else {
-            console.error("Profil verisi alınırken bir sorun oluştu");
-          }
-        })
-        .catch((error) => {
-          console.error("Profil verisi alınırken bir hata oluştu:", error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [open, userId, accessToken]);
+      try {
+        const response = await getProfileApi();
+        if (response.status === true) {
+          setUpdatedProfile(response.data);
+        } else {
+          console.error("Profil verisi alınırken bir sorun oluştu");
+        }
+      } catch (error) {
+        console.error("Profil verisi alınırken bir hata oluştu:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchProfile();
+  }, [open]);
 
   const handleSave = async () => {
-    if (!userId || !accessToken) {
-      console.error("Kullanıcı ID veya access token bulunamadı");
-      return;
-    }
+ 
 
     setLoading(true);
 
     try {
-      const response = await axios.put(
-        `${prodUrl}/customerauth/user/profile/update/${userId}`,
-        updatedProfile,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await updateProfileApi(updatedProfile)
 
-      if (response.data.status === true) {
+      if (response.status === true) {
         onSave(updatedProfile);
-        showAlert("success", response.data.message);
+        showAlert("success", response.message);
         onClose();
       } else {
         showAlert("error", "Bir hata oluştu");

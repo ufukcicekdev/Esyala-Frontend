@@ -13,6 +13,8 @@ import {
     Grid,
 } from "@mui/material";
 import axios from "axios";
+import { createAddressApi } from "@/lib/customerAuthApi/customerauth_api";
+import { useAlert } from "@/app/context/AlertContext";
 
 interface AddAddressDialogProps {
     open: boolean;
@@ -39,6 +41,7 @@ const AddAddressDialog: React.FC<AddAddressDialogProps> = ({ open, onClose, onSa
     const [cityData, setCityData] = useState<any>(null); // Şehir verisi burada saklanacak
     const [districts, setDistricts] = useState<any[]>([]);
     const [neighborhoods, setNeighborhoods] = useState<any[]>([]);
+    const showAlert = useAlert();
 
     const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -74,15 +77,16 @@ const AddAddressDialog: React.FC<AddAddressDialogProps> = ({ open, onClose, onSa
         }
     }, [district]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         const user = JSON.parse(localStorage.getItem("user") || "{}");
         const userId: string | null = user ? user.id : null;
         const accessToken: string | null = localStorage.getItem("access_token");
 
+
         if (userId && accessToken) {
             const addressData = {
                 address_type: addressType,
-                address_model:addressModel,
+                address_model: addressModel,
                 username,
                 usersurname,
                 phone,
@@ -98,21 +102,23 @@ const AddAddressDialog: React.FC<AddAddressDialogProps> = ({ open, onClose, onSa
                 user_id: userId,
             };
 
-            axios.post(
-                `${prodUrl}/customerauth/user/addresses/create/`,
-                addressData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                }
-            )
-                .then(response => {
+            try {
+                const response = await createAddressApi(addressData);
+
+                if (response.status === true) {
+                    showAlert("success", "Başarıyla eklendi");
                     onSave(response.data);
                     resetForm();
                     onClose();
-                })
-                .catch(error => console.error("Adres kaydedilirken hata oluştu: ", error));
+                } else {
+                    showAlert("error", response.message || "Adres kaydedilirken bir hata oluştu");
+                }
+            } catch (error) {
+                console.error("Adres kaydedilirken bir hata oluştu: ", error);
+                showAlert("error", "Adres kaydedilirken bir hata oluştu");
+            }
+
+
         }
     };
 
@@ -286,7 +292,16 @@ const AddAddressDialog: React.FC<AddAddressDialogProps> = ({ open, onClose, onSa
                     variant="outlined"
                     margin="normal"
                     value={postalCode}
-                    onChange={(e) => setPostalCode(e.target.value)}
+                    onChange={(e) => {
+                        // Sadece sayılar ve en fazla 5 karakter kabul edilsin
+                        const value = e.target.value;
+                        if (/^\d{0,5}$/.test(value)) {  // 0 ila 5 arası rakamlar
+                            setPostalCode(value);
+                        }
+                    }}
+                    inputProps={{
+                        maxLength: 5,  // Maksimum 5 karakter
+                    }}
                 />
 
                 {/* Fatura adresi alanları sadece "Fatura Adresi" seçildiğinde görünsün */}

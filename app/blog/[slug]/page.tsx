@@ -5,7 +5,7 @@ import BlogDetail from "@/lib/fetchData/fetch_data";
 const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function generateStaticParams() {
-  const response = await fetch(`${prodUrl}/blog/`);
+  const response = await fetch(`${prodUrl}blog/`);
   
   const categories = await response.json();
 

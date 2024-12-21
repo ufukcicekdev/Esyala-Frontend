@@ -5,7 +5,7 @@ import instance from "../axiosInstance";
 export const fetchProductDetails = async (slug : string) => {
     try {
         const response = await instance.get(`/products/api/products/${slug}/`);
-    return response.data;
+        return response.data;
     } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response) {
@@ -91,17 +91,25 @@ export const createProductQuestion = async (productId : number, questionData: an
 
 
 
-export const addToCartApi = async (requestData :any) => {
+export const addToCartApi = async (requestData: any) => {
     try {
+        const sessionKey = localStorage.getItem("session_key");
+
+        // Eğer session_key varsa, requestData'ya ekle
+        if (sessionKey) {
+            requestData.session_key = sessionKey;
+        }
+
         const response = await instance.post(
             `products/api/product/cart/add/`,
-            requestData
+            requestData 
         );
-        return response.data;  // Başarılı durumda gelen veriyi döndürüyoruz
+
+        return response.data; // Başarılı durumda gelen veriyi döndürüyoruz
     } catch (error) {
         const axiosError = error as AxiosError;
         if (axiosError.response) {
-            return axiosError.response.data;  
+            return axiosError.response.data;
         } else {
             return { error: true, message: "Bir hata oluştu." };
         }

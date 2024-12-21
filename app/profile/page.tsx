@@ -184,9 +184,7 @@ const Profile: React.FC = () => {
             sx={{ width: 100, height: 100, mb: 2, mx: "auto" }}
           />
           <Typography variant="h6" align="center">Ufuk Çiçek</Typography>
-          <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
-            Backend Developer
-          </Typography>
+       
           <Button variant="contained" color="primary" sx={{ my: 2 }} fullWidth onClick={toggleDialog}>
             Profili Düzenle
           </Button>

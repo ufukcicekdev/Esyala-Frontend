@@ -16,7 +16,7 @@ interface Product {
   truncated_description: string;
 }
 
-export function useProducts(slug: string, page: number, itemsPerPage: number) {
+export function useProducts(slug: string, page: number, itemsPerPage: number, filters: any) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +26,7 @@ export function useProducts(slug: string, page: number, itemsPerPage: number) {
     const loadProducts = async () => {
       setLoading(true);
       try {
-        const productData = await fetchCategoryProduct(slug, page, itemsPerPage);
+        const productData = await fetchCategoryProduct(slug, page, itemsPerPage, filters);
         const { product, product_count } = productData.data;
         setProducts(product || []);
         setProductCount(product_count || 0);
@@ -38,7 +38,7 @@ export function useProducts(slug: string, page: number, itemsPerPage: number) {
     };
 
     loadProducts();
-  }, [slug, page]);
+  }, [slug, page, filters]);
 
   return { products, loading, error, productCount };
 }

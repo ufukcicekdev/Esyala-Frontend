@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: "https://filestorages.fra1.cdn.digitaloceanspaces.com/esyabul/banners/WhatsApp_Image_2024-05-04_at_15.webp",
         width: 1200,
         height: 630,
-        alt: "Eşyala Banner",
+        alt: "Eşyala",
       },
     ],
   },
