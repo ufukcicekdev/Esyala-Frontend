@@ -9,7 +9,7 @@ export async function generateStaticParams() {
   const response = await fetch(`${prodUrl}/blog/`);
   const response2 = await response.json();
   return response2.data.map((blog: { slug: string }) => ({
-    slug: blog.slug,  // sadece slug'ı döndürüyoruz
+    slug: blog.slug,  
   }));
 }
 
