@@ -15,6 +15,8 @@ export async function generateStaticParams() {
 
   const categories = jsonResponse.data;
 
+  console.log("categories",categories);
+
   // Tüm slug'ları düz bir liste olarak birleştir
   const slugs = categories.flatMap((category: any) => {
       const categorySlugs = [{ slug: [category.slug] }];
