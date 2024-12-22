@@ -20,10 +20,10 @@ interface CartItem {
     id: number;
     name: string;
     quantity: number;
-    rentalPeriod?: string | null;
-    rentalPrice: string | null; 
-    isRental: boolean; 
-    sellingPrice: string | null; 
+    rental_period?: string | null;
+    rental_price: string | null; 
+    is_rental: boolean; 
+    selling_price: string | null; 
     product: Product;
 }
 
