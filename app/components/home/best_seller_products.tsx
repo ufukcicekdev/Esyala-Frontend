@@ -9,44 +9,31 @@ const HomePageProductSlider = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // loading durumunu ayarlamak için her bir veri istek tamamlandığında
-        const fetchBestSellerProducts = async () => {
-            const result = await getHomepageBestSellerProduct();
-            if (result.status === true) {
-                setBestSellerProducts(result.data);
+        const fetchDataSequentially = async () => {
+            // Çok satan ürünleri getir
+            const bestSellerResult = await getHomepageBestSellerProduct();
+            if (bestSellerResult.status === true) {
+                setBestSellerProducts(bestSellerResult.data);
             }
-            checkLoadingStatus(); // Tüm veriler yüklendiyse loading'i false yap
+
+            // Öne çıkan ürünleri getir
+            const featuredResult = await getHomepageFeaturedProduct();
+            if (featuredResult.status === true) {
+                setFeaturedProducts(featuredResult.data);
+            }
+
+            // Yeni ürünleri getir
+            const latestResult = await getHomepageLatestProducts();
+            if (latestResult.status === true) {
+                setLatestProducts(latestResult.data);
+            }
+
+            // Tüm veriler yüklendiğinde loading'i false yap
+            setLoading(false);
         };
 
-        const fetchFeaturedProduct = async () => {
-            const result = await getHomepageFeaturedProduct();
-            if (result.status === true) {
-                setFeaturedProducts(result.data);
-            }
-            checkLoadingStatus();
-        };
-
-        const fetchLatestProduct = async () => {
-            const result = await getHomepageLatestProducts();
-            if (result.status === true) {
-                setLatestProducts(result.data);
-            }
-            checkLoadingStatus();
-        };
-
-        // Tüm verilerin yüklendiğini kontrol etmek için sayaç
-        let loadedRequests = 0;
-        const checkLoadingStatus = () => {
-            loadedRequests++;
-            if (loadedRequests === 3) {
-                setLoading(false);  // Tüm veriler yüklendiğinde loading'i false yap
-            }
-        };
-
-        // Veri çekme işlemleri
-        fetchBestSellerProducts();
-        fetchFeaturedProduct();
-        fetchLatestProduct();
+        // Verileri sırayla yükleme fonksiyonunu çağır
+        fetchDataSequentially();
     }, []);
 
     return (
