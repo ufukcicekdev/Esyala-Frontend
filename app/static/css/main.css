@@ -47,6 +47,7 @@ outline-offset : 0;
 #mt-header {
 z-index : 4;
 position : relative;
+margin-top: 30px; 
 }
 #mt-header a:hover, .mt-shoplist-header .btn-box > ul > li a:hover {
 text-decoration : none;
