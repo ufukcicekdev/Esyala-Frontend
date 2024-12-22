@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getHomepageBestSellerProduct, getHomepageFeaturedProduct, getHomepageLatestProducts } from '@/lib/mainApi/main_api';
 import ProductSlider from '../sliderComponents/sliderComp';
+
 const HomePageProductSlider = () => {
     const [bestSellerProducts, setBestSellerProducts] = useState([]);
     const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -8,24 +9,41 @@ const HomePageProductSlider = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // loading durumunu ayarlamak için her bir veri istek tamamlandığında
         const fetchBestSellerProducts = async () => {
             const result = await getHomepageBestSellerProduct();
-            setBestSellerProducts(result.data);
-            setLoading(false);
+            if (result.status === true) {
+                setBestSellerProducts(result.data);
+            }
+            checkLoadingStatus(); // Tüm veriler yüklendiyse loading'i false yap
         };
 
         const fetchFeaturedProduct = async () => {
             const result = await getHomepageFeaturedProduct();
-            setFeaturedProducts(result.data);
-            setLoading(false);
+            if (result.status === true) {
+                setFeaturedProducts(result.data);
+            }
+            checkLoadingStatus();
         };
 
         const fetchLatestProduct = async () => {
             const result = await getHomepageLatestProducts();
-            setLatestProducts(result.data);
-            setLoading(false);
+            if (result.status === true) {
+                setLatestProducts(result.data);
+            }
+            checkLoadingStatus();
         };
 
+        // Tüm verilerin yüklendiğini kontrol etmek için sayaç
+        let loadedRequests = 0;
+        const checkLoadingStatus = () => {
+            loadedRequests++;
+            if (loadedRequests === 3) {
+                setLoading(false);  // Tüm veriler yüklendiğinde loading'i false yap
+            }
+        };
+
+        // Veri çekme işlemleri
         fetchBestSellerProducts();
         fetchFeaturedProduct();
         fetchLatestProduct();

@@ -20,20 +20,20 @@ export async function fetchBrands() {
 }
 
 
-export async function fetchAbout() {
-    try {
-        const response = await instance.get("/main/about/");
-        if (response.data["status"] == true) {
-            return response.data;
-        }
-        else {
-            return response.data["messages"]
-        }
-    } catch (error) {
-        console.error("Hakkımızda alınırken bir hata oluştu:", error);
-        return [];
-    }
-}
+// export async function fetchAbout() {
+//     try {
+//         const response = await instance.get("/main/about/");
+//         if (response.data["status"] == true) {
+//             return response.data;
+//         }
+//         else {
+//             return response.data["messages"]
+//         }
+//     } catch (error) {
+//         console.error("Hakkımızda alınırken bir hata oluştu:", error);
+//         return [];
+//     }
+// }
 
 
 

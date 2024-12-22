@@ -245,10 +245,10 @@ export const updateNotifySettings = async (email : boolean, sms : boolean) => {
 
 
 
-export const getRefreshSession = async (requestBody : any) => {
+export const getRefreshSession = async (refreshToken : string) => {
     try {
         const response = await instance.post(`/customerauth/user/token/refresh/`, {
-            requestBody
+            refresh:refreshToken
         })
 
         if (response.data.status === true) {

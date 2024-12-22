@@ -164,8 +164,26 @@ const Addresses: React.FC<AddressesProps> = ({ addressModel }) => {
                                     boxShadow: 6,
                                     transform: "scale(1.05)",
                                 },
+                                backgroundColor: address.is_default ? "#f0f8ff" : "white", // Varsayılan adres için renk
+                                border: address.is_default ? "2px solid #1976d2" : "none", // Varsayılan adres için kenarlık
                             }}
                         >
+                            {address.is_default && (
+                                <Typography
+                                    sx={{
+                                        position: "absolute",
+                                        top: 8,
+                                        left: 8,
+                                        backgroundColor: "#1976d2",
+                                        color: "white",
+                                        padding: "4px 8px",
+                                        borderRadius: "4px",
+                                    }}
+                                    variant="body2"
+                                >
+                                    Varsayılan
+                                </Typography>
+                            )}
                             <Box
                                 sx={{
                                     position: "absolute",
@@ -225,6 +243,7 @@ const Addresses: React.FC<AddressesProps> = ({ addressModel }) => {
                     open={editDialogOpen}
                     onClose={() => setEditDialogOpen(false)}
                     address={selectedAddress}
+                    fetchAddresses={fetchAddresses}
                 />
             )}
         </>

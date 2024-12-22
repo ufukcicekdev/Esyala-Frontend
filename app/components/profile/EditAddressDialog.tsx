@@ -41,6 +41,7 @@ interface EditAddressDialogProps {
     open: boolean;
     onClose: () => void;
     address: Address;
+    fetchAddresses?: () => void;
 }
 
 
@@ -48,6 +49,7 @@ const EditAddressDialog: React.FC<EditAddressDialogProps> = ({
     open,
     onClose,
     address,
+    fetchAddresses
 }) => {
     const [formData, setFormData] = useState<Address>({ ...address });
     const [cities, setCities] = useState<any[]>([]); // Şehirler
@@ -163,6 +165,9 @@ const EditAddressDialog: React.FC<EditAddressDialogProps> = ({
             const response = await updateAddressApi(address.id, dataToSend);
 
             if (response.status === true) {
+                if (fetchAddresses) {
+                    fetchAddresses();
+                }
                 showAlert("success", "Başarıyla Güncellendi");
                 onClose();
             }

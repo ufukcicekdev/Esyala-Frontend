@@ -78,48 +78,42 @@ const AddAddressDialog: React.FC<AddAddressDialogProps> = ({ open, onClose, onSa
     }, [district]);
 
     const handleSave = async () => {
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
-        const userId: string | null = user ? user.id : null;
-        const accessToken: string | null = localStorage.getItem("access_token");
 
+        const addressData = {
+            address_type: addressType,
+            address_model: addressModel,
+            username,
+            usersurname,
+            phone,
+            city: city,
+            region: district,
+            neighborhood: neighborhood,
+            address_name: addressName,
+            address_line1: addressLine1,
+            postal_code: postalCode,
+            firm_name: firmName,
+            firm_taxcode: firmTaxCode,
+            firm_tax_home: firmTaxHome,
+        };
 
-        if (userId && accessToken) {
-            const addressData = {
-                address_type: addressType,
-                address_model: addressModel,
-                username,
-                usersurname,
-                phone,
-                city: city,
-                region: district,
-                neighborhood: neighborhood,
-                address_name: addressName,
-                address_line1: addressLine1,
-                postal_code: postalCode,
-                firm_name: firmName,
-                firm_taxcode: firmTaxCode,
-                firm_tax_home: firmTaxHome,
-                user_id: userId,
-            };
+        try {
+            const response = await createAddressApi(addressData);
 
-            try {
-                const response = await createAddressApi(addressData);
-
-                if (response.status === true) {
-                    showAlert("success", "Başarıyla eklendi");
-                    onSave(response.data);
-                    resetForm();
-                    onClose();
-                } else {
-                    showAlert("error", response.message || "Adres kaydedilirken bir hata oluştu");
-                }
-            } catch (error) {
-                console.error("Adres kaydedilirken bir hata oluştu: ", error);
-                showAlert("error", "Adres kaydedilirken bir hata oluştu");
+            if (response.status === true) {
+                showAlert("success", "Başarıyla eklendi");
+                onSave(response.data);
+                resetForm();
+                onClose();
+            } else {
+                showAlert("error", response.message || "Adres kaydedilirken bir hata oluştu");
             }
-
-
+        } catch (error) {
+            console.error("Adres kaydedilirken bir hata oluştu: ", error);
+            showAlert("error", "Adres kaydedilirken bir hata oluştu");
         }
+
+
+
     };
 
     const resetForm = () => {

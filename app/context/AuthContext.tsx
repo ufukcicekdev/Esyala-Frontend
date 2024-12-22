@@ -43,6 +43,7 @@ interface AuthContextType {
   refreshSession: () => Promise<void>;
   loading: boolean;
   error: string | null;
+  checkAuth: () => Promise<any>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -62,11 +63,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
 
         const data =  await checkAuthApi()
-
         if (data.status === true) {
           setIsAuthenticated(true);
           setUser(data.user);
-
         } 
         else{
           setIsAuthenticated(false);
@@ -160,7 +159,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
-      const data = await getRefreshSession({ refresh: refreshToken })
+      const data = await getRefreshSession(refreshToken)
       
     } catch (err) {
       console.error("Hata:", err);
@@ -172,7 +171,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, user, login, logout, refreshSession, loading, error }}
+      value={{ isAuthenticated, user, login, logout, refreshSession, loading, error, checkAuth }}
     >
       {children}
     </AuthContext.Provider>

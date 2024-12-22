@@ -24,7 +24,7 @@ instance.interceptors.request.use(
 );
 
 const AxiosInterceptorWrapper = ({ children }: { children: ReactNode }) => {
-  const { refreshSession } = useAuth();
+  const { refreshSession, checkAuth } = useAuth();
   const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
@@ -37,7 +37,8 @@ const AxiosInterceptorWrapper = ({ children }: { children: ReactNode }) => {
           originalRequest._retry = true;
           setRetryCount(retryCount + 1);  // Retry count artırıyoruz
 
-          await refreshSession(); // Yeni token alıyoruz
+          await refreshSession(); 
+          await checkAuth();
           
           const newAccessToken = localStorage.getItem("access_token");
 

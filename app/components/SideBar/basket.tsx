@@ -103,7 +103,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                                     <Image
                                         src={item.product.first_image.image || '/default-image.jpg'}
                                         alt={item.product.first_image.img_alt}
-                                        width={50}  // Mobilde daha küçük bir resim boyutu
+                                        width={50}  
                                         height={50}
                                         style={{ borderRadius: '8px' }}
                                     />
