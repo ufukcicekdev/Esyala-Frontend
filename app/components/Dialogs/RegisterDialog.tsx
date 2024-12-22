@@ -12,7 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useAlert } from "@/app/context/AlertContext";
-import { registerApi } from "@/lib/customerAuthApi/customerauth_api";
+import { registerApi } from "@/lib/authApi/authapi";
 
 interface RegisterDialogProps {
   open: boolean;

@@ -34,7 +34,6 @@ export default function BlogDetail({ slug }: { slug: string }) {
         async function fetchData() {
             try {
                 const data = await fetchBlogDetail(slug);
-                console.log("data",data);
 
                 setBlog(data)
                 // if (!data) {

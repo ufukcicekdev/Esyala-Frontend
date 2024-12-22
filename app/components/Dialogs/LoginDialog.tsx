@@ -59,7 +59,6 @@ const LoginDialog: FC<LoginDialogProps> = ({
       console.error("Giriş işlemi sırasında bir hata oluştu:", err);
       setError("Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.");
       // Hata mesajını ve hata detaylarını alert fonksiyonuna geçiriyoruz
-      showAlert("error", `Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin. ${err}`);
     }
     
   };

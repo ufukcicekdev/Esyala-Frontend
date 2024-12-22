@@ -8,7 +8,6 @@ import instance from "../axiosInstance";
 export async function fetchBlogs() {
     try {
         const response = await instance.get("/blog/");
-        console.log("response",response);
         if (response.data?.status === true) {
             return response.data;
         }

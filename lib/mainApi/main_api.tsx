@@ -6,7 +6,6 @@ import instance from "../axiosInstance";
 export async function fetchBrands() {
     try {
         const response = await instance.get("/main/get_brand/");
-        console.log(response.data.status);
         if (response.data.status === true) {
             return response.data;
         }

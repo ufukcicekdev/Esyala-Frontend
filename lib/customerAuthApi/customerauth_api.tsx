@@ -1,80 +1,7 @@
 import { AxiosError } from "axios";
 import instance from "../axiosInstance";
-import { setCookie } from "nookies";
 
 
-export const loginApi = async (email: string, password: string) => {
-    try {
-        const response = await instance.post("/customerauth/user/login/", {
-            email,
-            password,
-        });
-        if (response.data.status === true) {
-            const { token } = response.data;
-            localStorage.setItem("access_token", token.access);
-            localStorage.setItem("refresh_token", token.refresh);
-            // setCookie(null, "access_token", token.access, {
-            //     maxAge: 3600, // 1 saat
-            //     sameSite: 'Strict' ,// ya da 'Lax' olabilir
-            //     httpOnly: true, // HttpOnly flag
-            //     secure: process.env.NODE_ENV === "production",
-            // });
-
-            // setCookie(null, "refresh_token", token.refresh, {
-            //     maxAge: 7 * 24 * 60 * 60, // 7 gün
-            //     sameSite: 'Strict', // ya da 'Lax' olabilir
-            //     httpOnly: true,
-            //     secure: process.env.NODE_ENV === "production",
-            // });
-            return response.data; 
-        } else {
-            return response.data;  
-        }
-    } catch (error) {
-        console.error("Giriş işlemi sırasında bir hata oluştu:", error);
-        const axiosError = error as AxiosError;
-        if (axiosError.response) {
-            return axiosError.response.data;  
-        }   
-    }
-};
-
-export const logoutApi = async (refreshToken : string ) => {
-    try {
-        const response = await instance.post("customerauth/user/logout/", {
-            refresh : refreshToken
-        });
-        if (response.data.status === true) {
-            return response.data; 
-        } else {
-            return response.data;  
-        }
-    } catch (error) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response) {
-            return axiosError.response.data;  
-        }   
-    }
-};
-
-
-export const registerApi = async (requestBody : any) => {
-    try {
-        const response = await instance.post("/customerauth/user/register/", 
-            requestBody
-        );
-        if (response.data.status === true) {
-            return response.data; 
-        } else {
-            return response.data;  
-        }
-    } catch (error) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response) {
-            return axiosError.response.data;  
-        }   
-    }
-};
 
 
 export const getAddressApi = async () => {
@@ -245,35 +172,6 @@ export const updateNotifySettings = async (email : boolean, sms : boolean) => {
 
 
 
-
-export const getRefreshSession = async (refreshToken : string) => {
-    try {
-        const response = await instance.post(`/customerauth/user/token/refresh/`, {
-            refresh:refreshToken
-        })
-
-        if (response.data.status === true) {
-            const { access } = response.data;
-            localStorage.setItem("access_token", access);
-
-            // setCookie(null, "access_token", access, {
-            //     maxAge: 3600, // 1 saat
-            //     sameSite: 'Strict', // ya da 'Lax' olabilir
-            //     httpOnly: true, // HttpOnly flag
-            //     secure: process.env.NODE_ENV === "production",
-            // });
-
-            return response.data; 
-        } else {
-            return response.data;  
-        }
-    } catch (error) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response) {
-            return axiosError.response.data;  
-        }   
-    }
-};
 
 
 

@@ -127,7 +127,6 @@ const Checkout = () => {
 
     const handleNewAddressSave = (newAddress: any) => {
         // Burada yeni adresi kaydetmek için gerekli işlemi yapın
-        console.log(newAddress);
         toggleAddAddressDialog(); // Dialogu kapat
     };
 

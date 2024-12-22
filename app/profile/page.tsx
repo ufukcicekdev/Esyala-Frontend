@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Tabs,
@@ -21,6 +21,7 @@ import OrderList from "../components/profile/OrderList";
 import Addresses from "../components/profile/AddressList";
 import AddAddressDialog from "../components/profile/NewAddressDialog";
 import { AddCircleOutline as AddIcon } from '@mui/icons-material'; // + ikonu için
+
 
 
 interface TabPanelProps {
@@ -65,6 +66,10 @@ const Profile: React.FC = () => {
     birth_date: "",
     tckn: "",
   });
+
+ 
+
+
 
   const [notifications, setNotifications] = useState({
     emailNotifications: false,
@@ -112,7 +117,6 @@ const Profile: React.FC = () => {
 
   const handleNewAddressSave = (newAddress: any) => {
     // Burada yeni adresi kaydetmek için gerekli işlemi yapın
-    console.log(newAddress);
     toggleAddAddressDialog(); // Dialogu kapat
   };
 

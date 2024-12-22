@@ -1,8 +1,9 @@
 "use client";
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { useAlert } from "./AlertContext";
-import { checkAuthApi, getRefreshSession, loginApi, logoutApi } from "@/lib/customerAuthApi/customerauth_api";
+import { checkAuthApi } from "@/lib/customerAuthApi/customerauth_api";
 import { useRouter } from 'next/navigation'
+import { getRefreshSession, loginApi, logoutApi } from "@/lib/authApi/authapi";
 
 
 
@@ -106,7 +107,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (err) {
       console.error("Giriş işlemi sırasında bir hata oluştu:", err);
-      showAlert("error", "Bir sorun oluştu. Lütfen tekrar deneyin.");
       throw err;
     } finally {
       setLoading(false);
