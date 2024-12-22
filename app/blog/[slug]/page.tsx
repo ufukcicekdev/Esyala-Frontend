@@ -14,7 +14,6 @@ export async function generateStaticParams() {
     }
 
     const response2 = await response.json();
-    console.log('API Yanıtı:', response2);  // Yanıtı logla
 
     return response2.data?.map((blog: { slug: string }) => ({
       slug: blog.slug,
