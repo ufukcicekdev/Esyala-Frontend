@@ -31,6 +31,7 @@ export const loginApi = async (email: string, password: string) => {
             return response.data;  
         }
     } catch (error) {
+        console.error("Giriş işlemi sırasında bir hata oluştu:", error);
         const axiosError = error as AxiosError;
         if (axiosError.response) {
             return axiosError.response.data;  

@@ -105,6 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return data;
       }
     } catch (err) {
+      console.error("Giriş işlemi sırasında bir hata oluştu:", err);
       showAlert("error", "Bir sorun oluştu. Lütfen tekrar deneyin.");
       throw err;
     } finally {

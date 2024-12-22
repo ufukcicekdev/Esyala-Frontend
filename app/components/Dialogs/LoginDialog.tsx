@@ -45,7 +45,7 @@ const LoginDialog: FC<LoginDialogProps> = ({
       setError("Geçerli bir email adresi giriniz.");
       return;
     }
-    
+
     try {
       const response = await login(email, password);
       if (response.status === true) {
@@ -58,8 +58,10 @@ const LoginDialog: FC<LoginDialogProps> = ({
     } catch (err) {
       console.error("Giriş işlemi sırasında bir hata oluştu:", err);
       setError("Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.");
-      showAlert("error", "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.");
+      // Hata mesajını ve hata detaylarını alert fonksiyonuna geçiriyoruz
+      showAlert("error", `Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin. ${err}`);
     }
+    
   };
 
   return (
