@@ -13,19 +13,19 @@ export const loginApi = async (email: string, password: string) => {
             const { token } = response.data;
             localStorage.setItem("access_token", token.access);
             localStorage.setItem("refresh_token", token.refresh);
-            setCookie(null, "access_token", token.access, {
-                maxAge: 3600, // 1 saat
-                sameSite: 'Strict' ,// ya da 'Lax' olabilir
-                httpOnly: true, // HttpOnly flag
-                secure: process.env.NODE_ENV === "production",
-            });
+            // setCookie(null, "access_token", token.access, {
+            //     maxAge: 3600, // 1 saat
+            //     sameSite: 'Strict' ,// ya da 'Lax' olabilir
+            //     httpOnly: true, // HttpOnly flag
+            //     secure: process.env.NODE_ENV === "production",
+            // });
 
-            setCookie(null, "refresh_token", token.refresh, {
-                maxAge: 7 * 24 * 60 * 60, // 7 gün
-                sameSite: 'Strict', // ya da 'Lax' olabilir
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-            });
+            // setCookie(null, "refresh_token", token.refresh, {
+            //     maxAge: 7 * 24 * 60 * 60, // 7 gün
+            //     sameSite: 'Strict', // ya da 'Lax' olabilir
+            //     httpOnly: true,
+            //     secure: process.env.NODE_ENV === "production",
+            // });
             return response.data; 
         } else {
             return response.data;  
@@ -256,12 +256,12 @@ export const getRefreshSession = async (refreshToken : string) => {
             const { access } = response.data;
             localStorage.setItem("access_token", access);
 
-            setCookie(null, "access_token", access, {
-                maxAge: 3600, // 1 saat
-                sameSite: 'Strict', // ya da 'Lax' olabilir
-                httpOnly: true, // HttpOnly flag
-                secure: process.env.NODE_ENV === "production",
-            });
+            // setCookie(null, "access_token", access, {
+            //     maxAge: 3600, // 1 saat
+            //     sameSite: 'Strict', // ya da 'Lax' olabilir
+            //     httpOnly: true, // HttpOnly flag
+            //     secure: process.env.NODE_ENV === "production",
+            // });
 
             return response.data; 
         } else {
