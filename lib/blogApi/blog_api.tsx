@@ -8,7 +8,8 @@ import instance from "../axiosInstance";
 export async function fetchBlogs() {
     try {
         const response = await instance.get("/blog/");
-        if (response.data?.status === true && response.data?.data?.length > 0) {
+        console.log("response",response);
+        if (response.data?.status === true) {
             return response.data;
         }
         else {
@@ -79,3 +80,6 @@ export async function fetchBlogCategoryDetail(slug: string) {
         return { error: "Blog detayları alınırken bir hata oluştu." };
     }
 }
+
+
+

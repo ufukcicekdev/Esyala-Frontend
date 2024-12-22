@@ -1,3 +1,4 @@
+import { fetchBlogs } from "@/lib/blogApi/blog_api";
 import BlogDetail from "@/lib/fetchData/fetch_data";
 
 
@@ -5,12 +6,10 @@ import BlogDetail from "@/lib/fetchData/fetch_data";
 const prodUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function generateStaticParams() {
-  const response = await fetch(`${prodUrl}blog/`);
-  
-  const categories = await response.json();
-
-  return categories.data.map((category: { slug: string }) => ({
-      slug: category.slug,  
+  const response = await fetch(`${prodUrl}/blog/`);
+  const response2 = await response.json();
+  return response2.data.map((blog: { slug: string }) => ({
+    slug: blog.slug,  // sadece slug'ı döndürüyoruz
   }));
 }
 
