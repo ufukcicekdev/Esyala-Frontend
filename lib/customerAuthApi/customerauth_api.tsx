@@ -15,14 +15,14 @@ export const loginApi = async (email: string, password: string) => {
             localStorage.setItem("refresh_token", token.refresh);
             setCookie(null, "access_token", token.access, {
                 maxAge: 3600, // 1 saat
-                path: "/",
+                sameSite: 'Strict' ,// ya da 'Lax' olabilir
                 httpOnly: true, // HttpOnly flag
                 secure: process.env.NODE_ENV === "production",
             });
 
             setCookie(null, "refresh_token", token.refresh, {
                 maxAge: 7 * 24 * 60 * 60, // 7 gün
-                path: "/",
+                sameSite: 'Strict', // ya da 'Lax' olabilir
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
             });
@@ -257,7 +257,7 @@ export const getRefreshSession = async (refreshToken : string) => {
 
             setCookie(null, "access_token", access, {
                 maxAge: 3600, // 1 saat
-                path: "/",
+                sameSite: 'Strict', // ya da 'Lax' olabilir
                 httpOnly: true, // HttpOnly flag
                 secure: process.env.NODE_ENV === "production",
             });
